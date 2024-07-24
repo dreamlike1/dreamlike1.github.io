@@ -82,7 +82,7 @@
         }
 
         function formatDate(date) {
-            return date.toLocaleDateString('default', { year: 'numeric', month: 'numeric', day: 'numeric' });
+            return date.toLocaleString('default', { month: 'long', day: 'numeric', year: 'numeric' });
         }
 
         async function calculateBusinessDate() {
