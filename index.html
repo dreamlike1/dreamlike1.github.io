@@ -10,19 +10,16 @@
             font-family: 'Roboto', sans-serif; 
             background: linear-gradient(to bottom, #42425b, #1d1c2b); 
             margin: 0; 
-            height: 100vh; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
+            padding: 20px; 
         }
         .calculator { 
             max-width: 400px; 
+            margin: auto; 
             padding: 20px; 
             background: #121212; 
             border-radius: 8px; 
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
             color: #8888ab; 
-            text-align: center; 
         }
         input, select { 
             width: 100%; 
@@ -33,8 +30,11 @@
             box-sizing: border-box; 
             background: #333; 
             color: #8888ab; 
+        }
+        select {
             appearance: none; 
-            outline: none; /* Remove the increment controls */
+            background: #333; 
+            padding-right: 20px; 
         }
         button { 
             width: 100%; 
@@ -51,6 +51,7 @@
             background-color: #0a0a0a; 
         }
         h1, h2 { 
+            text-align: center; 
             margin: 10px 0; 
         }
         #result {
@@ -62,22 +63,28 @@
     <div class="calculator">
         <h1>Business Date Calculator</h1>
         <select id="countrySelect">
-            <option value="US" selected>United States</option>
+            <option value="US">United States</option>
+            <option value="CA">Canada</option>
+            <option value="GB">United Kingdom</option>
             <!-- Add more countries as needed -->
         </select>
         <input type="date" id="startDate" required>
-        <input type="text" id="businessDays" placeholder="Business Days (e.g. 1-2)" required>
+        <input type="text" id="businessDays" placeholder="Business Days" required>
         <button onclick="calculateBusinessDate()">Calculate</button>
         <h2 id="result">Results: </h2>
     </div>
 
     <script>
-        async function fetchHolidays(countryCode) {
-            const url = `https://date.nager.at/Api/v2/PublicHolidays/${new Date().getFullYear()}/${countryCode}`;
-            const response = await fetch(url);
-            if (!response.ok) throw new Error('Failed to fetch holidays');
-            const holidays = await response.json();
-            return holidays.map(holiday => holiday.date);
+        async function fetchHolidays(country) {
+            const response = await fetch(`https://date.nager.at/Api/v2/NextPublicHolidaysWorldwide`);
+            const data = await response.json();
+            return data.filter(holiday => holiday.countryCode === country)
+                       .map(holiday => holiday.date);
+        }
+
+        function parseBusinessDays(input) {
+            const parts = input.split('-').map(Number);
+            return parts.length === 2 ? [parts[0], parts[1]] : [parseInt(input), parseInt(input)];
         }
 
         function isWeekend(date) {
@@ -85,37 +92,28 @@
         }
 
         async function calculateBusinessDate() {
-            try {
-                const startDate = new Date(document.getElementById('startDate').value);
-                const businessDaysRange = document.getElementById('businessDays').value.split('-').map(Number);
-                const selectedCountry = document.getElementById('countrySelect').value;
+            const startDate = new Date(document.getElementById('startDate').value);
+            const businessDaysInput = document.getElementById('businessDays').value;
+            const selectedCountry = document.getElementById('countrySelect').value;
+            const holidayDates = await fetchHolidays(selectedCountry);
+            const [minDays, maxDays] = parseBusinessDays(businessDaysInput);
+            const results = [];
 
-                if (businessDaysRange.length !== 2 || businessDaysRange.some(isNaN) || businessDaysRange[0] < 1) {
-                    document.getElementById('result').innerText = 'Please enter a valid range of business days (e.g. 1-2).';
-                    return;
-                }
+            for (let days = minDays; days <= maxDays; days++) {
+                let resultDate = new Date(startDate);
+                let addedDays = 0;
 
-                const holidayDates = await fetchHolidays(selectedCountry);
-                let resultDates = [];
-
-                for (let days = businessDaysRange[0]; days <= businessDaysRange[1]; days++) {
-                    let resultDate = new Date(startDate);
-                    let addedDays = 0;
-
-                    while (addedDays < days) {
-                        resultDate.setDate(resultDate.getDate() + 1);
-                        if (!isWeekend(resultDate) && !holidayDates.includes(resultDate.toISOString().split('T')[0])) {
-                            addedDays++;
-                        }
+                while (addedDays < days) {
+                    resultDate.setDate(resultDate.getDate() + 1);
+                    if (!isWeekend(resultDate) && !holidayDates.includes(resultDate.toISOString().split('T')[0])) {
+                        addedDays++;
                     }
-                    resultDates.push(resultDate.toLocaleDateString());
                 }
 
-                const resultRange = `Between ${startDate.toLocaleDateString()} and ${resultDates.join(', ')}`;
-                document.getElementById('result').innerText = `Results: ${resultRange}`;
-            } catch (error) {
-                document.getElementById('result').innerText = 'Error: ' + error.message;
+                results.push(resultDate.toLocaleString('default', { month: 'long', year: 'numeric' }));
             }
+
+            document.getElementById('result').innerText = 'Results: ' + results.join(' and ');
         }
     </script>
 </body>
