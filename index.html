@@ -109,7 +109,8 @@
                 }
             }
 
-            document.getElementById('result').innerText = 'Results: ' + resultDate.toLocaleDateString();
+            const options = { month: 'long', day: 'numeric' };
+            document.getElementById('result').innerText = 'Results: ' + resultDate.toLocaleDateString(undefined, options);
         }
 
         function copyResult() {
