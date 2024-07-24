@@ -65,6 +65,15 @@
             text-align: center;
             cursor: pointer; /* Change cursor to indicate clickable */
         }
+        .copy-message {
+            position: absolute;
+            background: #28a745;
+            color: white;
+            padding: 10px;
+            border-radius: 4px;
+            display: none;
+            z-index: 10;
+        }
     </style>
 </head>
 <body>
@@ -72,12 +81,18 @@
         <h1>Business Date Calculator</h1>
         <select id="countrySelect">
             <option value="US" selected>United States</option>
-
+            <option value="AT">Austria</option>
+            <option value="BE">Belgium</option>
+            <option value="DE">Germany</option>
+            <option value="FR">France</option>
+            <option value="IT">Italy</option>
+            <option value="ES">Spain</option>
         </select>
         <input type="date" id="startDate" required>
         <input type="text" id="businessDays" placeholder="Business Days" required>
         <button id="calculateButton">Calculate</button>
         <input type="text" id="result" class="result-field" readonly>
+        <div id="copyMessage" class="copy-message">Copied!</div>
     </div>
 
     <script>
@@ -125,7 +140,14 @@
         document.getElementById('result').addEventListener('click', () => {
             const resultField = document.getElementById('result');
             navigator.clipboard.writeText(resultField.value).then(() => {
-                alert('Copied to clipboard: ' + resultField.value);
+                const copyMessage = document.getElementById('copyMessage');
+                copyMessage.style.display = 'block';
+                copyMessage.style.top = `${resultField.getBoundingClientRect().top + window.scrollY - 40}px`;
+                copyMessage.style.left = `${resultField.getBoundingClientRect().left + window.scrollX}px`;
+
+                setTimeout(() => {
+                    copyMessage.style.display = 'none';
+                }, 2000);
             });
         });
     </script>
