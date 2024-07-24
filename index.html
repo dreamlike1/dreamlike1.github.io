@@ -73,14 +73,11 @@
 
     <script>
         async function fetchHolidays(countryCode) {
-            const apiKey = 'YOUR_PUBLIC_API_KEY'; // Replace with your public Calendarific API key
-            const year = new Date().getFullYear();
-            const url = `https://calendarific.com/api/v2/holidays?api_key=${apiKey}&country=${countryCode}&year=${year}`;
-            
+            const url = `https://date.nager.at/Api/v2/PublicHolidays/${new Date().getFullYear()}/${countryCode}`;
             const response = await fetch(url);
             if (!response.ok) throw new Error('Failed to fetch holidays');
-            const data = await response.json();
-            return data.response.holidays.map(holiday => holiday.date.iso);
+            const holidays = await response.json();
+            return holidays.map(holiday => holiday.date);
         }
 
         function isWeekend(date) {
