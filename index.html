@@ -67,7 +67,6 @@
             <option value="FR">France</option>
             <option value="IT">Italy</option>
             <option value="ES">Spain</option>
-            <!-- Add more countries as needed -->
         </select>
         <input type="date" id="startDate" required>
         <input type="text" id="businessDays" placeholder="Business Days" required>
@@ -87,7 +86,7 @@
         }
 
         function formatDate(date) {
-            return date.toLocaleDateString('default', { month: 'long', day: 'numeric', year: 'numeric' });
+            return date.toLocaleDateString('default', { year: 'numeric', month: 'numeric', day: 'numeric' });
         }
 
         async function calculateBusinessDate() {
