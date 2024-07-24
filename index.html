@@ -55,6 +55,14 @@
         #result {
             color: white; 
         }
+        #copyButton {
+            display: none; 
+            margin-top: 10px; 
+            background-color: #444; 
+        }
+        #resultContainer:hover #copyButton {
+            display: block; 
+        }
     </style>
 </head>
 <body>
@@ -67,7 +75,10 @@
         <input type="date" id="startDate" required>
         <input type="text" id="businessDays" placeholder="Business Days" required pattern="\d*">
         <button onclick="calculateBusinessDate()">Calculate</button>
-        <h2 id="result">Results: </h2>
+        <div id="resultContainer">
+            <h2 id="result">Results: </h2>
+            <button id="copyButton" onclick="copyResult()">Copy Result</button>
+        </div>
     </div>
 
     <script>
@@ -99,6 +110,13 @@
             }
 
             document.getElementById('result').innerText = 'Results: ' + resultDate.toLocaleDateString();
+        }
+
+        function copyResult() {
+            const resultText = document.getElementById('result').innerText.replace('Results: ', '');
+            navigator.clipboard.writeText(resultText).then(() => {
+                alert('Copied to clipboard: ' + resultText);
+            });
         }
     </script>
 </body>
