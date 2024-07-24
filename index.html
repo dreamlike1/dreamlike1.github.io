@@ -41,11 +41,31 @@
             background: #222831;
             color: #76ABAE; /* Input text color */
             appearance: none;
-            text-transform: uppercase;
+            text-transform: none;
+            font-family: 'Menlo', monospace;
+            position: relative;
+        }
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            color: #76ABAE; /* Match icon color to font color */
         }
         #businessDays {
-            color: #76ABAE; /* Preview text input color */
-            background: #31363F; /* Updated background for business days input */
+            color: #76ABAE;
+            background: #222831;
+        }
+        #businessDays::placeholder {
+            color: #37414F;
+        }
+        .dropdown-arrow {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 8px solid #76ABAE;
+            pointer-events: none;
         }
         button {
             width: 100%;
@@ -68,13 +88,13 @@
             font-size: 1.15em;
         }
         #result {
-            color: #31363F; /* Result text color */
+            color: #31363F;
             margin-top: 10px;
-            background: #EEEEEE; /* Result field background */
+            background: #EEEEEE;
         }
         .result-field {
             background: #EEEEEE;
-            color: #31363F; /* Result field text color */
+            color: #31363F;
             border: none;
             padding: 12px;
             width: 100%;
@@ -95,15 +115,18 @@
 <body>
     <div class="calculator">
         <h1>Business Date Calculator</h1>
-        <select id="countrySelect">
-            <option value="US" selected>United States</option>
-            <option value="AT">Austria</option>
-            <option value="BE">Belgium</option>
-            <option value="DE">Germany</option>
-            <option value="FR">France</option>
-            <option value="IT">Italy</option>
-            <option value="ES">Spain</option>
-        </select>
+        <div style="position: relative;">
+            <select id="countrySelect">
+                <option value="US" selected>United States</option>
+                <option value="AT">Austria</option>
+                <option value="BE">Belgium</option>
+                <option value="DE">Germany</option>
+                <option value="FR">France</option>
+                <option value="IT">Italy</option>
+                <option value="ES">Spain</option>
+            </select>
+            <div class="dropdown-arrow"></div>
+        </div>
         <input type="date" id="startDate" required>
         <input type="text" id="businessDays" placeholder="Business Days" required>
         <button id="calculateButton">Calculate</button>
