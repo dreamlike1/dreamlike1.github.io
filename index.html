@@ -11,63 +11,77 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-family: 'Menlo', monospace; /* Updated to Menlo */
-            background-image: linear-gradient(to right bottom, #222831, #262b34, #292f38, #2d323b, #31363f); /* Updated gradient */
+            font-family: 'Menlo', monospace;
+            background-image: linear-gradient(to right bottom, #222831, #262b34, #292f38, #2d323b, #31363f);
+            font-size: 1.15em;
         }
         .calculator {
             max-width: 400px;
             padding: 20px;
-            background: #121212;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            color: #8888ab;
+            background: #37414F;
+            border-radius: 12px;
+            box-shadow:
+                0 1px 1px hsl(0deg 0% 0% / 0.075),
+                0 2px 2px hsl(0deg 0% 0% / 0.075),
+                0 4px 4px hsl(0deg 0% 0% / 0.075),
+                0 8px 8px hsl(0deg 0% 0% / 0.075),
+                0 16px 16px hsl(0deg 0% 0% / 0.075);
+            color: #76ABAE;
             text-align: center;
         }
         input, select {
             width: 100%;
             padding: 12px;
             margin: 5px 0;
-            border: 1px solid #8888ab;
+            border: 1px solid #76ABAE;
             border-radius: 4px;
             box-sizing: border-box;
-            background: #333;
-            color: #8888ab;
-            appearance: none; /* Remove dropdown arrow */
-            text-transform: uppercase; /* Make text uppercase */
+            background: #222831;
+            color: #76ABAE; /* Input text color */
+            appearance: none;
+            text-transform: uppercase;
+        }
+        #businessDays {
+            color: #76ABAE; /* Preview text input color */
+            background: #31363F; /* Updated background for business days input */
         }
         button {
             width: 100%;
             padding: 12px;
             margin: 5px 0;
-            background-color: #2a2a2b;
-            color: #8888ab;
+            background-color: #76ABAE;
+            color: #2a2a2b;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             font-weight: bold;
+            font-family: 'Menlo', monospace;
         }
         button:hover {
-            background-color: #0a0a0a;
+            background-color: #6c9e8e;
         }
         h1 {
             margin: 10px 0;
+            white-space: nowrap;
+            font-size: 1.15em;
         }
         #result {
-            color: white;
+            color: #31363F; /* Result text color */
             margin-top: 10px;
+            background: #EEEEEE; /* Result field background */
         }
         .result-field {
-            background: #222;
-            color: #8888ab;
+            background: #EEEEEE;
+            color: #31363F; /* Result field text color */
             border: none;
             padding: 12px;
             width: 100%;
             text-align: center;
-            cursor: pointer; /* Change cursor to indicate clickable */
+            cursor: pointer;
         }
         .copy-message {
             position: absolute;
-            background: #28a745;
+            background: #76AE8D;
             color: white;
             padding: 10px;
             border-radius: 4px;
