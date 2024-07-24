@@ -61,12 +61,11 @@
     <div class="calculator">
         <h1>Business Date Calculator</h1>
         <select id="countrySelect">
-            <option value="US">United States</option>
-            <!-- Other countries omitted for brevity -->
-            <option value="VE">Venezuela</option>
+            <option value="US" selected>United States</option>
+            <!-- Add more countries as needed -->
         </select>
         <input type="date" id="startDate" required>
-        <input type="text" id="businessDays" placeholder="Business Days" required>
+        <input type="text" id="businessDays" placeholder="Business Days" required pattern="\d*">
         <button onclick="calculateBusinessDate()">Calculate</button>
         <h2 id="result">Results: </h2>
     </div>
@@ -84,34 +83,22 @@
             return date.getDay() === 0 || date.getDay() === 6; // Sunday or Saturday
         }
 
-        function parseBusinessDays(input) {
-            const parts = input.split('-').map(Number);
-            return parts.length === 2 ? [parts[0], parts[1]] : [parseInt(input), parseInt(input)];
-        }
-
         async function calculateBusinessDate() {
             const startDate = new Date(document.getElementById('startDate').value);
-            const businessDaysInput = document.getElementById('businessDays').value;
+            const businessDays = parseInt(document.getElementById('businessDays').value);
             const selectedCountry = document.getElementById('countrySelect').value;
             const holidayDates = await fetchHolidays(selectedCountry);
-            const [minDays, maxDays] = parseBusinessDays(businessDaysInput);
-            const results = [];
+            let resultDate = new Date(startDate);
+            let addedDays = 0;
 
-            for (let days = minDays; days <= maxDays; days++) {
-                let resultDate = new Date(startDate);
-                let addedDays = 0;
-
-                while (addedDays < days) {
-                    resultDate.setDate(resultDate.getDate() + 1);
-                    if (!isWeekend(resultDate) && !holidayDates.includes(resultDate.toISOString().split('T')[0])) {
-                        addedDays++;
-                    }
+            while (addedDays < businessDays) {
+                resultDate.setDate(resultDate.getDate() + 1);
+                if (!isWeekend(resultDate) && !holidayDates.includes(resultDate.toISOString().split('T')[0])) {
+                    addedDays++;
                 }
-
-                results.push(resultDate.toLocaleDateString());
             }
 
-            document.getElementById('result').innerText = 'Results: ' + results.join(' and ');
+            document.getElementById('result').innerText = 'Results: ' + resultDate.toLocaleDateString();
         }
     </script>
 </body>
