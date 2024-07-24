@@ -34,6 +34,7 @@
             background: #333; 
             color: #8888ab; 
             appearance: none; 
+            outline: none; /* Remove the increment controls */
         }
         button { 
             width: 100%; 
@@ -65,7 +66,7 @@
             <!-- Add more countries as needed -->
         </select>
         <input type="date" id="startDate" required>
-        <input type="text" id="businessDays" placeholder="Business Days" required pattern="\d*">
+        <input type="text" id="businessDays" placeholder="Business Days (e.g. 1-2)" required>
         <button onclick="calculateBusinessDate()">Calculate</button>
         <h2 id="result">Results: </h2>
     </div>
@@ -84,21 +85,37 @@
         }
 
         async function calculateBusinessDate() {
-            const startDate = new Date(document.getElementById('startDate').value);
-            const businessDays = parseInt(document.getElementById('businessDays').value);
-            const selectedCountry = document.getElementById('countrySelect').value;
-            const holidayDates = await fetchHolidays(selectedCountry);
-            let resultDate = new Date(startDate);
-            let addedDays = 0;
+            try {
+                const startDate = new Date(document.getElementById('startDate').value);
+                const businessDaysRange = document.getElementById('businessDays').value.split('-').map(Number);
+                const selectedCountry = document.getElementById('countrySelect').value;
 
-            while (addedDays < businessDays) {
-                resultDate.setDate(resultDate.getDate() + 1);
-                if (!isWeekend(resultDate) && !holidayDates.includes(resultDate.toISOString().split('T')[0])) {
-                    addedDays++;
+                if (businessDaysRange.length !== 2 || businessDaysRange.some(isNaN) || businessDaysRange[0] < 1) {
+                    document.getElementById('result').innerText = 'Please enter a valid range of business days (e.g. 1-2).';
+                    return;
                 }
-            }
 
-            document.getElementById('result').innerText = 'Results: ' + resultDate.toLocaleDateString();
+                const holidayDates = await fetchHolidays(selectedCountry);
+                let resultDates = [];
+
+                for (let days = businessDaysRange[0]; days <= businessDaysRange[1]; days++) {
+                    let resultDate = new Date(startDate);
+                    let addedDays = 0;
+
+                    while (addedDays < days) {
+                        resultDate.setDate(resultDate.getDate() + 1);
+                        if (!isWeekend(resultDate) && !holidayDates.includes(resultDate.toISOString().split('T')[0])) {
+                            addedDays++;
+                        }
+                    }
+                    resultDates.push(resultDate.toLocaleDateString());
+                }
+
+                const resultRange = `Between ${startDate.toLocaleDateString()} and ${resultDates.join(', ')}`;
+                document.getElementById('result').innerText = `Results: ${resultRange}`;
+            } catch (error) {
+                document.getElementById('result').innerText = 'Error: ' + error.message;
+            }
         }
     </script>
 </body>
