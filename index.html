@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Business Date Calculator</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-8f3pVq03XZGLu/MEdTyVnTUn9PBRd3AnatTxgscqGyoAUI7Qt2y/8kVQ/mFiPjt0aiwYZltMTc8MQdhtnE27Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         html, body {
             height: 100%;
@@ -31,7 +30,6 @@
                 0 16px 16px hsl(0deg 0% 0% / 0.075);
             color: #76ABAE;
             text-align: center;
-            position: relative;
         }
         input, select {
             width: 100%;
@@ -44,20 +42,6 @@
             color: #76ABAE; /* Input text color */
             appearance: none;
             text-transform: uppercase;
-            position: relative;
-        }
-        .input-icon {
-            position: relative;
-        }
-        .input-icon input {
-            padding-left: 35px; /* Adjust padding to accommodate icon */
-        }
-        .input-icon i {
-            position: absolute;
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #76ABAE; /* Icon color to match font color */
         }
         #businessDays {
             color: #76ABAE; /* Preview text input color */
@@ -101,13 +85,10 @@
             position: absolute;
             background: #76AE8D;
             color: white;
-            padding: 5px; /* Smaller padding for smaller size */
+            padding: 10px;
             border-radius: 4px;
             display: none;
             z-index: 10;
-            font-size: 0.75em; /* Smaller font size */
-            bottom: 10px; /* Positioning to the bottom */
-            right: 10px; /* Positioning to the right */
         }
     </style>
 </head>
@@ -123,10 +104,7 @@
             <option value="IT">Italy</option>
             <option value="ES">Spain</option>
         </select>
-        <div class="input-icon">
-            <i class="fas fa-calendar-alt"></i>
-            <input type="date" id="startDate" required>
-        </div>
+        <input type="date" id="startDate" required>
         <input type="text" id="businessDays" placeholder="Business Days" required>
         <button id="calculateButton">Calculate</button>
         <input type="text" id="result" class="result-field" readonly>
@@ -180,6 +158,9 @@
             navigator.clipboard.writeText(resultField.value).then(() => {
                 const copyMessage = document.getElementById('copyMessage');
                 copyMessage.style.display = 'block';
+                copyMessage.style.top = `${resultField.getBoundingClientRect().top + window.scrollY - 40}px`;
+                copyMessage.style.left = `${resultField.getBoundingClientRect().left + window.scrollX}px`;
+
                 setTimeout(() => {
                     copyMessage.style.display = 'none';
                 }, 2000);
