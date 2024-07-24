@@ -39,14 +39,10 @@
             border-radius: 4px;
             box-sizing: border-box;
             background: #222831;
-            color: #76ABAE; /* Input text color */
+            color: #76ABAE;
             appearance: none;
-            text-transform: none;
             font-family: 'Menlo', monospace;
             position: relative;
-        }
-        input[type="date"]::-webkit-calendar-picker-indicator {
-            color: #76ABAE; /* Match icon color to font color */
         }
         #businessDays {
             color: #76ABAE;
@@ -55,17 +51,29 @@
         #businessDays::placeholder {
             color: #37414F;
         }
-        .dropdown-arrow {
+        .dropdown-arrow, .hamburger-icon {
             position: absolute;
             right: 10px;
             top: 50%;
             transform: translateY(-50%);
+            pointer-events: none;
+        }
+        .dropdown-arrow {
             width: 0;
             height: 0;
             border-left: 6px solid transparent;
             border-right: 6px solid transparent;
-            border-top: 8px solid #76ABAE;
-            pointer-events: none;
+            border-top: 8px solid #76ABAE; /* Linear arrow */
+        }
+        .hamburger-icon {
+            width: 16px;
+            height: 16px;
+        }
+        .hamburger-icon div {
+            width: 100%;
+            height: 2px;
+            background: #76ABAE;
+            margin: 2px 0;
         }
         button {
             width: 100%;
@@ -127,7 +135,14 @@
             </select>
             <div class="dropdown-arrow"></div>
         </div>
-        <input type="date" id="startDate" required>
+        <div style="position: relative;">
+            <input type="date" id="startDate" required>
+            <div class="hamburger-icon">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
         <input type="text" id="businessDays" placeholder="Business Days" required>
         <button id="calculateButton">Calculate</button>
         <input type="text" id="result" class="result-field" readonly>
