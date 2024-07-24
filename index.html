@@ -49,11 +49,21 @@
         button:hover {
             background-color: #0a0a0a;
         }
-        h1, h2 {
+        h1 {
             margin: 10px 0;
         }
         #result {
             color: white;
+            margin-top: 10px;
+        }
+        .result-field {
+            background: #222;
+            color: #8888ab;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            text-align: center;
+            cursor: pointer; /* Change cursor to indicate clickable */
         }
     </style>
 </head>
@@ -62,12 +72,17 @@
         <h1>Business Date Calculator</h1>
         <select id="countrySelect">
             <option value="US" selected>United States</option>
-
+            <option value="AT">Austria</option>
+            <option value="BE">Belgium</option>
+            <option value="DE">Germany</option>
+            <option value="FR">France</option>
+            <option value="IT">Italy</option>
+            <option value="ES">Spain</option>
         </select>
         <input type="date" id="startDate" required>
         <input type="text" id="businessDays" placeholder="Business Days" required>
         <button id="calculateButton">Calculate</button>
-        <h2 id="result">Results: </h2>
+        <input type="text" id="result" class="result-field" readonly>
     </div>
 
     <script>
@@ -107,10 +122,17 @@
                 results.push(formatDate(resultDate));
             }
 
-            document.getElementById('result').innerText = 'Results: ' + results.join(' and ');
+            document.getElementById('result').value = results.join(' and ');
         }
 
         document.getElementById('calculateButton').addEventListener('click', calculateBusinessDate);
+
+        document.getElementById('result').addEventListener('click', () => {
+            const resultField = document.getElementById('result');
+            navigator.clipboard.writeText(resultField.value).then(() => {
+                alert('Copied to clipboard: ' + resultField.value);
+            });
+        });
     </script>
 </body>
 </html>
