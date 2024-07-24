@@ -83,12 +83,15 @@
         }
 
         function parseBusinessDays(input) {
-            const parts = input.split('-').map(Number);
-            return parts.length === 2 ? [parts[0], parts[1]] : [parseInt(input), parseInt(input)];
+            return input.split('-').map(Number);
         }
 
         function isWeekend(date) {
             return date.getDay() === 0 || date.getDay() === 6; // Sunday or Saturday
+        }
+
+        function formatDate(date) {
+            return date.toLocaleString('default', { month: 'long', day: 'numeric', year: 'numeric' });
         }
 
         async function calculateBusinessDate() {
@@ -110,7 +113,7 @@
                     }
                 }
 
-                results.push(resultDate.toLocaleString('default', { month: 'long', year: 'numeric' }));
+                results.push(formatDate(resultDate));
             }
 
             document.getElementById('result').innerText = 'Results: ' + results.join(' and ');
