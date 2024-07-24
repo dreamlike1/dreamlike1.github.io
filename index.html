@@ -33,6 +33,7 @@
             box-sizing: border-box;
             background: #333;
             color: #8888ab;
+            appearance: none; /* Remove dropdown arrow */
         }
         button {
             width: 100%;
@@ -70,7 +71,7 @@
         </select>
         <input type="date" id="startDate" required>
         <input type="text" id="businessDays" placeholder="Business Days" required>
-        <button onclick="calculateBusinessDate()">Calculate</button>
+        <button id="calculateButton">Calculate</button>
         <h2 id="result">Results: </h2>
     </div>
 
@@ -113,6 +114,8 @@
 
             document.getElementById('result').innerText = 'Results: ' + results.join(' and ');
         }
+
+        document.getElementById('calculateButton').addEventListener('click', calculateBusinessDate);
     </script>
 </body>
 </html>
