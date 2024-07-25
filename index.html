@@ -208,17 +208,17 @@ function isHoliday(date, country) {
     );
 }
 
-function calculateBusinessDays(startDate, businessDays, country) {
+function calculateBusinessDays(startDate, endDate, country) {
     let currentDate = new Date(startDate);
     let count = 0;
 
-    while (count < businessDays) {
-        currentDate.setDate(currentDate.getDate() + 1);
+    while (currentDate <= endDate) {
         if (currentDate.getDay() !== 0 && currentDate.getDay() !== 6 && !isHoliday(currentDate, country)) {
             count++;
         }
+        currentDate.setDate(currentDate.getDate() + 1);
     }
-    return currentDate;
+    return count;
 }
 
 async function populateCountries() {
@@ -240,18 +240,19 @@ document.getElementById('serviceType').addEventListener('change', populateCountr
 
 async function calculateBusinessDate() {
     const startDateInput = document.getElementById('startDate').value;
-    const businessDaysInput = parseInt(document.getElementById('businessDays').value, 10);
+    const endDateInput = document.getElementById('endDate').value;
     const selectedCountry = document.getElementById('countrySelect').value;
 
-    if (!startDateInput || isNaN(businessDaysInput) || !selectedCountry) {
-        alert('Please enter valid start date, number of business days, and select a country.');
+    if (!startDateInput || !endDateInput || !selectedCountry) {
+        alert('Please enter valid start date, end date, and select a country.');
         return;
     }
 
     const startDate = new Date(startDateInput);
-    const endDate = calculateBusinessDays(startDate, businessDaysInput, selectedCountry);
+    const endDate = new Date(endDateInput);
+    const businessDays = calculateBusinessDays(startDate, endDate, selectedCountry);
     
-    document.getElementById('result').value = `End Date: ${endDate.toDateString()}`;
+    document.getElementById('result').value = `Business Days: ${businessDays}`;
 }
 
 document.getElementById('calculateButton').addEventListener('click', calculateBusinessDate);
