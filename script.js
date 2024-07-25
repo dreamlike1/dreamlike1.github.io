@@ -70,6 +70,11 @@ function calculateBusinessDays(startDate, numDays, country) {
     return currentDate;
 }
 
+// Check for countries with holidays
+function filterCountriesWithoutHolidays(countries) {
+    return countries.filter(country => !holidays[country] || holidays[country].length === 0);
+}
+
 // Populate country options and fetch holidays
 async function populateCountries() {
     const countrySelect = document.getElementById('countrySelect');
@@ -78,11 +83,17 @@ async function populateCountries() {
 
     countrySelect.innerHTML = '';
     for (const country of countries) {
+        await fetchHolidays(country); // Fetch holidays for each country
+    }
+    
+    const filteredCountries = filterCountriesWithoutHolidays(countries);
+    filteredCountries.sort(); // Sort countries alphabetically
+
+    for (const country of filteredCountries) {
         const option = document.createElement('option');
         option.value = country;
         option.textContent = country;
         countrySelect.appendChild(option);
-        await fetchHolidays(country); // Fetch holidays for each country
     }
 }
 
