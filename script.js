@@ -77,13 +77,17 @@ async function populateCountries() {
     const countries = countryOptions[selectedService];
 
     countrySelect.innerHTML = '';
+    const holidayFetchPromises = [];
+
     for (const country of countries) {
         const option = document.createElement('option');
         option.value = country;
         option.textContent = country;
         countrySelect.appendChild(option);
-        await fetchHolidays(country); // Fetch holidays for each country
+        holidayFetchPromises.push(fetchHolidays(country)); // Collect promises
     }
+
+    await Promise.all(holidayFetchPromises); // Wait for all holidays to be fetched
 }
 
 document.getElementById('serviceType').addEventListener('change', populateCountries);
