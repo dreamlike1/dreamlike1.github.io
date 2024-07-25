@@ -77,17 +77,13 @@ async function populateCountries() {
     const countries = countryOptions[selectedService];
 
     countrySelect.innerHTML = '';
-    const holidayFetchPromises = [];
-
     for (const country of countries) {
         const option = document.createElement('option');
         option.value = country;
         option.textContent = country;
         countrySelect.appendChild(option);
-        holidayFetchPromises.push(fetchHolidays(country)); // Collect promises
+        await fetchHolidays(country); // Fetch holidays for each country
     }
-
-    await Promise.all(holidayFetchPromises); // Wait for all holidays to be fetched
 }
 
 document.getElementById('serviceType').addEventListener('change', populateCountries);
@@ -96,16 +92,14 @@ async function calculateBusinessDate() {
     const dateRangeInput = document.getElementById('businessDays').value;
     const selectedCountry = document.getElementById('countrySelect').value;
 
-    if (!dateRangeInput || !selectedCountry) {
+    if (!dateRangeInput || isNaN(dateRangeInput) || !selectedCountry) {
         alert('Please enter a valid number of business days and select a country.');
         return;
     }
 
-    // Extract the largest number from the input
-    const numbers = dateRangeInput.split('-').map(num => parseInt(num)).filter(num => !isNaN(num));
-    const numDays = Math.max(...numbers);
-
     const startDate = new Date(document.getElementById('startDate').value);
+    const numDays = parseInt(dateRangeInput);
+
     const endDate = calculateBusinessDays(startDate, numDays, selectedCountry);
     document.getElementById('result').value = `End Date: ${endDate.toLocaleDateString()}`;
 }
