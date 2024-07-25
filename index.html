@@ -125,8 +125,8 @@
         <h1>Business Date Calculator</h1>
         <div style="position: relative;">
             <select id="serviceType">
-                <option value="expressFree">Express (Free)</option>
                 <option value="expressPaid">Express (Paid)</option>
+                <option value="expressFree">Express (Free)</option>
                 <option value="standard">Standard</option>
                 <option value="economy">Economy</option>
                 <option value="collection">Collection</option>
@@ -135,7 +135,7 @@
         </div>
         <div style="position: relative;">
             <select id="countrySelect">
-                /*<option value="US" selected>United States</option>*/
+                <!-- Options will be populated dynamically -->
             </select>
             <div class="dropdown-arrow"></div>
         </div>
@@ -222,15 +222,22 @@
         }
 
         async function calculateBusinessDate() {
-            const startDate = new Date(document.getElementById('startDate').value);
+            const startDateInput = document.getElementById('startDate').value;
             const businessDaysInput = document.getElementById('businessDays').value;
             const selectedCountry = document.getElementById('countrySelect').value;
+
+            console.log("Start Date:", startDateInput);
+            console.log("Business Days Input:", businessDaysInput);
+            console.log("Selected Country:", selectedCountry);
+
             const holidayDates = await fetchHolidays(selectedCountry);
+            console.log("Holidays:", holidayDates);
+
             const [minDays, maxDays] = businessDaysInput.split('-').map(Number);
             const results = [];
 
             for (let days = minDays; days <= maxDays; days++) {
-                let resultDate = new Date(startDate);
+                let resultDate = new Date(startDateInput);
                 let addedDays = 0;
 
                 while (addedDays < days) {
