@@ -156,45 +156,50 @@
 <script>
     const countryOptions = {
         expressPaid: [
-            "United States", "Canada", "Australia", "Mexico", "United Kingdom", "Brazil", 
-            "New Zealand", "Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", 
-            "Czech Republic", "Denmark", "Estonia", "Finland", "France", "Germany", 
-            "Greece", "Hungary", "Ireland", "Italy", "Latvia", "Lithuania", 
-            "Luxembourg", "Malta", "Netherlands", "Poland", "Portugal", "Romania", 
+            "United States", "Canada", "Australia", "Mexico", "United Kingdom", "Brazil",
+            "New Zealand", "Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus",
+            "Czech Republic", "Denmark", "Estonia", "Finland", "France", "Germany",
+            "Greece", "Hungary", "Ireland", "Italy", "Latvia", "Lithuania",
+            "Luxembourg", "Malta", "Netherlands", "Poland", "Portugal", "Romania",
             "Slovakia", "Slovenia", "Spain", "Sweden"
         ],
         expressFree: ["Japan", "South Korea"],
         economy: ["United States"],
         standard: [
-            "United States", "New Zealand", "Austria", "Bosnia and Herzegovina", 
-            "Belgium", "Bulgaria", "Croatia", "Czech Republic", "Denmark", 
-            "Estonia", "Finland", "France", "Germany", "Greece", "Hungary", 
-            "Ireland", "Italy", "Lithuania", "Luxembourg", "Latvia", 
-            "Netherlands", "Norway", "Poland", "Portugal", "Romania", 
-            "Slovenia", "Slovakia", "Spain", "Sweden", "Switzerland", 
-            "United Kingdom", "Brunei", "Hong Kong", "Indonesia", "Macau", 
-            "Malaysia", "Philippines", "Singapore", "Thailand", "Taiwan", 
-            "Vietnam", "Anguilla", "Antigua and Barbuda", "Aruba", "Barbados", 
-            "Bermuda", "Bonaire", "Cayman Islands", "Curaçao", "Dominica", 
-            "Dominican Republic", "Greenland", "Grenada", "Guadeloupe", 
-            "Haiti", "Jamaica", "Martinique", "Montserrat", "Puerto Rico", 
-            "Saint Barthélemy", "Saint Kitts and Nevis", "Saint Lucia", 
-            "Saint Martin", "Saint Pierre and Miquelon", "Saint Vincent and the Grenadines", 
-            "Sint Maarten", "Bahamas", "Trinidad and Tobago", "Turks and Caicos Islands", 
-            "British Virgin Islands", "U.S. Virgin Islands", "Belize", "Bolivia", 
-            "Chile", "Colombia", "Costa Rica", "Ecuador", "El Salvador", 
-            "Falkland Islands", "French Guiana", "Guatemala", "Guyana", 
-            "Honduras", "Nicaragua", "Panama", "Paraguay", "Peru", 
-            "South Georgia and the South Sandwich Islands", "Suriname", 
+            "United States", "New Zealand", "Austria", "Bosnia and Herzegovina",
+            "Belgium", "Bulgaria", "Croatia", "Czech Republic", "Denmark",
+            "Estonia", "Finland", "France", "Germany", "Greece", "Hungary",
+            "Ireland", "Italy", "Lithuania", "Luxembourg", "Latvia",
+            "Netherlands", "Norway", "Poland", "Portugal", "Romania",
+            "Slovenia", "Slovakia", "Spain", "Sweden", "Switzerland",
+            "United Kingdom", "Brunei", "Hong Kong", "Indonesia", "Macau",
+            "Malaysia", "Philippines", "Singapore", "Thailand", "Taiwan",
+            "Vietnam", "Anguilla", "Antigua and Barbuda", "Aruba", "Barbados",
+            "Bermuda", "Bonaire", "Cayman Islands", "Curaçao", "Dominica",
+            "Dominican Republic", "Greenland", "Grenada", "Guadeloupe",
+            "Haiti", "Jamaica", "Martinique", "Montserrat", "Puerto Rico",
+            "Saint Barthélemy", "Saint Kitts and Nevis", "Saint Lucia",
+            "Saint Martin", "Saint Pierre and Miquelon", "Saint Vincent and the Grenadines",
+            "Sint Maarten", "Bahamas", "Trinidad and Tobago", "Turks and Caicos Islands",
+            "British Virgin Islands", "U.S. Virgin Islands", "Belize", "Bolivia",
+            "Chile", "Colombia", "Costa Rica", "Ecuador", "El Salvador",
+            "Falkland Islands", "French Guiana", "Guatemala", "Guyana",
+            "Honduras", "Nicaragua", "Panama", "Paraguay", "Peru",
+            "South Georgia and the South Sandwich Islands", "Suriname",
             "Uruguay", "Venezuela"
         ],
         collection: ["United States", "Canada"],
     };
 
-    const holidays = {
-        "United States": [new Date('2024-07-04')], // Independence Day
-        // Add more countries and their holidays here
-    };
+    let holidays = {};
+
+    async function fetchHolidays(country) {
+        const year = new Date().getFullYear();
+        const response = await fetch(`https://date.nager.at/api/v2/PublicHolidays/${year}/${country}`);
+        if (response.ok) {
+            holidays[country] = await response.json();
+        }
+    }
 
     function hasHolidaysForCountry(country) {
         return holidays[country] && holidays[country].length > 0;
@@ -203,13 +208,13 @@
     function isHoliday(date, country) {
         if (!hasHolidaysForCountry(country)) return false;
         return holidays[country].some(holiday => 
-            holiday.getDate() === date.getDate() &&
-            holiday.getMonth() === date.getMonth() &&
-            holiday.getFullYear() === date.getFullYear()
+            new Date(holiday.date).getDate() === date.getDate() &&
+            new Date(holiday.date).getMonth() === date.getMonth() &&
+            new Date(holiday.date).getFullYear() === date.getFullYear()
         );
     }
 
-    function populateCountries() {
+    async function populateCountries() {
         const countrySelect = document.getElementById('countrySelect');
         const selectedService = document.getElementById('serviceType').value;
         const countries = countryOptions[selectedService];
@@ -220,26 +225,13 @@
             option.value = country;
             option.textContent = country;
             countrySelect.appendChild(option);
+            fetchHolidays(country); // Fetch holidays for each country
         });
     }
 
     document.getElementById('serviceType').addEventListener('change', populateCountries);
 
-    function calculateBusinessDays(startDate, businessDays, country) {
-        let currentDate = new Date(startDate);
-        let daysAdded = 0;
-
-        while (daysAdded < businessDays) {
-            currentDate.setDate(currentDate.getDate() + 1);
-            const dayOfWeek = currentDate.getDay();
-            if (dayOfWeek !== 0 && dayOfWeek !== 6 && !isHoliday(currentDate, country)) { // Exclude weekends and holidays
-                daysAdded++;
-            }
-        }
-        return currentDate.toLocaleString('default', { month: 'long' }) + ' ' + currentDate.getDate() + ' ' + currentDate.getFullYear();
-    }
-
-    function calculateBusinessDate() {
+    async function calculateBusinessDate() {
         const startDateInput = document.getElementById('startDate').value;
         const businessDaysInput = parseInt(document.getElementById('businessDays').value, 10);
         const selectedCountry = document.getElementById('countrySelect').value;
@@ -249,8 +241,11 @@
             return;
         }
 
-        const resultDate = calculateBusinessDays(startDateInput, businessDaysInput, selectedCountry);
-        document.getElementById('result').value = resultDate;
+        const startDate = new Date(startDateInput);
+        const endDate = calculateBusinessDays(startDate, businessDaysInput, selectedCountry);
+        
+        const resultText = `Between ${startDate.toLocaleDateString()} and ${endDate.toLocaleDateString()}`;
+        document.getElementById('result').value = resultText;
     }
 
     document.getElementById('calculateButton').addEventListener('click', calculateBusinessDate);
