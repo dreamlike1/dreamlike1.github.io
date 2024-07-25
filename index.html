@@ -125,8 +125,8 @@
         <h1>Business Date Calculator</h1>
         <div style="position: relative;">
             <select id="serviceType">
-                <option value="expressPaid">Express (Paid)</option>
                 <option value="expressFree">Express (Free)</option>
+                <option value="expressPaid">Express (Paid)</option>
                 <option value="standard">Standard</option>
                 <option value="economy">Economy</option>
                 <option value="collection">Collection</option>
@@ -135,7 +135,7 @@
         </div>
         <div style="position: relative;">
             <select id="countrySelect">
-                <option value="US" selected>United States</option>
+                //<option value="US" selected>United States</option>
             </select>
             <div class="dropdown-arrow"></div>
         </div>
@@ -155,83 +155,57 @@
 
     <script>
         const countryOptions = {
-    const countryOptions = {
-    expressPaid: [
-        "United States", "Canada", "Australia", "Mexico", "United Kingdom", "Brazil", 
-        "New Zealand", "Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", 
-        "Czech Republic", "Denmark", "Estonia", "Finland", "France", "Germany", 
-        "Greece", "Hungary", "Ireland", "Italy", "Latvia", "Lithuania", 
-        "Luxembourg", "Malta", "Netherlands", "Poland", "Portugal", "Romania", 
-        "Slovakia", "Slovenia", "Spain", "Sweden"
-    ],
-    expressFree: [
-        "Japan", "South Korea"
-    ],
-    standard: [
-        "United States", "New Zealand", "Austria", "Bosnia and Herzegovina", 
-        "Belgium", "Bulgaria", "Croatia", "Czech Republic", "Denmark", 
-        "Estonia", "Finland", "France", "Germany", "Greece", "Hungary", 
-        "Ireland", "Italy", "Lithuania", "Luxembourg", "Latvia", 
-        "Netherlands", "Norway", "Poland", "Portugal", "Romania", 
-        "Slovenia", "Slovakia", "Spain", "Sweden", "Switzerland", 
-        "United Kingdom", "Brunei", "Hong Kong", "Indonesia", "Macau", 
-        "Malaysia", "Philippines", "Singapore", "Thailand", "Taiwan", 
-        "Vietnam", "Anguilla", "Antigua and Barbuda", "Aruba", "Barbados", 
-        "Bermuda", "Bonaire", "Cayman Islands", "Curaçao", "Dominica", 
-        "Dominican Republic", "Greenland", "Grenada", "Guadeloupe", 
-        "Haiti", "Jamaica", "Martinique", "Montserrat", "Puerto Rico", 
-        "Saint Barthélemy", "Saint Kitts and Nevis", "Saint Lucia", 
-        "Saint Martin", "Saint Pierre and Miquelon", "Saint Vincent and the Grenadines", 
-        "Sint Maarten", "Bahamas", "Trinidad and Tobago", "Turks and Caicos Islands", 
-        "British Virgin Islands", "U.S. Virgin Islands", "Belize", "Bolivia", 
-        "Chile", "Colombia", "Costa Rica", "Ecuador", "El Salvador", 
-        "Falkland Islands", "French Guiana", "Guatemala", "Guyana", 
-        "Honduras", "Nicaragua", "Panama", "Paraguay", "Peru", 
-        "South Georgia and the South Sandwich Islands", "Suriname", 
-        "Uruguay", "Venezuela"
-    ],
-    economy: [
-        "United States"
-    ],
-    collection: [
-        "United States", "Canada"
-    ],
-    default: []
-};
+            expressFree: ["Japan", "South Korea"],
+            expressPaid: [
+                "United States", "Canada", "Australia", "Mexico", "United Kingdom", "Brazil", 
+                "New Zealand", "Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", 
+                "Czech Republic", "Denmark", "Estonia", "Finland", "France", "Germany", 
+                "Greece", "Hungary", "Ireland", "Italy", "Latvia", "Lithuania", 
+                "Luxembourg", "Malta", "Netherlands", "Poland", "Portugal", "Romania", 
+                "Slovakia", "Slovenia", "Spain", "Sweden"
+            ],
+            economy: ["United States"],
+            standard: [
+                "United States", "New Zealand", "Austria", "Bosnia and Herzegovina", 
+                "Belgium", "Bulgaria", "Croatia", "Czech Republic", "Denmark", 
+                "Estonia", "Finland", "France", "Germany", "Greece", "Hungary", 
+                "Ireland", "Italy", "Lithuania", "Luxembourg", "Latvia", 
+                "Netherlands", "Norway", "Poland", "Portugal", "Romania", 
+                "Slovenia", "Slovakia", "Spain", "Sweden", "Switzerland", 
+                "United Kingdom", "Brunei", "Hong Kong", "Indonesia", "Macau", 
+                "Malaysia", "Philippines", "Singapore", "Thailand", "Taiwan", 
+                "Vietnam", "Anguilla", "Antigua and Barbuda", "Aruba", "Barbados", 
+                "Bermuda", "Bonaire", "Cayman Islands", "Curaçao", "Dominica", 
+                "Dominican Republic", "Greenland", "Grenada", "Guadeloupe", 
+                "Haiti", "Jamaica", "Martinique", "Montserrat", "Puerto Rico", 
+                "Saint Barthélemy", "Saint Kitts and Nevis", "Saint Lucia", 
+                "Saint Martin", "Saint Pierre and Miquelon", "Saint Vincent and the Grenadines", 
+                "Sint Maarten", "Bahamas", "Trinidad and Tobago", "Turks and Caicos Islands", 
+                "British Virgin Islands", "U.S. Virgin Islands", "Belize", "Bolivia", 
+                "Chile", "Colombia", "Costa Rica", "Ecuador", "El Salvador", 
+                "Falkland Islands", "French Guiana", "Guatemala", "Guyana", 
+                "Honduras", "Nicaragua", "Panama", "Paraguay", "Peru", 
+                "South Georgia and the South Sandwich Islands", "Suriname", 
+                "Uruguay", "Venezuela"
+            ],
+            collection: ["United States", "Canada"],
+        };
 
-document.getElementById('serviceType').addEventListener('change', (event) => {
-    const selectedService = event.target.value;
-    const countrySelect = document.getElementById('countrySelect');
-    countrySelect.innerHTML = '';
-
-    const countries = countryOptions[selectedService];
-    countries.forEach(country => {
-        const option = document.createElement('option');
-        option.value = country;
-        option.textContent = country;
-        countrySelect.appendChild(option);
-    });
-
-    // Set the first option as selected
-    countrySelect.value = countries[0] || '';
-});
-
-        document.getElementById('serviceType').addEventListener('change', (event) => {
-            const selectedService = event.target.value;
+        function populateCountries() {
             const countrySelect = document.getElementById('countrySelect');
-            countrySelect.innerHTML = '';
+            const selectedService = document.getElementById('serviceType').value;
+            const countries = countryOptions[selectedService];
 
-            const countries = countryOptions[selectedService] || countryOptions.default;
+            countrySelect.innerHTML = ''; // Clear existing options
             countries.forEach(country => {
                 const option = document.createElement('option');
                 option.value = country;
                 option.textContent = country;
                 countrySelect.appendChild(option);
             });
+        }
 
-            // Set the first option as selected
-            countrySelect.value = countries[0] || '';
-        });
+        document.getElementById('serviceType').addEventListener('change', populateCountries);
 
         async function fetchHolidays(country) {
             const response = await fetch(`https://date.nager.at/Api/v2/PublicHolidays/${new Date().getFullYear()}/${country}`);
@@ -240,7 +214,7 @@ document.getElementById('serviceType').addEventListener('change', (event) => {
         }
 
         function isWeekend(date) {
-            return date.getDay() === 0 || date.getDay() === 6; // Sunday or Saturday
+            return date.getDay() === 0 || date.getDay() === 6;
         }
 
         function formatDate(date) {
