@@ -148,18 +148,19 @@ async function calculateBusinessDate() {
     const endDate2 = calculateBusinessDays(startDate, maxDays, selectedCountry);
 
     // Ensure the final results don't include holidays
-    const finalEndDate1 = new Date(endDate1);
-    const finalEndDate2 = new Date(endDate2);
-
-    while (isHoliday(finalEndDate1, selectedCountry)) {
-        finalEndDate1.setDate(finalEndDate1.getDate() + 1);
-    }
-    while (isHoliday(finalEndDate2, selectedCountry)) {
-        finalEndDate2.setDate(finalEndDate2.getDate() + 1);
-    }
+    const finalEndDate1 = adjustForHolidays(endDate1, selectedCountry);
+    const finalEndDate2 = adjustForHolidays(endDate2, selectedCountry);
 
     const options = { month: 'long', day: 'numeric', year: 'numeric' };
     document.getElementById('result').value = `Between ${finalEndDate1.toLocaleDateString('en-US', options)} and ${finalEndDate2.toLocaleDateString('en-US', options)}`;
+}
+
+// Adjust dates to skip holidays
+function adjustForHolidays(date, country) {
+    while (isHoliday(date, country)) {
+        date.setDate(date.getDate() + 1);
+    }
+    return date;
 }
 
 document.getElementById('calculateButton').addEventListener('click', calculateBusinessDate);
