@@ -126,6 +126,7 @@
         <div style="position: relative;">
             <select id="serviceType">
                 <option value="expressPaid">Express (Paid)</option>
+                <option value="expressFree">Express (Free)</option>
                 <option value="standard">Standard</option>
                 <option value="economy">Economy</option>
                 <option value="collection">Collection</option>
@@ -154,7 +155,8 @@
 
     <script>
         const countryOptions = {
-            expressPaid: ["US", "CA", "AU", "MX", "UK", "BR", "NZ"],
+            expressPaid: ["US", "CA", "AU", "MX", "UK", "BR", "NZ", "AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR", "DE", "GR", "HU", "IE", "IT", "LV", "LT", "LU", "MT", "NL", "PL", "PT", "RO", "SK", "SI", "ES", "SE"],
+            expressFree: ["JP", "KR"],
             standard: ["US", "NZ"],
             economy: ["US"],
             collection: ["US", "CA"],
