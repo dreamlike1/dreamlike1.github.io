@@ -109,7 +109,7 @@ function calculateBusinessDays(startDate, numDays, country) {
             count++;
         }
     }
-    return currentDate; // Return the last valid business day
+    return currentDate;
 }
 
 // Populate country options and fetch holidays
@@ -130,36 +130,20 @@ async function populateCountries() {
 
 document.getElementById('serviceType').addEventListener('change', populateCountries);
 
-// Calculate the business date based on user input
 async function calculateBusinessDate() {
     const dateRangeInput = document.getElementById('businessDays').value;
     const selectedCountry = document.getElementById('countrySelect').value;
 
-    if (!dateRangeInput || !selectedCountry) {
-        alert('Please enter a valid date range and select a country.');
+    if (!dateRangeInput || isNaN(dateRangeInput) || !selectedCountry) {
+        alert('Please enter a valid number of business days and select a country.');
         return;
     }
 
     const startDate = new Date(document.getElementById('startDate').value);
-    const [minDays, maxDays] = dateRangeInput.split('-').map(Number);
+    const numDays = parseInt(dateRangeInput);
 
-    const endDate1 = calculateBusinessDays(startDate, minDays, selectedCountry);
-    const endDate2 = calculateBusinessDays(startDate, maxDays, selectedCountry);
-
-    // Adjust end dates to ensure they do not fall on holidays
-    const finalEndDate1 = adjustForHolidays(endDate1, selectedCountry);
-    const finalEndDate2 = adjustForHolidays(endDate2, selectedCountry);
-
-    const options = { month: 'long', day: 'numeric', year: 'numeric' };
-    document.getElementById('result').value = `Between ${finalEndDate1.toLocaleDateString('en-US', options)} and ${finalEndDate2.toLocaleDateString('en-US', options)}`;
-}
-
-// Adjust dates to skip holidays
-function adjustForHolidays(date, country) {
-    while (isHoliday(date, country)) {
-        date.setDate(date.getDate() + 1);
-    }
-    return date;
+    const endDate = calculateBusinessDays(startDate, numDays, selectedCountry);
+    document.getElementById('result').value = `End Date: ${endDate.toLocaleDateString()}`;
 }
 
 document.getElementById('calculateButton').addEventListener('click', calculateBusinessDate);
