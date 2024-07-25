@@ -191,6 +191,19 @@
         collection: ["United States", "Canada"],
     };
 
+    const holidays = [
+        new Date('2024-07-04'), // Independence Day
+        // Add more holidays here as needed
+    ];
+
+    function isHoliday(date) {
+        return holidays.some(holiday => 
+            holiday.getDate() === date.getDate() &&
+            holiday.getMonth() === date.getMonth() &&
+            holiday.getFullYear() === date.getFullYear()
+        );
+    }
+
     function populateCountries() {
         const countrySelect = document.getElementById('countrySelect');
         const selectedService = document.getElementById('serviceType').value;
@@ -214,7 +227,7 @@
         while (daysAdded < businessDays) {
             currentDate.setDate(currentDate.getDate() + 1);
             const dayOfWeek = currentDate.getDay();
-            if (dayOfWeek !== 0 && dayOfWeek !== 6) { // Exclude weekends
+            if (dayOfWeek !== 0 && dayOfWeek !== 6 && !isHoliday(currentDate)) { // Exclude weekends and holidays
                 daysAdded++;
             }
         }
