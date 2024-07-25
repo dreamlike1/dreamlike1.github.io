@@ -94,17 +94,19 @@ function isHoliday(date, country) {
     );
 }
 
-function calculateBusinessDays(startDate, endDate, country) {
+function calculateBusinessDays(startDate, numDays, country) {
     let currentDate = new Date(startDate);
     let count = 0;
+    let endDate;
 
-    while (currentDate <= endDate) {
+    while (count < numDays) {
+        currentDate.setDate(currentDate.getDate() + 1);
         if (currentDate.getDay() !== 0 && currentDate.getDay() !== 6 && !isHoliday(currentDate, country)) {
             count++;
+            endDate = new Date(currentDate);
         }
-        currentDate.setDate(currentDate.getDate() + 1);
     }
-    return count;
+    return endDate;
 }
 
 async function populateCountries() {
@@ -134,18 +136,13 @@ async function calculateBusinessDate() {
     }
 
     const startDate = new Date(document.getElementById('startDate').value);
-    const endDate = new Date(startDate);
-    endDate.setDate(startDate.getDate() + parseInt(dateRangeInput));
+    const [minDays, maxDays] = dateRangeInput.split('-').map(Number);
 
-    if (isNaN(startDate) || isNaN(endDate)) {
-        alert('Please enter valid dates.');
-        return;
-    }
+    const endDate1 = calculateBusinessDays(startDate, minDays, selectedCountry);
+    const endDate2 = calculateBusinessDays(startDate, maxDays, selectedCountry);
 
-    const businessDays = calculateBusinessDays(startDate, endDate, selectedCountry);
-    
     const options = { month: 'long', day: 'numeric' };
-    document.getElementById('result').value = `Between ${startDate.toLocaleDateString('en-US', options)} and ${endDate.toLocaleDateString('en-US', options)}`;
+    document.getElementById('result').value = `Between ${endDate1.toLocaleDateString('en-US', options)} and ${endDate2.toLocaleDateString('en-US', options)}`;
 }
 
 document.getElementById('calculateButton').addEventListener('click', calculateBusinessDate);
@@ -163,6 +160,5 @@ document.getElementById('result').addEventListener('click', () => {
 
 // Initial population of countries
 populateCountries();
-</script>
 </body>
 </html>
