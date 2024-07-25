@@ -228,17 +228,19 @@
 
         let currentDate = startDate;
         let daysAdded = 0;
+        const resultDates = [];
 
         while (daysAdded < businessDaysInput) {
             currentDate.setDate(currentDate.getDate() + 1);
             const dayOfWeek = currentDate.getDay();
 
             if (dayOfWeek !== 0 && dayOfWeek !== 6 && !holidays.includes(currentDate.toISOString().split('T')[0])) {
+                resultDates.push(`${currentDate.toLocaleString('default', { month: 'long' })} ${currentDate.getDate()} ${currentDate.getFullYear()}`);
                 daysAdded++;
             }
         }
 
-        document.getElementById('result').value = currentDate.toISOString().split('T')[0];
+        document.getElementById('result').value = resultDates.join(", ");
     }
 
     document.getElementById('calculateButton').addEventListener('click', calculateBusinessDate);
