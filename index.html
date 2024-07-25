@@ -140,6 +140,11 @@ async function calculateBusinessDate() {
     }
 
     const startDate = new Date(document.getElementById('startDate').value);
+    if (isNaN(startDate)) {
+        alert('Please select a valid start date.');
+        return;
+    }
+
     const numDays = parseInt(dateRangeInput);
 
     const endDate = calculateBusinessDays(startDate, numDays, selectedCountry);
