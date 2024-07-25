@@ -239,20 +239,24 @@ async function populateCountries() {
 document.getElementById('serviceType').addEventListener('change', populateCountries);
 
 async function calculateBusinessDate() {
-    const startDateInput = document.getElementById('startDate').value;
-    const endDateInput = document.getElementById('endDate').value;
+    const dateRangeInput = document.getElementById('dateRange').value;
     const selectedCountry = document.getElementById('countrySelect').value;
 
-    if (!startDateInput || !endDateInput || !selectedCountry) {
-        alert('Please enter valid start date, end date, and select a country.');
+    if (!dateRangeInput || !selectedCountry) {
+        alert('Please enter a valid date range and select a country.');
         return;
     }
 
-    const startDate = new Date(startDateInput);
-    const endDate = new Date(endDateInput);
-    const businessDays = calculateBusinessDays(startDate, endDate, selectedCountry);
+    const [start, end] = dateRangeInput.split('-').map(date => new Date(date.trim()));
     
-    document.getElementById('result').value = `Business Days: ${businessDays}`;
+    if (isNaN(start) || isNaN(end)) {
+        alert('Please enter valid dates in the format MM/DD - MM/DD.');
+        return;
+    }
+
+    const businessDays = calculateBusinessDays(start, end, selectedCountry);
+    
+    document.getElementById('result').value = `Between ${start.toDateString()} and ${end.toDateString()}: ${businessDays} business days`;
 }
 
 document.getElementById('calculateButton').addEventListener('click', calculateBusinessDate);
