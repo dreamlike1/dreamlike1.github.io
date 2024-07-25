@@ -96,14 +96,16 @@ async function calculateBusinessDate() {
     const dateRangeInput = document.getElementById('businessDays').value;
     const selectedCountry = document.getElementById('countrySelect').value;
 
-    if (!dateRangeInput || isNaN(dateRangeInput) || !selectedCountry) {
+    if (!dateRangeInput || !selectedCountry) {
         alert('Please enter a valid number of business days and select a country.');
         return;
     }
 
-    const startDate = new Date(document.getElementById('startDate').value);
-    const numDays = parseInt(dateRangeInput);
+    // Extract the largest number from the input
+    const numbers = dateRangeInput.split('-').map(num => parseInt(num)).filter(num => !isNaN(num));
+    const numDays = Math.max(...numbers);
 
+    const startDate = new Date(document.getElementById('startDate').value);
     const endDate = calculateBusinessDays(startDate, numDays, selectedCountry);
     document.getElementById('result').value = `End Date: ${endDate.toLocaleDateString()}`;
 }
