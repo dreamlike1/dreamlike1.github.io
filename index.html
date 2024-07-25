@@ -63,7 +63,7 @@
             height: 0;
             border-left: 6px solid transparent;
             border-right: 6px solid transparent;
-            border-top: 8px solid #76ABAE; /* Linear arrow */
+            border-top: 8px solid #76ABAE;
         }
         .hamburger-icon {
             width: 16px;
@@ -127,7 +127,6 @@
             <select id="serviceType">
                 <option value="expressPaid">Express (Paid)</option>
                 <option value="expressFree">Express (Free)</option>
-                <option value="standard">Standard</option>
                 <option value="economy">Economy</option>
                 <option value="collection">Collection</option>
             </select>
@@ -136,12 +135,6 @@
         <div style="position: relative;">
             <select id="countrySelect">
                 <option value="US" selected>United States</option>
-                <option value="AT">Austria</option>
-                <option value="BE">Belgium</option>
-                <option value="DE">Germany</option>
-                <option value="FR">France</option>
-                <option value="IT">Italy</option>
-                <option value="ES">Spain</option>
             </select>
             <div class="dropdown-arrow"></div>
         </div>
@@ -160,6 +153,31 @@
     </div>
 
     <script>
+        const countryOptions = {
+            expressPaid: ["US", "CA", "AU", "DE", "FR", "IT", "ES", "NL", "SE", "PL", "BR", "NZ"],
+            expressFree: ["JP", "KR"],
+            economy: ["US"],
+            collection: ["US", "CA"],
+            default: []
+        };
+
+        document.getElementById('serviceType').addEventListener('change', (event) => {
+            const selectedService = event.target.value;
+            const countrySelect = document.getElementById('countrySelect');
+            countrySelect.innerHTML = '';
+
+            const countries = countryOptions[selectedService] || countryOptions.default;
+            countries.forEach(country => {
+                const option = document.createElement('option');
+                option.value = country;
+                option.textContent = country;
+                countrySelect.appendChild(option);
+            });
+
+            // Set the first option as selected
+            countrySelect.value = countries[0] || '';
+        });
+
         async function fetchHolidays(country) {
             const response = await fetch(`https://date.nager.at/Api/v2/PublicHolidays/${new Date().getFullYear()}/${country}`);
             const data = await response.json();
