@@ -147,7 +147,7 @@ async function calculateBusinessDate() {
     const endDate1 = calculateBusinessDays(startDate, minDays, selectedCountry);
     const endDate2 = calculateBusinessDays(startDate, maxDays, selectedCountry);
 
-    // Ensure the final results don't include holidays
+    // Adjust end dates to ensure they do not fall on holidays
     const finalEndDate1 = adjustForHolidays(endDate1, selectedCountry);
     const finalEndDate2 = adjustForHolidays(endDate2, selectedCountry);
 
