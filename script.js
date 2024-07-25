@@ -56,6 +56,12 @@ function isHoliday(date, country) {
     );
 }
 
+// Format date to a string with month names
+function formatDate(date) {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString(undefined, options);
+}
+
 // Calculate business days, excluding weekends and holidays
 function calculateBusinessDays(startDate, numDays, country) {
     let currentDate = new Date(startDate);
@@ -92,16 +98,23 @@ async function calculateBusinessDate() {
     const dateRangeInput = document.getElementById('businessDays').value;
     const selectedCountry = document.getElementById('countrySelect').value;
 
-    if (!dateRangeInput || isNaN(dateRangeInput) || !selectedCountry) {
-        alert('Please enter a valid number of business days and select a country.');
+    if (!dateRangeInput || !selectedCountry) {
+        alert('Please enter a valid range of business days and select a country.');
         return;
     }
 
     const startDate = new Date(document.getElementById('startDate').value);
-    const numDays = parseInt(dateRangeInput);
+    const ranges = dateRangeInput.split('-').map(Number);
+    const numDaysStart = ranges[0];
+    const numDaysEnd = ranges[1] || ranges[0]; // Handle single number input
 
-    const endDate = calculateBusinessDays(startDate, numDays, selectedCountry);
-    document.getElementById('result').value = `End Date: ${endDate.toLocaleDateString()}`;
+    const endDateStart = calculateBusinessDays(startDate, numDaysStart, selectedCountry);
+    const endDateEnd = calculateBusinessDays(startDate, numDaysEnd, selectedCountry);
+
+    const formattedStart = formatDate(endDateStart);
+    const formattedEnd = formatDate(endDateEnd);
+
+    document.getElementById('result').value = `Between ${formattedStart} and ${formattedEnd}`;
 }
 
 document.getElementById('calculateButton').addEventListener('click', calculateBusinessDate);
