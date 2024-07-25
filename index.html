@@ -100,16 +100,15 @@ function isHoliday(date, country) {
 function calculateBusinessDays(startDate, numDays, country) {
     let currentDate = new Date(startDate);
     let count = 0;
-    let endDate;
 
     while (count < numDays) {
         currentDate.setDate(currentDate.getDate() + 1);
+        // Check if current day is a weekend or a holiday
         if (currentDate.getDay() !== 0 && currentDate.getDay() !== 6 && !isHoliday(currentDate, country)) {
             count++;
-            endDate = new Date(currentDate);
         }
     }
-    return endDate;
+    return currentDate; // Return the last valid business day
 }
 
 async function populateCountries() {
