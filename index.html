@@ -221,23 +221,18 @@ function calculateBusinessDays(startDate, businessDays, country) {
     return currentDate;
 }
 
-function getMonthName(date) {
-    const options = { month: 'long' };
-    return new Intl.DateTimeFormat('en-US', options).format(date);
-}
-
 async function populateCountries() {
     const countrySelect = document.getElementById('countrySelect');
     const selectedService = document.getElementById('serviceType').value;
     const countries = countryOptions[selectedService];
 
-    countrySelect.innerHTML = ''; // Clear existing options
-    countries.forEach(country => {
+    countrySelect.innerHTML = '';
+    countries.forEach(async country => {
         const option = document.createElement('option');
         option.value = country;
         option.textContent = country;
         countrySelect.appendChild(option);
-        fetchHolidays(country); // Fetch holidays for the country
+        await fetchHolidays(country);
     });
 }
 
@@ -256,17 +251,14 @@ async function calculateBusinessDate() {
     const startDate = new Date(startDateInput);
     const endDate = calculateBusinessDays(startDate, businessDaysInput, selectedCountry);
     
-    const resultText = `Between ${getMonthName(startDate)} and ${getMonthName(endDate)}`;
-    document.getElementById('result').value = resultText;
+    document.getElementById('result').value = `End Date: ${endDate.toDateString()}`;
 }
 
 document.getElementById('calculateButton').addEventListener('click', calculateBusinessDate);
 
 document.getElementById('result').addEventListener('click', () => {
     const resultField = document.getElementById('result');
-    navigator.clipboard.writeText(resultField.value).then(() => {
-        alert("Copied!");
-    });
+    navigator.clipboard.writeText(resultField.value);
 });
 </script>
 </body>
