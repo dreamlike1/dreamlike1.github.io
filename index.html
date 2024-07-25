@@ -207,40 +207,31 @@
 
     document.getElementById('serviceType').addEventListener('change', populateCountries);
 
-    async function fetchHolidays(year, country) {
-        try {
-            const response = await fetch(`https://date.nager.at/Api/v2/PublicHolidays/${year}/${country}`);
-            const data = await response.json();
-            return data.map(holiday => new Date(holiday.date).toISOString().split('T')[0]);
-        } catch (error) {
-            console.error('Error fetching holidays:', error);
-            return [];
-        }
-    }
-
-    async function calculateBusinessDate() {
-        const startDateInput = document.getElementById('startDate').value;
-        const businessDaysInput = document.getElementById('businessDays').value;
-        const selectedCountry = document.getElementById('countrySelect').value;
-
-        const startDate = new Date(startDateInput);
-        const holidays = await fetchHolidays(startDate.getFullYear(), selectedCountry);
-
-        let currentDate = startDate;
+    function calculateBusinessDays(startDate, businessDays) {
+        let currentDate = new Date(startDate);
         let daysAdded = 0;
-        const resultDates = [];
 
-        while (daysAdded < businessDaysInput) {
+        while (daysAdded < businessDays) {
             currentDate.setDate(currentDate.getDate() + 1);
             const dayOfWeek = currentDate.getDay();
-
-            if (dayOfWeek !== 0 && dayOfWeek !== 6 && !holidays.includes(currentDate.toISOString().split('T')[0])) {
-                resultDates.push(`${currentDate.toLocaleString('default', { month: 'long' })} ${currentDate.getDate()} ${currentDate.getFullYear()}`);
+            if (dayOfWeek !== 0 && dayOfWeek !== 6) { // Exclude weekends
                 daysAdded++;
             }
         }
+        return currentDate.toLocaleString('default', { month: 'long' }) + ' ' + currentDate.getDate() + ' ' + currentDate.getFullYear();
+    }
 
-        document.getElementById('result').value = resultDates.join(", ");
+    function calculateBusinessDate() {
+        const startDateInput = document.getElementById('startDate').value;
+        const businessDaysInput = parseInt(document.getElementById('businessDays').value, 10);
+
+        if (!startDateInput || isNaN(businessDaysInput)) {
+            alert('Please enter valid start date and number of business days.');
+            return;
+        }
+
+        const resultDate = calculateBusinessDays(startDateInput, businessDaysInput);
+        document.getElementById('result').value = resultDate;
     }
 
     document.getElementById('calculateButton').addEventListener('click', calculateBusinessDate);
