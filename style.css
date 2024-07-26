@@ -56,7 +56,7 @@ select {
 
 /* Remove calendar icon for date input */
 input[type="date"]::-webkit-calendar-picker-indicator {
-    display: none; /* Hides the calendar icon in WebKit browsers */
+    display: block; /* Hides the calendar icon in WebKit browsers */
 }
 
 button {
