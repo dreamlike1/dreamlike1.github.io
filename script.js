@@ -123,7 +123,7 @@ async function fetchHolidays(country, year) {
     console.log(`Fetching holidays for ${country} (${countryCode}) in ${year}`);
     
     try {
-        const response = await fetch(`https://openholidaysapi.org/v1/holidays/${year}/${countryCode}`);
+        const response = await fetch(`hhttps://date.nager.at/api/v3/publicholidays/${year}/${countryCode}`);
         
         if (!response.ok) {
             console.error(`Failed to fetch holidays for ${country}: ${response.status} ${response.statusText}`);
