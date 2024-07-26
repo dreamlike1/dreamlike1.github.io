@@ -190,18 +190,21 @@ async function populateCountries() {
     const countries = countryOptions[selectedService] || [];
 
     console.log(`Selected service: ${selectedService}, Countries: ${countries}`);
+
     countrySelect.innerHTML = '<option value="">Select a country</option>'; // Add default option
-    
-    for (const country of countries) {
-        await fetchHolidays(country, new Date().getFullYear()); // Fetch holidays for each country
+
+    if (countries.length === 0) {
+        console.warn('No countries found for selected service.');
+        return;
     }
 
-    countries.forEach(country => {
+    for (const country of countries) {
+        await fetchHolidays(country, new Date().getFullYear());
         const option = document.createElement('option');
         option.value = country;
         option.textContent = country;
         countrySelect.appendChild(option);
-    });
+    }
 }
 
 // Event listeners
