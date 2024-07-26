@@ -123,20 +123,20 @@ async function fetchHolidays(country, year) {
     console.log(`Fetching holidays for ${country} (${countryCode}) in ${year}`);
     
     try {
-        const response = await fetch(`https://date.nager.at/api/v3/publicholidays/${year}/${countryCode}`);
+        const response = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${year}/${countryCode}`);
         
         if (!response.ok) {
             console.error(`Failed to fetch holidays for ${country}: ${response.status} ${response.statusText}`);
             return;
         }
 
-        const data = await response.json(); // Updated here
+        const text = await response.text();
         if (!text) {
             console.warn(`Empty response for ${country}, no holidays found.`);
             return;
         }
 
-        const holidayData = await response.json(); // Updated here
+        const data = JSON.parse(text);
         if (data && Array.isArray(data)) {
             holidays[country] = data;
             console.log(`Holidays for ${country}:`, holidays[country]);
