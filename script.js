@@ -121,15 +121,22 @@ async function fetchHolidays(country, year) {
     }
     
     console.log(`Fetching holidays for ${country} (${countryCode}) in ${year}`);
-    const response = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${year}/${countryCode}`);
-    
-    if (!response.ok) {
-        console.error(`Failed to fetch holidays for ${country}: ${response.statusText}`);
-        return;
-    }
     
     try {
-        const data = await response.json();
+        const response = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${year}/${countryCode}`);
+        
+        if (!response.ok) {
+            console.error(`Failed to fetch holidays for ${country}: ${response.status} ${response.statusText}`);
+            return;
+        }
+
+        const text = await response.text();
+        if (!text) {
+            console.warn(`Empty response for ${country}, no holidays found.`);
+            return;
+        }
+
+        const data = JSON.parse(text);
         if (data && Array.isArray(data)) {
             holidays[country] = data;
             console.log(`Holidays for ${country}:`, holidays[country]);
@@ -137,7 +144,7 @@ async function fetchHolidays(country, year) {
             console.warn(`No holiday data available for ${country}`);
         }
     } catch (error) {
-        console.error(`Error parsing JSON for ${country}:`, error);
+        console.error(`Error fetching holidays for ${country}:`, error);
     }
 }
 
@@ -170,7 +177,7 @@ function calculateBusinessDays(startDate, numDays, country) {
             count++;
         }
     }
-    // Adjust if the final date falls on a holiday
+
     while (isHoliday(currentDate, country)) {
         console.log(`Date ${currentDate.toDateString()} is a holiday, moving to next day`);
         currentDate.setDate(currentDate.getDate() + 1);
@@ -192,12 +199,7 @@ async function populateCountries() {
         await fetchHolidays(country, new Date().getFullYear()); // Fetch holidays for each country
     }
 
-    const filteredCountries = countries.filter(country => 
-        !holidays[country] || holidays[country].length === 0
-    ).sort();
-
-    console.log(`Filtered countries: ${filteredCountries}`);
-    filteredCountries.forEach(country => {
+    countries.forEach(country => {
         const option = document.createElement('option');
         option.value = country;
         option.textContent = country;
@@ -222,9 +224,9 @@ async function calculateBusinessDate() {
     const startDate = new Date(document.getElementById('startDate').value);
     const ranges = dateRangeInput.split('-').map(Number);
     const numDaysStart = ranges[0];
-    const numDaysEnd = ranges[1] || ranges[0]; // Handle single number input
+    const numDaysEnd = ranges[1] || ranges[0];
 
-    await fetchHolidays(selectedCountry, startDate.getFullYear()); // Update holidays for selected year
+    await fetchHolidays(selectedCountry, startDate.getFullYear());
 
     const endDateStart = calculateBusinessDays(startDate, numDaysStart, selectedCountry);
     const endDateEnd = calculateBusinessDays(startDate, numDaysEnd, selectedCountry);
