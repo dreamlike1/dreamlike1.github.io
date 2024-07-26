@@ -38,6 +38,7 @@ input, select {
     appearance: none;
     font-family: 'Menlo', monospace;
     position: relative;
+    color-scheme: dark;
 }
 
 #businessDays {
