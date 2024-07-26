@@ -92,7 +92,6 @@ const countryCodeMapping = {
     "Jamaica": "JM",
     "Malaysia": "MY",
     "Montserrat": "MS",
-    "New Zealand": "NZ",
     "Nicaragua": "NI",
     "Panama": "PA",
     "Paraguay": "PY",
@@ -195,6 +194,7 @@ async function populateCountries() {
     });
 }
 
+// Event listeners
 document.getElementById('serviceType').addEventListener('change', populateCountries);
 
 async function calculateBusinessDate() {
@@ -240,4 +240,6 @@ document.getElementById('result').addEventListener('click', () => {
 });
 
 // Initial population of countries
-populateCountries();
+document.addEventListener('DOMContentLoaded', () => {
+    populateCountries();
+});
