@@ -29,12 +29,100 @@ const countryOptions = {
     collection: ["Canada", "United States"],
 };
 
+// Country code mapping
+const countryCodeMapping = {
+    "Australia": "AU",
+    "Austria": "AT",
+    "Belgium": "BE",
+    "Bolivia": "BO",
+    "Brazil": "BR",
+    "Bulgaria": "BG",
+    "Canada": "CA",
+    "Croatia": "HR",
+    "Cyprus": "CY",
+    "Czech Republic": "CZ",
+    "Denmark": "DK",
+    "Estonia": "EE",
+    "Finland": "FI",
+    "France": "FR",
+    "Germany": "DE",
+    "Greece": "GR",
+    "Hungary": "HU",
+    "Ireland": "IE",
+    "Italy": "IT",
+    "Japan": "JP",
+    "Latvia": "LV",
+    "Lithuania": "LT",
+    "Luxembourg": "LU",
+    "Malta": "MT",
+    "Mexico": "MX",
+    "Netherlands": "NL",
+    "New Zealand": "NZ",
+    "Norway": "NO",
+    "Poland": "PL",
+    "Portugal": "PT",
+    "Romania": "RO",
+    "Slovakia": "SK",
+    "Slovenia": "SI",
+    "Spain": "ES",
+    "Sweden": "SE",
+    "United Kingdom": "GB",
+    "United States": "US",
+    "Vietnam": "VN",
+    "South Korea": "KR",
+    "Anguilla": "AI",
+    "Antigua and Barbuda": "AG",
+    "Aruba": "AW",
+    "Bahamas": "BS",
+    "Belize": "BZ",
+    "Bosnia and Herzegovina": "BA",
+    "Brunei": "BN",
+    "Chile": "CL",
+    "Colombia": "CO",
+    "Costa Rica": "CR",
+    "Curaçao": "CW",
+    "Dominica": "DM",
+    "Dominican Republic": "DO",
+    "French Guiana": "GF",
+    "Grenada": "GD",
+    "Guadeloupe": "GP",
+    "Haiti": "HT",
+    "Honduras": "HN",
+    "Hong Kong": "HK",
+    "Jamaica": "JM",
+    "Malaysia": "MY",
+    "Montserrat": "MS",
+    "New Zealand": "NZ",
+    "Nicaragua": "NI",
+    "Panama": "PA",
+    "Paraguay": "PY",
+    "Peru": "PE",
+    "Philippines": "PH",
+    "Puerto Rico": "PR",
+    "Saint Kitts and Nevis": "KN",
+    "Saint Lucia": "LC",
+    "Saint Vincent and the Grenadines": "VC",
+    "Singapore": "SG",
+    "Switzerland": "CH",
+    "Trinidad and Tobago": "TT",
+    "Turks and Caicos Islands": "TC",
+    "U.S. Virgin Islands": "VI",
+    "Venezuela": "VE",
+};
+
+// Store holidays
 let holidays = {};
 
 // Fetch holidays for a specific country and year
 async function fetchHolidays(country, year) {
-    console.log(`Fetching holidays for ${country} in ${year}`);
-    const response = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${year}/${country}`);
+    const countryCode = countryCodeMapping[country];
+    if (!countryCode) {
+        console.error(`No country code found for ${country}`);
+        return;
+    }
+    
+    console.log(`Fetching holidays for ${country} (${countryCode}) in ${year}`);
+    const response = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${year}/${countryCode}`);
     if (response.ok) {
         holidays[country] = await response.json();
         console.log(`Holidays for ${country}:`, holidays[country]);
@@ -85,27 +173,26 @@ function calculateBusinessDays(startDate, numDays, country) {
 async function populateCountries() {
     const countrySelect = document.getElementById('countrySelect');
     const selectedService = document.getElementById('serviceType').value;
-    const countries = countryOptions[selectedService];
+    const countries = countryOptions[selectedService] || [];
 
     console.log(`Selected service: ${selectedService}, Countries: ${countries}`);
     countrySelect.innerHTML = '';
+    
     for (const country of countries) {
-        const year = new Date().getFullYear();
-        await fetchHolidays(country, year); // Fetch holidays for each country
+        await fetchHolidays(country, new Date().getFullYear()); // Fetch holidays for each country
     }
 
     const filteredCountries = countries.filter(country => 
         !holidays[country] || holidays[country].length === 0
-    );
-    filteredCountries.sort();
+    ).sort();
 
     console.log(`Filtered countries: ${filteredCountries}`);
-    for (const country of filteredCountries) {
+    filteredCountries.forEach(country => {
         const option = document.createElement('option');
         option.value = country;
         option.textContent = country;
         countrySelect.appendChild(option);
-    }
+    });
 }
 
 document.getElementById('serviceType').addEventListener('change', populateCountries);
