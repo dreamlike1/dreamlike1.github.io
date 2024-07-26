@@ -136,7 +136,7 @@ async function fetchHolidays(country, year) {
             return;
         }
 
-        const data = JSON.parse(text);
+        const holidayData = await response.json(); // Updated here
         if (data && Array.isArray(data)) {
             holidays[country] = data;
             console.log(`Holidays for ${country}:`, holidays[country]);
