@@ -38,6 +38,7 @@ input, select {
     appearance: none;
     font-family: 'Menlo', monospace;
     position: relative;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="%2300ffff" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4z"/></svg>'); /* Arrow icon */
 }
 
 #businessDays {
