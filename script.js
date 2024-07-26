@@ -31,9 +31,9 @@ const countryOptions = {
 
 let holidays = {};
 
-// Fetch holidays for a specific country and year
+// New API for fetching holidays
 async function fetchHolidays(country, year) {
-    const response = await fetch(`https://date.nager.at/api/v2/PublicHolidays/${year}/${country}`);
+    const response = await fetch(`https://www.abalin.net/api/v1/holidays?country=${country}&year=${year}`);
     if (response.ok) {
         holidays[country] = await response.json();
     } else {
@@ -44,7 +44,7 @@ async function fetchHolidays(country, year) {
 // Check if a date is a holiday
 function isHoliday(date, country) {
     if (!holidays[country]) return false;
-    return holidays[country].some(holiday => 
+    return holidays[country].data.some(holiday => 
         new Date(holiday.date).toDateString() === date.toDateString()
     );
 }
