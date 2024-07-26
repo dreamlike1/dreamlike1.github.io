@@ -124,19 +124,16 @@ async function fetchHolidays(country, year) {
     
     try {
         const response = await fetch(`https://api.openholidays.com/v1/holidays/${year}/${countryCode}`);
+        console.log(response); // Log the response object
         
         if (!response.ok) {
-            console.error(`Failed to fetch holidays for ${country}: ${response.status} ${response.statusText}`);
+            console.error(`Failed to fetch: ${response.status} ${response.statusText}`);
             return;
         }
 
-        const text = await response.text();
-        if (!text) {
-            console.warn(`Empty response for ${country}, no holidays found.`);
-            return;
-        }
-
-        const data = JSON.parse(text);
+        const data = await response.json();
+        console.log(data); // Log the parsed data
+        
         if (data && Array.isArray(data)) {
             holidays[country] = data;
             console.log(`Holidays for ${country}:`, holidays[country]);
