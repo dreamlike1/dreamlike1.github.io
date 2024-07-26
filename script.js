@@ -31,9 +31,9 @@ const countryOptions = {
 
 let holidays = {};
 
-// New API for fetching holidays
+// Fetch holidays for a specific country and year
 async function fetchHolidays(country, year) {
-    const response = await fetch(`https://www.abalin.net/api/v1/holidays?country=${country}&year=${year}`);
+    const response = await fetch(`https://date.nager.at/api/v2/PublicHolidays/${year}/${country}`);
     if (response.ok) {
         holidays[country] = await response.json();
     } else {
@@ -44,7 +44,7 @@ async function fetchHolidays(country, year) {
 // Check if a date is a holiday
 function isHoliday(date, country) {
     if (!holidays[country]) return false;
-    return holidays[country].data.some(holiday => 
+    return holidays[country].some(holiday => 
         new Date(holiday.date).toDateString() === date.toDateString()
     );
 }
@@ -66,6 +66,10 @@ function calculateBusinessDays(startDate, numDays, country) {
             count++;
         }
     }
+    // Adjust if the final date falls on a holiday
+    while (isHoliday(currentDate, country)) {
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
     return currentDate;
 }
 
@@ -79,6 +83,14 @@ async function populateCountries() {
     for (const country of countries) {
         const year = new Date().getFullYear();
         await fetchHolidays(country, year); // Fetch holidays for each country
+    }
+
+    const filteredCountries = countries.filter(country => 
+        !holidays[country] || holidays[country].length === 0
+    );
+    filteredCountries.sort();
+
+    for (const country of filteredCountries) {
         const option = document.createElement('option');
         option.value = country;
         option.textContent = country;
@@ -100,9 +112,9 @@ async function calculateBusinessDate() {
     const startDate = new Date(document.getElementById('startDate').value);
     const ranges = dateRangeInput.split('-').map(Number);
     const numDaysStart = ranges[0];
-    const numDaysEnd = ranges[1] || ranges[0];
+    const numDaysEnd = ranges[1] || ranges[0]; // Handle single number input
 
-    await fetchHolidays(selectedCountry, startDate.getFullYear()); // Ensure holidays are updated
+    await fetchHolidays(selectedCountry, startDate.getFullYear()); // Update holidays for selected year
 
     const endDateStart = calculateBusinessDays(startDate, numDaysStart, selectedCountry);
     const endDateEnd = calculateBusinessDays(startDate, numDaysEnd, selectedCountry);
