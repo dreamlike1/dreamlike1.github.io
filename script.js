@@ -122,11 +122,22 @@ async function fetchHolidays(country, year) {
     
     console.log(`Fetching holidays for ${country} (${countryCode}) in ${year}`);
     const response = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${year}/${countryCode}`);
-    if (response.ok) {
-        holidays[country] = await response.json();
-        console.log(`Holidays for ${country}:`, holidays[country]);
-    } else {
-        console.error(`Failed to fetch holidays for ${country}`);
+    
+    if (!response.ok) {
+        console.error(`Failed to fetch holidays for ${country}: ${response.statusText}`);
+        return;
+    }
+    
+    try {
+        const data = await response.json();
+        if (data && Array.isArray(data)) {
+            holidays[country] = data;
+            console.log(`Holidays for ${country}:`, holidays[country]);
+        } else {
+            console.warn(`No holiday data available for ${country}`);
+        }
+    } catch (error) {
+        console.error(`Error parsing JSON for ${country}:`, error);
     }
 }
 
@@ -175,7 +186,7 @@ async function populateCountries() {
     const countries = countryOptions[selectedService] || [];
 
     console.log(`Selected service: ${selectedService}, Countries: ${countries}`);
-    countrySelect.innerHTML = '';
+    countrySelect.innerHTML = '<option value="">Select a country</option>'; // Add default option
     
     for (const country of countries) {
         await fetchHolidays(country, new Date().getFullYear()); // Fetch holidays for each country
