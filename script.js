@@ -66,6 +66,10 @@ function calculateBusinessDays(startDate, numDays, country) {
             count++;
         }
     }
+    // Adjust if the final date falls on a holiday
+    while (isHoliday(currentDate, country)) {
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
     return currentDate;
 }
 
