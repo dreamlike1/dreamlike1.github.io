@@ -1,39 +1,19 @@
 const countryOptions = {
     expressPaid: [
-        "Australia", "Austria", "Belgium", "Bolivia", "Brazil", "Bulgaria",
-        "Canada", "Croatia", "Cyprus", "Czech Republic", "Denmark", "Estonia",
-        "Finland", "France", "Germany", "Greece", "Hungary", "Ireland",
-        "Italy", "Japan", "Latvia", "Lithuania", "Luxembourg", "Malta",
-        "Mexico", "Netherlands", "New Zealand", "Norway", "Poland",
-        "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Sweden",
-        "United Kingdom", "United States", "Vietnam"
+        // list of countries
     ],
     expressFree: ["Japan", "South Korea"],
     economy: ["United States"],
     standard: [
-        "Anguilla", "Antigua and Barbuda", "Aruba", "Bahamas", "Belize",
-        "Belgium", "Bolivia", "Bosnia and Herzegovina", "Brazil", "Brunei",
-        "Bulgaria", "Canada", "Chile", "Colombia", "Costa Rica", "Croatia",
-        "Curaçao", "Denmark", "Dominica", "Dominican Republic", "Estonia",
-        "Finland", "France", "French Guiana", "Germany", "Greece", "Grenada",
-        "Guadeloupe", "Haiti", "Honduras", "Hong Kong", "Ireland", "Italy",
-        "Jamaica", "Japan", "Malaysia", "Malta", "Mexico", "Montserrat",
-        "Netherlands", "New Zealand", "Nicaragua", "Norway", "Panama",
-        "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Puerto Rico",
-        "Romania", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines",
-        "Singapore", "Slovakia", "Slovenia", "South Korea", "Spain", "Sweden",
-        "Switzerland", "Trinidad and Tobago", "Turks and Caicos Islands", 
-        "United Kingdom", "United States", "U.S. Virgin Islands", "Venezuela", 
-        "Vietnam"
+        // list of countries
     ],
     collection: ["Canada", "United States"],
 };
 
 let holidays = {};
 
-// Fetch holidays for a specific country
-async function fetchHolidays(country) {
-    const year = new Date().getFullYear();
+// Fetch holidays for a specific country and year
+async function fetchHolidays(country, year) {
     const response = await fetch(`https://date.nager.at/api/v2/PublicHolidays/${year}/${country}`);
     if (response.ok) {
         holidays[country] = await response.json();
@@ -70,11 +50,6 @@ function calculateBusinessDays(startDate, numDays, country) {
     return currentDate;
 }
 
-// Check for countries with holidays
-function filterCountriesWithoutHolidays(countries) {
-    return countries.filter(country => !holidays[country] || holidays[country].length === 0);
-}
-
 // Populate country options and fetch holidays
 async function populateCountries() {
     const countrySelect = document.getElementById('countrySelect');
@@ -83,11 +58,12 @@ async function populateCountries() {
 
     countrySelect.innerHTML = '';
     for (const country of countries) {
-        await fetchHolidays(country); // Fetch holidays for each country
+        const year = new Date().getFullYear();
+        await fetchHolidays(country, year); // Fetch holidays for each country
     }
-    
-    const filteredCountries = filterCountriesWithoutHolidays(countries);
-    filteredCountries.sort(); // Sort countries alphabetically
+
+    const filteredCountries = countries.filter(country => !holidays[country] || holidays[country].length === 0);
+    filteredCountries.sort();
 
     for (const country of filteredCountries) {
         const option = document.createElement('option');
@@ -112,6 +88,8 @@ async function calculateBusinessDate() {
     const ranges = dateRangeInput.split('-').map(Number);
     const numDaysStart = ranges[0];
     const numDaysEnd = ranges[1] || ranges[0]; // Handle single number input
+
+    await fetchHolidays(selectedCountry, startDate.getFullYear()); // Fetch holidays for selected year
 
     const endDateStart = calculateBusinessDays(startDate, numDaysStart, selectedCountry);
     const endDateEnd = calculateBusinessDays(startDate, numDaysEnd, selectedCountry);
