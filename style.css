@@ -51,7 +51,7 @@ input, select {
 
 /* Remove dropdown arrow */
 select {
-    background-image: none; /* Removes default dropdown arrow */
+    background-image: block; /* Removes default dropdown arrow */
 }
 
 /* Remove calendar icon for date input */
