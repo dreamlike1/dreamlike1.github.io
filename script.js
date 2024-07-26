@@ -33,9 +33,11 @@ let holidays = {};
 
 // Fetch holidays for a specific country and year
 async function fetchHolidays(country, year) {
+    console.log(`Fetching holidays for ${country} in ${year}`);
     const response = await fetch(`https://date.nager.at/api/v2/PublicHolidays/${year}/${country}`);
     if (response.ok) {
         holidays[country] = await response.json();
+        console.log(`Holidays for ${country}:`, holidays[country]);
     } else {
         console.error(`Failed to fetch holidays for ${country}`);
     }
@@ -43,7 +45,10 @@ async function fetchHolidays(country, year) {
 
 // Check if a date is a holiday
 function isHoliday(date, country) {
-    if (!holidays[country]) return false;
+    if (!holidays[country]) {
+        console.log(`No holidays found for ${country}`);
+        return false;
+    }
     return holidays[country].some(holiday => 
         new Date(holiday.date).toDateString() === date.toDateString()
     );
@@ -62,14 +67,17 @@ function calculateBusinessDays(startDate, numDays, country) {
 
     while (count < numDays) {
         currentDate.setDate(currentDate.getDate() + 1);
+        console.log(`Checking date: ${currentDate.toDateString()}`);
         if (currentDate.getDay() !== 0 && currentDate.getDay() !== 6 && !isHoliday(currentDate, country)) {
             count++;
         }
     }
     // Adjust if the final date falls on a holiday
     while (isHoliday(currentDate, country)) {
+        console.log(`Date ${currentDate.toDateString()} is a holiday, moving to next day`);
         currentDate.setDate(currentDate.getDate() + 1);
     }
+    console.log(`Calculated end date: ${currentDate.toDateString()}`);
     return currentDate;
 }
 
@@ -79,6 +87,7 @@ async function populateCountries() {
     const selectedService = document.getElementById('serviceType').value;
     const countries = countryOptions[selectedService];
 
+    console.log(`Selected service: ${selectedService}, Countries: ${countries}`);
     countrySelect.innerHTML = '';
     for (const country of countries) {
         const year = new Date().getFullYear();
@@ -90,6 +99,7 @@ async function populateCountries() {
     );
     filteredCountries.sort();
 
+    console.log(`Filtered countries: ${filteredCountries}`);
     for (const country of filteredCountries) {
         const option = document.createElement('option');
         option.value = country;
@@ -103,6 +113,8 @@ document.getElementById('serviceType').addEventListener('change', populateCountr
 async function calculateBusinessDate() {
     const dateRangeInput = document.getElementById('businessDays').value;
     const selectedCountry = document.getElementById('countrySelect').value;
+
+    console.log(`Input: ${dateRangeInput}, Country: ${selectedCountry}`);
 
     if (!dateRangeInput || !selectedCountry) {
         alert('Please enter a valid range of business days and select a country.');
@@ -123,6 +135,7 @@ async function calculateBusinessDate() {
     const formattedEnd = formatDate(endDateEnd);
 
     document.getElementById('result').value = `Between ${formattedStart} and ${formattedEnd}`;
+    console.log(`Result: Between ${formattedStart} and ${formattedEnd}`);
 }
 
 document.getElementById('calculateButton').addEventListener('click', calculateBusinessDate);
