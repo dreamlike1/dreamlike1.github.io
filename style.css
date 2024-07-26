@@ -10,6 +10,7 @@ html, body {
     background-attachment: fixed;
     font-size: 1.15em;
 }
+
 .calculator {
     max-width: 400px;
     padding: 20px;
@@ -24,6 +25,7 @@ html, body {
     color: #76ABAE;
     text-align: center;
 }
+
 input, select {
     width: 100%;
     padding: 12px;
@@ -37,20 +39,26 @@ input, select {
     font-family: 'Menlo', monospace;
     position: relative;
 }
+
 #businessDays {
     color: #76ABAE;
     background: #222831;
 }
+
 #businessDays::placeholder {
     color: #37414F;
 }
-.dropdown-arrow {
-    width: 0;
-    height: 0;
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
-    border-top: 8px solid #76ABAE;
+
+/* Remove dropdown arrow */
+select {
+    background-image: none; /* Removes default dropdown arrow */
 }
+
+/* Remove calendar icon for date input */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none; /* Hides the calendar icon in WebKit browsers */
+}
+
 button {
     width: 100%;
     padding: 12px;
@@ -63,19 +71,23 @@ button {
     font-weight: bold;
     font-family: 'Menlo', monospace;
 }
+
 button:hover {
     background-color: #6c9e8e;
 }
+
 h1 {
     margin: 10px 0;
     white-space: nowrap;
     font-size: 1.15em;
 }
+
 #result {
     color: #31363F;
     margin-top: 10px;
     background: #EEEEEE;
 }
+
 .result-field {
     background: #EEEEEE;
     color: #31363F;
@@ -85,6 +97,7 @@ h1 {
     text-align: center;
     cursor: pointer;
 }
+
 .copy-message {
     position: absolute;
     background: #76AE8D;
