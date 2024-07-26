@@ -31,11 +31,12 @@ const countryOptions = {
 
 let holidays = {};
 
-// Fetch holidays for a specific country and year
+// Fetch holidays for a specific country and year using Calendarific
 async function fetchHolidays(country, year) {
-    const response = await fetch(`https://date.nager.at/api/v2/PublicHolidays/${year}/${country}`);
+    const response = await fetch(`https://calendarific.com/api/v2/holidays?api_key=YOUR_API_KEY&country=${country}&year=${year}`);
     if (response.ok) {
-        holidays[country] = await response.json();
+        const data = await response.json();
+        holidays[country] = data.response.holidays;
     } else {
         console.error(`Failed to fetch holidays for ${country}`);
     }
@@ -45,7 +46,7 @@ async function fetchHolidays(country, year) {
 function isHoliday(date, country) {
     if (!holidays[country]) return false;
     return holidays[country].some(holiday => 
-        new Date(holiday.date).toDateString() === date.toDateString()
+        new Date(holiday.date.iso).toDateString() === date.toDateString()
     );
 }
 
