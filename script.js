@@ -34,7 +34,7 @@ let holidays = {};
 // Fetch holidays for a specific country and year
 async function fetchHolidays(country, year) {
     console.log(`Fetching holidays for ${country} in ${year}`);
-    const response = await fetch(`https://date.nager.at/api/v2/PublicHolidays/${year}/${country}`);
+    const response = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${year}/${country}`);
     if (response.ok) {
         holidays[country] = await response.json();
         console.log(`Holidays for ${country}:`, holidays[country]);
