@@ -31,82 +31,27 @@ const countryOptions = {
 
 // Country code mapping
 const countryCodeMapping = {
-    "Australia": "AU",
-    "Austria": "AT",
-    "Belgium": "BE",
-    "Bolivia": "BO",
-    "Brazil": "BR",
-    "Bulgaria": "BG",
-    "Canada": "CA",
-    "Croatia": "HR",
-    "Cyprus": "CY",
-    "Czech Republic": "CZ",
-    "Denmark": "DK",
-    "Estonia": "EE",
-    "Finland": "FI",
-    "France": "FR",
-    "Germany": "DE",
-    "Greece": "GR",
-    "Hungary": "HU",
-    "Ireland": "IE",
-    "Italy": "IT",
-    "Japan": "JP",
-    "Latvia": "LV",
-    "Lithuania": "LT",
-    "Luxembourg": "LU",
-    "Malta": "MT",
-    "Mexico": "MX",
-    "Netherlands": "NL",
-    "New Zealand": "NZ",
-    "Norway": "NO",
-    "Poland": "PL",
-    "Portugal": "PT",
-    "Romania": "RO",
-    "Slovakia": "SK",
-    "Slovenia": "SI",
-    "Spain": "ES",
-    "Sweden": "SE",
-    "United Kingdom": "GB",
-    "United States": "US",
-    "Vietnam": "VN",
-    "South Korea": "KR",
-    "Anguilla": "AI",
-    "Antigua and Barbuda": "AG",
-    "Aruba": "AW",
-    "Bahamas": "BS",
-    "Belize": "BZ",
-    "Bosnia and Herzegovina": "BA",
-    "Brunei": "BN",
-    "Chile": "CL",
-    "Colombia": "CO",
-    "Costa Rica": "CR",
-    "Curaçao": "CW",
-    "Dominica": "DM",
-    "Dominican Republic": "DO",
-    "French Guiana": "GF",
-    "Grenada": "GD",
-    "Guadeloupe": "GP",
-    "Haiti": "HT",
-    "Honduras": "HN",
-    "Hong Kong": "HK",
-    "Jamaica": "JM",
-    "Malaysia": "MY",
-    "Montserrat": "MS",
-    "Nicaragua": "NI",
-    "Panama": "PA",
-    "Paraguay": "PY",
-    "Peru": "PE",
-    "Philippines": "PH",
-    "Puerto Rico": "PR",
-    "Saint Kitts and Nevis": "KN",
-    "Saint Lucia": "LC",
-    "Saint Vincent and the Grenadines": "VC",
-    "Singapore": "SG",
-    "Switzerland": "CH",
-    "Trinidad and Tobago": "TT",
-    "Turks and Caicos Islands": "TC",
-    "U.S. Virgin Islands": "VI",
-    "Venezuela": "VE",
+    "Australia": "AU", "Austria": "AT", "Belgium": "BE", "Bolivia": "BO",
+    "Brazil": "BR", "Bulgaria": "BG", "Canada": "CA", "Croatia": "HR",
+    "Cyprus": "CY", "Czech Republic": "CZ", "Denmark": "DK", "Estonia": "EE",
+    "Finland": "FI", "France": "FR", "Germany": "DE", "Greece": "GR",
+    "Hungary": "HU", "Ireland": "IE", "Italy": "IT", "Japan": "JP",
+    "Latvia": "LV", "Lithuania": "LT", "Luxembourg": "LU", "Malta": "MT",
+    "Mexico": "MX", "Netherlands": "NL", "New Zealand": "NZ", "Norway": "NO",
+    "Poland": "PL", "Portugal": "PT", "Romania": "RO", "Slovakia": "SK",
+    "Slovenia": "SI", "Spain": "ES", "Sweden": "SE", "United Kingdom": "GB",
+    "United States": "US", "Vietnam": "VN", "South Korea": "KR",
+    "Anguilla": "AI", "Antigua and Barbuda": "AG", "Aruba": "AW",
+    "Bahamas": "BS", "Belize": "BZ", "Bosnia and Herzegovina": "BA",
+    "Brunei": "BN", "Chile": "CL", "Colombia": "CO", "Costa Rica": "CR",
+    "Curaçao": "CW", "Dominica": "DM", "Dominican Republic": "DO",
+    "French Guiana": "GF", "Grenada": "GD", "Guadeloupe": "GP",
+    "Haiti": "HT", "Honduras": "HN", "Hong Kong": "HK", "Jamaica": "JM",
+    "Malaysia": "MY", "Montserrat": "MS", "Nicaragua": "NI", "Panama": "PA",
+    "Paraguay": "PY", "Peru": "PE", "Philippines": "PH", "Puerto Rico": "PR",
+    "Saint Kitts and Nevis": "KN", "Saint Lucia": "LC", "Saint Vincent and the Grenadines": "VC",
+    "Singapore": "SG", "Switzerland": "CH", "Trinidad and Tobago": "TT",
+    "Turks and Caicos Islands": "TC", "U.S. Virgin Islands": "VI", "Venezuela": "VE",
 };
 
 // Store holidays
@@ -124,7 +69,6 @@ async function fetchHolidays(country, year) {
     
     try {
         const response = await fetch(`https://api.openholidays.com/v1/holidays/${year}/${countryCode}`);
-        console.log(response); // Log the response object
         
         if (!response.ok) {
             console.error(`Failed to fetch: ${response.status} ${response.statusText}`);
@@ -132,7 +76,6 @@ async function fetchHolidays(country, year) {
         }
 
         const data = await response.json();
-        console.log(data); // Log the parsed data
         
         if (data && Array.isArray(data)) {
             holidays[country] = data;
@@ -169,32 +112,30 @@ function calculateBusinessDays(startDate, numDays, country) {
 
     while (count < numDays) {
         currentDate.setDate(currentDate.getDate() + 1);
-        console.log(`Checking date: ${currentDate.toDateString()}`);
         if (currentDate.getDay() !== 0 && currentDate.getDay() !== 6 && !isHoliday(currentDate, country)) {
             count++;
         }
     }
 
     while (isHoliday(currentDate, country)) {
-        console.log(`Date ${currentDate.toDateString()} is a holiday, moving to next day`);
         currentDate.setDate(currentDate.getDate() + 1);
     }
-    console.log(`Calculated end date: ${currentDate.toDateString()}`);
     return currentDate;
 }
 
 // Populate country options and fetch holidays
 async function populateCountries() {
     const countrySelect = document.getElementById('countrySelect');
+    const loadingIndicator = document.getElementById('loadingIndicator');
     const selectedService = document.getElementById('serviceType').value;
     const countries = countryOptions[selectedService] || [];
 
-    console.log(`Selected service: ${selectedService}, Countries: ${countries}`);
-
+    loadingIndicator.style.display = 'block'; // Show loading indicator
     countrySelect.innerHTML = '<option value="">Select a country</option>'; // Add default option
 
     if (countries.length === 0) {
         console.warn('No countries found for selected service.');
+        loadingIndicator.style.display = 'none'; // Hide loading indicator
         return;
     }
 
@@ -205,6 +146,8 @@ async function populateCountries() {
         option.textContent = country;
         countrySelect.appendChild(option);
     }
+
+    loadingIndicator.style.display = 'none'; // Hide loading indicator
 }
 
 // Event listeners
@@ -213,8 +156,6 @@ document.getElementById('serviceType').addEventListener('change', populateCountr
 async function calculateBusinessDate() {
     const dateRangeInput = document.getElementById('businessDays').value;
     const selectedCountry = document.getElementById('countrySelect').value;
-
-    console.log(`Input: ${dateRangeInput}, Country: ${selectedCountry}`);
 
     if (!dateRangeInput || !selectedCountry) {
         alert('Please enter a valid range of business days and select a country.');
@@ -235,7 +176,6 @@ async function calculateBusinessDate() {
     const formattedEnd = formatDate(endDateEnd);
 
     document.getElementById('result').value = `Between ${formattedStart} and ${formattedEnd}`;
-    console.log(`Result: Between ${formattedStart} and ${formattedEnd}`);
 }
 
 document.getElementById('calculateButton').addEventListener('click', calculateBusinessDate);
