@@ -1,5 +1,5 @@
 // js/ui.js
-import { countryOptions } from './countryData.js';
+import { countryOptions } from './api/countryData.js';
 import { fetchHolidays } from './api/holidays.js'; // Updated path
 import { calculateBusinessDays, formatDate } from './dateUtils.js';
 
