@@ -1,5 +1,6 @@
 // js/dateUtils.js
-import { isHoliday } from './api/holidays.js';
+import { isHoliday } from './api/holidays.js'; // Adjust if necessary
+import { fetchHolidays } from './api/holidays.js'; // Adjust if necessary
 
 export function formatDate(date) {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
