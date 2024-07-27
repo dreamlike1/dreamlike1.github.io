@@ -28,9 +28,10 @@ export async function fetchHolidays(country, year) {
 
     try {
         const response = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${year}/${countryCode}`);
-        if (!response.ok) {
-            console.error(`Failed to fetch holidays for ${country}: ${response.status} ${response.statusText}`);
-            // Fallback to HolidayAPI
+        
+        // Handle non-OK responses and empty responses
+        if (!response.ok || response.status === 204) {
+            console.warn(`Fetching holidays from primary API failed or returned no data for ${country}, falling back to HolidayAPI.`);
             const data = await fetchFromHolidayAPI(country, year);
             if (Array.isArray(data.holidays)) {
                 holidays[country] = data.holidays;
@@ -41,18 +42,6 @@ export async function fetchHolidays(country, year) {
         }
 
         const text = await response.text();
-        if (!text) {
-            console.warn(`Empty response for ${country}, no holidays found.`);
-            // Fallback to HolidayAPI
-            const data = await fetchFromHolidayAPI(country, year);
-            if (Array.isArray(data.holidays)) {
-                holidays[country] = data.holidays;
-            } else {
-                console.warn(`No holiday data available for ${country}`);
-            }
-            return;
-        }
-
         try {
             const data = JSON.parse(text);
             if (Array.isArray(data)) {
@@ -62,6 +51,13 @@ export async function fetchHolidays(country, year) {
             }
         } catch (e) {
             console.error(`Failed to parse JSON for ${country}:`, e);
+            // Fallback in case of parsing error
+            const data = await fetchFromHolidayAPI(country, year);
+            if (Array.isArray(data.holidays)) {
+                holidays[country] = data.holidays;
+            } else {
+                console.warn(`No holiday data available for ${country}`);
+            }
         }
     } catch (error) {
         console.error(`Error fetching holidays for ${country}:`, error);
