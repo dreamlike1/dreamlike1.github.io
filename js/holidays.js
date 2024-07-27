@@ -1,7 +1,26 @@
 // js/holidays.js
 import { countryCodeMapping } from './countryData.js';
 
+const NAGER_API_URL = 'https://date.nager.at/api/v3/PublicHolidays';
+const HOLIDAY_API_URL = 'https://holidayapi.com/v1/holidays';
+const HOLIDAY_API_KEY = 'YOUR_HOLIDAY_API_KEY'; // Replace with your actual API key
+
 export let holidays = {};
+
+async function fetchFromHolidayAPI(countryCode, year) {
+    try {
+        const response = await fetch(`${HOLIDAY_API_URL}?country=${countryCode}&year=${year}&key=${HOLIDAY_API_KEY}`);
+        if (!response.ok) {
+            console.error(`Failed to fetch holidays from HolidayAPI for ${countryCode}: ${response.status} ${response.statusText}`);
+            return [];
+        }
+        const data = await response.json();
+        return data.holidays || [];
+    } catch (error) {
+        console.error(`Error fetching holidays from HolidayAPI for ${countryCode}:`, error);
+        return [];
+    }
+}
 
 export async function fetchHolidays(country, year) {
     const countryCode = countryCodeMapping[country];
@@ -11,9 +30,13 @@ export async function fetchHolidays(country, year) {
     }
 
     try {
-        const response = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${year}/${countryCode}`);
+        const response = await fetch(`${NAGER_API_URL}/${year}/${countryCode}`);
         if (!response.ok) {
-            console.error(`Failed to fetch holidays for ${country}: ${response.status} ${response.statusText}`);
+            console.error(`Failed to fetch holidays for ${country} from Nager API: ${response.status} ${response.statusText}`);
+            const holidaysFromFallbackAPI = await fetchFromHolidayAPI(countryCode, year);
+            if (holidaysFromFallbackAPI.length > 0) {
+                holidays[country] = holidaysFromFallbackAPI;
+            }
             return;
         }
 
@@ -21,10 +44,18 @@ export async function fetchHolidays(country, year) {
         if (Array.isArray(data)) {
             holidays[country] = data;
         } else {
-            console.warn(`No holiday data available for ${country}`);
+            console.warn(`No holiday data available for ${country} from Nager API`);
+            const holidaysFromFallbackAPI = await fetchFromHolidayAPI(countryCode, year);
+            if (holidaysFromFallbackAPI.length > 0) {
+                holidays[country] = holidaysFromFallbackAPI;
+            }
         }
     } catch (error) {
-        console.error(`Error fetching holidays for ${country}:`, error);
+        console.error(`Error fetching holidays for ${country} from Nager API:`, error);
+        const holidaysFromFallbackAPI = await fetchFromHolidayAPI(countryCode, year);
+        if (holidaysFromFallbackAPI.length > 0) {
+            holidays[country] = holidaysFromFallbackAPI;
+        }
     }
 }
 
