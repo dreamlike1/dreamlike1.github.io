@@ -1,6 +1,6 @@
 // js/ui.js
 import { countryOptions } from './countryData.js';
-import { fetchHolidays } from './holidays.js';
+import { fetchHolidays } from './api/holidays.js'; // Updated path
 import { calculateBusinessDays, formatDate } from './dateUtils.js';
 
 export async function populateCountries() {
