@@ -63,3 +63,13 @@ export async function fetchHolidays(country, year) {
         console.error(`Error fetching holidays for ${country}:`, error);
     }
 }
+
+// Function to check if a given date is a holiday in a specified country
+export function isHoliday(date, country) {
+    if (!holidays[country]) {
+        return false;
+    }
+    return holidays[country].some(holiday =>
+        new Date(holiday.date).toDateString() === date.toDateString()
+    );
+}
