@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Date Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="calculator">
+        <h1>Business Date Calculator</h1>
+        <div style="position: relative;">
+            <select id="serviceType">
+                <option value="expressPaid" selected>Express (Paid)</option>
+                <option value="expressFree">Express (Free)</option>
+                <option value="standard">Standard</option>
+                <option value="economy">Economy</option>
+                <option value="collection">Collection</option>
+            </select>
+        </div>
+        <div style="position: relative;">
+            <select id="countrySelect">
+                <!-- Options will be populated dynamically -->
+            </select>
+        </div>
+        <div style="position: relative;">
+            <input type="date" id="startDate" required>
+        </div>
+        <input type="text" id="businessDays" placeholder="Business Days" required>
+        <button id="calculateButton">Calculate</button>
+        <input type="text" id="result" class="result-field" readonly>
+        <div id="copyMessage" class="copy-message">Copied!</div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

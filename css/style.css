@@ -1,0 +1,40 @@
+/* css/style.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.calculator {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    width: 300px;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+select, input, button {
+    width: 100%;
+    margin: 10px 0;
+}
+
+.result-field {
+    cursor: pointer;
+}
+
+.copy-message {
+    display: none;
+    color: green;
+    font-size: 14px;
+    margin-top: 10px;
+}
