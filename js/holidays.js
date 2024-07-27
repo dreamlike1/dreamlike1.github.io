@@ -3,7 +3,7 @@ import { countryCodeMapping } from './countryData.js';
 
 const NAGER_API_URL = 'https://date.nager.at/api/v3/PublicHolidays';
 const HOLIDAY_API_URL = 'https://holidayapi.com/v1/holidays';
-const HOLIDAY_API_KEY = 'YOUR_HOLIDAY_API_KEY'; // Replace with your actual API key
+const HOLIDAY_API_KEY = '83f19228-84e2-4cf5-8c3e-25e84795705f'; // Replace with your actual API key
 
 export let holidays = {};
 
