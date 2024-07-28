@@ -10,8 +10,7 @@ async function fetchFromDateNagerAPI(countryCode, year) {
         if (!response.ok) {
             throw new Error(`Failed to fetch holidays from Date Nager API: ${response.statusText}`);
         }
-        const data = await response.json();
-        return data;
+        return await response.json();
     } catch (error) {
         console.error(`Error fetching holidays from Date Nager API:`, error);
         throw error;
@@ -28,7 +27,6 @@ export async function fetchHolidays(country, year) {
 
     try {
         const data = await fetchFromDateNagerAPI(countryCode, year);
-
         if (Array.isArray(data)) {
             holidays[country] = data;
         } else {
@@ -41,10 +39,31 @@ export async function fetchHolidays(country, year) {
 
 // Function to check if a given date is a holiday in a specified country
 export function isHoliday(date, country) {
-    if (!holidays[country]) {
-        return false;
-    }
-    return holidays[country].some(holiday =>
+    const countryHolidays = holidays[country];
+    if (!countryHolidays) return false;
+
+    return countryHolidays.some(holiday => 
         new Date(holiday.date).toDateString() === date.toDateString()
     );
 }
+
+// Function to filter countries without holidays and save results in an array
+export async function filterCountriesWithoutHolidays(year) {
+    const countriesWithoutHolidays = [];
+    const promises = Object.keys(countryCodeMapping).map(async (country) => {
+        await fetchHolidays(country, year);
+        if (!holidays[country] || holidays[country].length === 0) {
+            countriesWithoutHolidays.push(country);
+        }
+    });
+
+    await Promise.all(promises);
+    return countriesWithoutHolidays;
+}
+
+// Example usage of the functions
+(async () => {
+    const year = 2024;
+    const result = await filterCountriesWithoutHolidays(year);
+    console.log(result); // This will log countries that have no holidays
+})();
