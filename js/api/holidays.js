@@ -17,6 +17,20 @@ async function fetchFromDateNagerAPI(countryCode, year) {
     }
 }
 
+// Function to fetch holidays from the new API
+async function fetchFromHolidaysAPI(countryCode, year) {
+    try {
+        const response = await fetch(`/api/holidaysAPI/${year}/${countryCode}`);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch holidays from Holidays API: ${response.statusText}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error(`Error fetching holidays from Holidays API:`, error);
+        throw error;
+    }
+}
+
 // Function to fetch holidays
 export async function fetchHolidays(country, year) {
     const countryCode = countryCodeMapping[country];
@@ -26,12 +40,13 @@ export async function fetchHolidays(country, year) {
     }
 
     try {
-        const data = await fetchFromDateNagerAPI(countryCode, year);
-        if (Array.isArray(data)) {
-            holidays[country] = data;
-        } else {
-            console.warn(`No holiday data available for ${country}`);
+        // Attempt to fetch from Date Nager API
+        let data = await fetchFromDateNagerAPI(countryCode, year);
+        if (!Array.isArray(data) || data.length === 0) {
+            console.warn(`No holiday data available from Date Nager API for ${country}, trying Holidays API...`);
+            data = await fetchFromHolidaysAPI(countryCode, year);
         }
+        holidays[country] = data;
     } catch (error) {
         console.error(`Error fetching holidays for ${country}:`, error);
     }
