@@ -8,10 +8,25 @@ export let holidays = {};
 async function fetchFromDateNagerAPI(countryCode, year) {
     try {
         const response = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${year}/${countryCode}`);
+        
         if (!response.ok) {
             throw new Error(`Failed to fetch holidays from Date Nager API: ${response.statusText}`);
         }
-        return await response.json();
+        
+        // Read the response text
+        const responseText = await response.text();
+        
+        // Log the raw response text for debugging
+        console.log('Response Text from Date Nager API:', responseText);
+        
+        // Handle empty response
+        if (!responseText) {
+            console.warn('Received empty response from Date Nager API');
+            return []; // Return an empty array if the response is empty
+        }
+        
+        // Parse the response as JSON
+        return JSON.parse(responseText);
     } catch (error) {
         console.error(`Error fetching holidays from Date Nager API:`, error);
         throw error;
