@@ -1,5 +1,5 @@
 import { countryCodeMapping } from './countryData.js';
-import { fetchHolidaysFromLocalAPI } from './holidaysAPI.js'; // Adjust this import based on actual export
+import { fetchHolidaysFromLocalAPI } from './holidaysAPI.js'; // Ensure this function is correctly imported
 
 // Store holidays data
 export let holidays = {};
@@ -13,23 +13,20 @@ async function fetchFromDateNagerAPI(countryCode, year) {
             throw new Error(`Failed to fetch holidays from Date Nager API: ${response.statusText}`);
         }
         
-        // Read the response text
         const responseText = await response.text();
         
         // Log the raw response text for debugging
         console.log('Response Text from Date Nager API:', responseText);
         
-        // Handle empty response
         if (!responseText) {
             console.warn('Received empty response from Date Nager API');
             return []; // Return an empty array if the response is empty
         }
         
-        // Parse the response as JSON
         return JSON.parse(responseText);
     } catch (error) {
         console.error(`Error fetching holidays from Date Nager API:`, error);
-        throw error;
+        return []; // Return an empty array on error
     }
 }
 
