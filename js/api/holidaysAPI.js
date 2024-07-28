@@ -115,7 +115,7 @@ const holidays = {
             "Christmas Day - December 25",
             "Boxing Day - December 26"
         ],
-        Saint Lucia: [
+        'Saint Lucia': [
             "New Year's Day - January 1",
             "Good Friday - March 29",
             "Easter Monday - April 1",
