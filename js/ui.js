@@ -1,4 +1,4 @@
-// js/ui.js
+// ui.js
 import { countryOptions } from './api/countryData.js';
 import { fetchHolidays } from './api/holidays.js'; // Updated path
 import { calculateBusinessDays, formatDate } from './dateUtils.js';
@@ -11,6 +11,7 @@ export async function populateCountries() {
     countrySelect.innerHTML = '<option value="">Select a country</option>'; // Add default option
     
     for (const country of countries) {
+        // Fetch holidays for each country
         await fetchHolidays(country, new Date().getFullYear());
     }
 
