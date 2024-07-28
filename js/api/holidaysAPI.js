@@ -1,8 +1,8 @@
-// HolidayAPI.js
+// holidaysAPI.js
 
 const holidays = {
     2024: {
-        Brunei: [
+        BN: [  // Brunei
             "New Year's Day - January 1",
             "Chinese New Year - February 10",
             "Hari Raya Aidilfitri - April 10",
@@ -12,7 +12,7 @@ const holidays = {
             "National Day - February 23",
             "Sultan's Birthday - July 15"
         ],
-        Anguilla: [
+        AI: [  // Anguilla
             "New Year's Day - January 1",
             "Heritage Day - May 30",
             "Queen's Birthday - June 10",
@@ -21,7 +21,7 @@ const holidays = {
             "Christmas Day - December 25",
             "Boxing Day - December 26"
         ],
-        'Antigua and Barbuda': [
+        AG: [  // Antigua and Barbuda
             "New Year's Day - January 1",
             "Antigua and Barbuda Independence Day - November 1",
             "Carnival Monday - August 5",
@@ -29,7 +29,7 @@ const holidays = {
             "Christmas Day - December 25",
             "Boxing Day - December 26"
         ],
-        Aruba: [
+        AW: [  // Aruba
             "New Year's Day - January 1",
             "Carnival - February 12",
             "Good Friday - March 29",
@@ -40,7 +40,7 @@ const holidays = {
             "Christmas Day - December 25",
             "Boxing Day - December 26"
         ],
-        Curaçao: [
+        CW: [  // Curaçao
             "New Year's Day - January 1",
             "Carnival - February 12",
             "Good Friday - March 29",
@@ -52,7 +52,7 @@ const holidays = {
             "Christmas Day - December 25",
             "Boxing Day - December 26"
         ],
-        Dominica: [
+        DM: [  // Dominica
             "New Year's Day - January 1",
             "Carnival - February 12",
             "Good Friday - March 29",
@@ -62,7 +62,7 @@ const holidays = {
             "Christmas Day - December 25",
             "Boxing Day - December 26"
         ],
-        'French Guiana': [
+        GF: [  // French Guiana
             "New Year's Day - January 1",
             "Carnival - February 12",
             "Good Friday - March 29",
@@ -73,7 +73,7 @@ const holidays = {
             "All Saints' Day - November 1",
             "Christmas Day - December 25"
         ],
-        Malaysia: [
+        MY: [  // Malaysia
             "New Year's Day - January 1",
             "Chinese New Year - February 10",
             "Hari Raya Aidilfitri - April 10",
@@ -84,7 +84,7 @@ const holidays = {
             "Christmas Day - December 25",
             "Labour Day - May 1"
         ],
-        Guadeloupe: [
+        GP: [  // Guadeloupe
             "New Year's Day - January 1",
             "Carnival - February 12",
             "Easter Monday - April 1",
@@ -94,7 +94,7 @@ const holidays = {
             "All Saints' Day - November 1",
             "Christmas Day - December 25"
         ],
-        Philippines: [
+        PH: [  // Philippines
             "New Year's Day - January 1",
             "Maundy Thursday - March 28",
             "Good Friday - March 29",
@@ -106,7 +106,7 @@ const holidays = {
             "Christmas Day - December 25",
             "Rizal Day - December 30"
         ],
-        'Saint Kitts and Nevis': [
+        KN: [  // Saint Kitts and Nevis
             "New Year's Day - January 1",
             "Good Friday - March 29",
             "Easter Monday - April 1",
@@ -115,7 +115,7 @@ const holidays = {
             "Christmas Day - December 25",
             "Boxing Day - December 26"
         ],
-        'Saint Lucia': [
+        LC: [  // Saint Lucia
             "New Year's Day - January 1",
             "Good Friday - March 29",
             "Easter Monday - April 1",
@@ -125,7 +125,7 @@ const holidays = {
             "Christmas Day - December 25",
             "Boxing Day - December 26"
         ],
-        'Saint Vincent and the Grenadines': [
+        VC: [  // Saint Vincent and the Grenadines
             "New Year's Day - January 1",
             "Good Friday - March 29",
             "Easter Monday - April 1",
@@ -135,7 +135,7 @@ const holidays = {
             "Christmas Day - December 25",
             "Boxing Day - December 26"
         ],
-        'Trinidad and Tobago': [
+        TT: [  // Trinidad and Tobago
             "New Year's Day - January 1",
             "Carnival Monday - February 12",
             "Carnival Tuesday - February 13",
@@ -147,7 +147,7 @@ const holidays = {
             "Christmas Day - December 25",
             "Boxing Day - December 26"
         ],
-        'Turks and Caicos Islands': [
+        TC: [  // Turks and Caicos Islands
             "New Year's Day - January 1",
             "Good Friday - March 29",
             "Easter Monday - April 1",
@@ -157,7 +157,7 @@ const holidays = {
             "Christmas Day - December 25",
             "Boxing Day - December 26"
         ],
-        'U.S. Virgin Islands': [
+        VI: [  // U.S. Virgin Islands
             "New Year's Day - January 1",
             "Three Kings Day - January 6",
             "Martin Luther King Jr. Day - January 15",
@@ -187,11 +187,9 @@ export async function fetchHolidaysFromLocalAPI(countryCode, year) {
             if (countryHolidays) {
                 resolve(countryHolidays);
             } else {
-                console.error(`No holidays data available for the country: ${countryCode}`);
-                reject(new Error(`No holidays data available for the country: ${countryCode}`));
+                console.error(`No holidays data available for the country code: ${countryCode}`);
+                reject(new Error(`No holidays data available for the country code: ${countryCode}`));
             }
         }, 1000); // Simulate network delay
     });
 }
-
-
