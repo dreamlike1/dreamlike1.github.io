@@ -38,8 +38,8 @@ async function fetchFromHolidaysAPI(countryCode, year) {
     try {
         return await fetchHolidaysFromLocalAPI(countryCode, year); // Use the local function here
     } catch (error) {
-        console.error(`Error fetching holidays from local Holidays API:`, error);
-        throw error;
+        console.error(`Error fetching holidays from local Holidays API for ${countryCode}:`, error);
+        return []; // Return an empty array if there's an error
     }
 }
 
