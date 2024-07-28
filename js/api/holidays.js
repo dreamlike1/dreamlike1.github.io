@@ -1,4 +1,5 @@
 import { countryCodeMapping } from './countryData.js';
+import { fetchHolidaysFromLocalAPI } from './holidaysAPI.js'; // Adjust this import based on actual export
 
 // Store holidays data
 export let holidays = {};
@@ -17,16 +18,12 @@ async function fetchFromDateNagerAPI(countryCode, year) {
     }
 }
 
-// Function to fetch holidays from the new API
+// Function to fetch holidays from the local API
 async function fetchFromHolidaysAPI(countryCode, year) {
     try {
-        const response = await fetch(`/api/holidaysAPI/${year}/${countryCode}`);
-        if (!response.ok) {
-            throw new Error(`Failed to fetch holidays from Holidays API: ${response.statusText}`);
-        }
-        return await response.json();
+        return await fetchHolidaysFromLocalAPI(countryCode, year); // Use the local function here
     } catch (error) {
-        console.error(`Error fetching holidays from Holidays API:`, error);
+        console.error(`Error fetching holidays from local Holidays API:`, error);
         throw error;
     }
 }
@@ -43,7 +40,7 @@ export async function fetchHolidays(country, year) {
         // Attempt to fetch from Date Nager API
         let data = await fetchFromDateNagerAPI(countryCode, year);
         if (!Array.isArray(data) || data.length === 0) {
-            console.warn(`No holiday data available from Date Nager API for ${country}, trying Holidays API...`);
+            console.warn(`No holiday data available from Date Nager API for ${country}, trying local Holidays API...`);
             data = await fetchFromHolidaysAPI(countryCode, year);
         }
         holidays[country] = data;
