@@ -59,6 +59,16 @@ async function fetchAndStoreHolidays(country, year) {
     }
 }
 
+// Function to check if a given date is a holiday in a specified country
+export function isHoliday(date, country) {
+    const countryHolidays = holidays[country];
+    if (!countryHolidays) return false;
+
+    return countryHolidays.some(holiday => 
+        new Date(holiday.date).toDateString() === date.toDateString()
+    );
+}
+
 // Function to filter countries without holidays and save results in an array
 export async function filterCountriesWithoutHolidays(year) {
     const countriesWithoutHolidays = [];
