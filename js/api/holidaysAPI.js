@@ -172,7 +172,27 @@ const holidays = {
     }
 };
 
-// Export the holidays object
-module.exports = holidays;
+// Function to fetch holidays from the local API
+export function fetchHolidaysFromLocalAPI(countryCode, year) {
+    return new Promise((resolve, reject) => {
+        const yearHolidays = holidays[year];
+        if (!yearHolidays) {
+            reject(new Error('No holidays data available for the year'));
+            return;
+        }
+
+        const countryHolidays = yearHolidays[countryCode];
+        if (!countryHolidays) {
+            reject(new Error('No holidays data available for the country'));
+            return;
+        }
+
+        // Convert the holiday data to match expected format (if necessary)
+        resolve(countryHolidays.map(holiday => ({
+            date: holiday,  // Adjust this as per your data's date format
+            name: holiday
+        })));
+    });
+}
 
 
