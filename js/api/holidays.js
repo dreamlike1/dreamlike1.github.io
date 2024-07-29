@@ -12,28 +12,28 @@ async function fetchFromDateNagerAPI(countryCode, year) {
         if (!response.ok) {
             throw new Error(`Failed to fetch holidays from Date Nager API: ${response.statusText}`);
         }
-
-        const data = await response.json(); // Directly parse JSON
         
-        if (!Array.isArray(data) || data.length === 0) {
-            console.warn('Received empty or invalid data from Date Nager API');
-            return [];
+        const responseText = await response.text();
+        
+        if (!responseText) {
+            console.warn('Received empty response from Date Nager API');
+            return []; // Return an empty array if the response is empty
         }
         
-        return data;
+        return JSON.parse(responseText);
     } catch (error) {
         console.error(`Error fetching holidays from Date Nager API:`, error);
-        return [];
+        return []; // Return an empty array on error
     }
 }
 
 // Function to fetch holidays from the local API
-async function fetchFromLocalAPI(countryCode, year) {
+async function fetchFromHolidaysAPI(countryCode, year) {
     try {
-        return await fetchHolidaysFromLocalAPI(countryCode, year);
+        return await fetchHolidaysFromLocalAPI(countryCode, year); // Use the local function here
     } catch (error) {
         console.error(`Error fetching holidays from local Holidays API for ${countryCode}:`, error);
-        return [];
+        return []; // Return an empty array if there's an error
     }
 }
 
@@ -42,41 +42,34 @@ export async function fetchHolidays(country, year) {
     const countryCode = countryCodeMapping[country];
     if (!countryCode) {
         console.error(`No country code found for ${country}`);
-        return [];
+        return;
     }
 
-    // Use countryCode as key for cache
-    if (holidaysCache.has(countryCode)) {
-        return holidaysCache.get(countryCode);
+    // Return cached data if available
+    if (holidaysCache.has(country)) {
+        return holidaysCache.get(country);
     }
 
     try {
         let data = await fetchFromDateNagerAPI(countryCode, year);
 
-        // If no valid data from Date Nager API, try local API
         if (!Array.isArray(data) || data.length === 0) {
             console.warn(`No holiday data available from Date Nager API for ${country}, trying local Holidays API...`);
-            data = await fetchFromLocalAPI(countryCode, year);
+            data = await fetchFromHolidaysAPI(countryCode, year);
         }
 
         // Store the result in cache
-        holidaysCache.set(countryCode, data);
-        return data;
+        holidaysCache.set(country, data);
     } catch (error) {
         console.error(`Error fetching holidays for ${country}:`, error);
-        return [];
     }
 }
 
 // Function to check if a given date is a holiday in a specified country
 export function isHoliday(date, country) {
-    const countryCode = countryCodeMapping[country];
-    if (!countryCode) {
-        console.error(`No country code found for ${country}`);
-        return false;
-    }
-    
-    const countryHolidays = holidaysCache.get(countryCode) || [];
+    const countryHolidays = holidaysCache.get(country);
+    if (!countryHolidays) return false;
+
     return countryHolidays.some(holiday => 
         new Date(holiday.date).toDateString() === date.toDateString()
     );
@@ -85,27 +78,20 @@ export function isHoliday(date, country) {
 // Function to filter countries without holidays and save results in an array
 export async function filterCountriesWithoutHolidays(year) {
     const countriesWithoutHolidays = [];
-    const countries = Object.keys(countryCodeMapping);
-    
-    // Fetch holidays for all countries in parallel
-    const fetchPromises = countries.map(country => fetchHolidays(country, year));
-    const allHolidays = await Promise.all(fetchPromises);
 
-    // Check which countries have no holidays and need local API fetch
-    for (const [index, country] of countries.entries()) {
-        const holidays = allHolidays[index];
-        
-        if (!holidays.length) {
-            console.log(`Country ${country} has no holidays from Date Nager API. Fetching from local API...`);
-            const localHolidays = await fetchFromLocalAPI(countryCodeMapping[country], year);
-            
-            if (localHolidays.length) {
-                holidaysCache.set(countryCodeMapping[country], localHolidays);
-            } else {
-                countriesWithoutHolidays.push(country);
-            }
+    // Fetch holidays for all countries in parallel
+    const countries = Object.keys(countryCodeMapping);
+    const fetchPromises = countries.map(country => fetchHolidays(country, year));
+
+    // Wait for all fetch promises to complete
+    await Promise.all(fetchPromises);
+
+    // Filter countries that have no holidays
+    countries.forEach(country => {
+        if (!holidaysCache.get(country) || holidaysCache.get(country).length === 0) {
+            countriesWithoutHolidays.push(country);
         }
-    }
+    });
 
     return countriesWithoutHolidays;
 }
@@ -114,5 +100,5 @@ export async function filterCountriesWithoutHolidays(year) {
 (async () => {
     const year = 2024;
     const result = await filterCountriesWithoutHolidays(year);
-    console.log('Countries without holidays:', result);
+    console.log(result); // This will log countries that have no holidays
 })();
