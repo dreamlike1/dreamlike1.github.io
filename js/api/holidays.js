@@ -1,8 +1,9 @@
+
 import { countryCodeMapping } from './countryData.js';
 import { fetchHolidaysFromLocalAPI } from './holidaysAPI.js'; // Ensure this function is correctly imported
 
-// Store holidays data
-export let holidays = {};
+// Store holidays data with a cache
+const holidaysCache = new Map();
 
 // Function to fetch holidays from Date Nager API
 async function fetchFromDateNagerAPI(countryCode, year) {
@@ -37,12 +38,17 @@ async function fetchFromHolidaysAPI(countryCode, year) {
     }
 }
 
-// Function to fetch holidays and update the holidays data
+// Function to fetch holidays and cache the results
 async function fetchAndStoreHolidays(country, year) {
     const countryCode = countryCodeMapping[country];
     if (!countryCode) {
         console.error(`No country code found for ${country}`);
         return;
+    }
+
+    // Return cached data if available
+    if (holidaysCache.has(country)) {
+        return holidaysCache.get(country);
     }
 
     try {
@@ -53,7 +59,8 @@ async function fetchAndStoreHolidays(country, year) {
             data = await fetchFromHolidaysAPI(countryCode, year);
         }
 
-        holidays[country] = data;
+        // Store the result in cache
+        holidaysCache.set(country, data);
     } catch (error) {
         console.error(`Error fetching holidays for ${country}:`, error);
     }
@@ -61,7 +68,7 @@ async function fetchAndStoreHolidays(country, year) {
 
 // Function to check if a given date is a holiday in a specified country
 export function isHoliday(date, country) {
-    const countryHolidays = holidays[country];
+    const countryHolidays = holidaysCache.get(country);
     if (!countryHolidays) return false;
 
     return countryHolidays.some(holiday => 
@@ -72,20 +79,21 @@ export function isHoliday(date, country) {
 // Function to filter countries without holidays and save results in an array
 export async function filterCountriesWithoutHolidays(year) {
     const countriesWithoutHolidays = [];
-    
+
     // Fetch holidays for all countries in parallel
-    const fetchPromises = Object.keys(countryCodeMapping).map(country => fetchAndStoreHolidays(country, year));
-    
+    const countries = Object.keys(countryCodeMapping);
+    const fetchPromises = countries.map(country => fetchAndStoreHolidays(country, year));
+
     // Wait for all fetch promises to complete
     await Promise.all(fetchPromises);
-    
+
     // Filter countries that have no holidays
-    Object.keys(countryCodeMapping).forEach(country => {
-        if (!holidays[country] || holidays[country].length === 0) {
+    countries.forEach(country => {
+        if (!holidaysCache.get(country) || holidaysCache.get(country).length === 0) {
             countriesWithoutHolidays.push(country);
         }
     });
-    
+
     return countriesWithoutHolidays;
 }
 
