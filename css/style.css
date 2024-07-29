@@ -8,7 +8,7 @@ html, body {
     background-image: linear-gradient(to right bottom, #222831, #262b34, #292f38, #2d323b, #31363f);
     background-size: cover;
     background-attachment: fixed;
-    font-size: 1.15em;
+    font-size: 1em; /* Reduced font size */
 }
 
 .calculator {
@@ -78,7 +78,7 @@ button:hover {
 h1 {
     margin: 10px 0;
     white-space: nowrap;
-    font-size: 1.15em;
+    font-size: 1em; /* Reduced font size */
 }
 
 #result {
@@ -95,7 +95,7 @@ h1 {
     width: 100%;
     text-align: center;
     cursor: pointer;
-    font-size: 1.15em;
+    font-size: 1em; /* Reduced font size */
 }
 
 .copy-message {
@@ -112,22 +112,23 @@ h1 {
     margin: 10px 0;
     display: flex;
     align-items: center;
-    font-size: 0.85em;
+    font-size: 0.75em; /* Reduced font size */
 }
 
 .checkbox-container input[type="checkbox"] {
-    width: 1em; /* Adjusted to match font size */
-    height: 1em; /* Adjusted to match font size */
+    width: 16px; /* Smaller size */
+    height: 16px; /* Smaller size */
     margin-right: 8px;
     cursor: pointer;
     accent-color: #76ABAE;
+    position: relative;
 }
 
 .checkbox-container label {
     color: #76ABAE;
     font-family: 'Menlo', monospace;
     cursor: pointer;
-    font-size: 1em; /* Matching the font size of the text */
+    font-size: 0.75em; /* Reduced font size */
 }
 
 .checkbox-container input[type="checkbox"]:checked {
@@ -137,9 +138,8 @@ h1 {
 .checkbox-container input[type="checkbox"]:checked::after {
     content: "✔";
     position: absolute;
-    top: 0;
+    top: -2px;
     left: 0;
-    font-size: 0.85em; /* Adjusted to fit within the checkbox */
+    font-size: 16px; /* Adjusted to make the checkmark bigger */
     color: #76ABAE;
-    margin: 2px;
 }
