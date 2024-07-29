@@ -60,6 +60,7 @@ export async function fetchHolidays(country, year) {
 
         // Store the result in cache
         holidaysCache.set(country, data);
+        return data; // Return the fetched data for immediate use
     } catch (error) {
         console.error(`Error fetching holidays for ${country}:`, error);
     }
@@ -88,7 +89,8 @@ export async function filterCountriesWithoutHolidays(year) {
 
     // Filter countries that have no holidays
     countries.forEach(country => {
-        if (!holidaysCache.get(country) || holidaysCache.get(country).length === 0) {
+        const holidays = holidaysCache.get(country);
+        if (!holidays || holidays.length === 0) {
             countriesWithoutHolidays.push(country);
         }
     });
