@@ -1,4 +1,3 @@
-
 // holidaysAPI.js
 
 const holidays = {
