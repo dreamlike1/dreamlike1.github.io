@@ -1,5 +1,6 @@
 // holidaysAPI.js
 
+// Sample data for holidays
 const holidays = {
     2024: {
         BN: [  // Brunei
@@ -173,6 +174,48 @@ const holidays = {
 };
 
 /**
+ * Transform local API holiday data to match the Date Nager API format.
+ * @param {Array} holidays - The array of holiday strings.
+ * @param {string} countryCode - The country code.
+ * @returns {Array} - Transformed holidays array.
+ */
+function transformLocalAPIResponse(holidays, countryCode) {
+    return holidays.map(holiday => {
+        const [name, date] = holiday.split(' - ');
+        return {
+            date: `2024-${convertDateToISO(date)}`, // Adjust year dynamically if needed
+            localName: name,
+            name: name,
+            countryCode: countryCode
+        };
+    });
+}
+
+/**
+ * Converts a date string (e.g., "January 1") to ISO format (e.g., "2024-01-01").
+ * @param {string} date - The date string to convert.
+ * @returns {string} - The date in ISO format.
+ */
+function convertDateToISO(date) {
+    const [month, day] = date.split(' ');
+    const monthMap = {
+        January: '01',
+        February: '02',
+        March: '03',
+        April: '04',
+        May: '05',
+        June: '06',
+        July: '07',
+        August: '08',
+        September: '09',
+        October: '10',
+        November: '11',
+        December: '12'
+    };
+    return `${monthMap[month]}-${String(day).padStart(2, '0')}`;
+}
+
+/**
  * Fetch holidays from the local API.
  * @param {string} countryCode - The country code for the holidays.
  * @param {number} year - The year for which to fetch holidays.
@@ -185,7 +228,9 @@ export async function fetchHolidaysFromLocalAPI(countryCode, year) {
             const countryHolidays = holidays[year] ? holidays[year][countryCode] : null;
 
             if (countryHolidays) {
-                resolve(countryHolidays);
+                // Transform data to match the Date Nager API format
+                const transformedHolidays = transformLocalAPIResponse(countryHolidays, countryCode);
+                resolve(transformedHolidays);
             } else {
                 console.error(`No holidays data available for the country code: ${countryCode}`);
                 reject(new Error(`No holidays data available for the country code: ${countryCode}`));
