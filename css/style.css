@@ -8,7 +8,7 @@ html, body {
     background-image: linear-gradient(to right bottom, #222831, #262b34, #292f38, #2d323b, #31363f);
     background-size: cover;
     background-attachment: fixed;
-    font-size: 1.15em;
+    font-size: 1.15em; /* Reverted font size */
 }
 
 .calculator {
@@ -44,7 +44,6 @@ input, select {
 #businessDays {
     color: #76ABAE;
     background: #222831;
-    font-size: 0.85em; /* Smaller font size for input fields */
 }
 
 #businessDays::placeholder {
@@ -53,7 +52,7 @@ input, select {
 
 /* Remove dropdown arrow */
 select {
-    background-image: none; /* Corrected to remove default dropdown arrow */
+    background-image: none; /* Fixed to remove default dropdown arrow */
 }
 
 /* Remove calendar icon for date input */
@@ -72,7 +71,6 @@ button {
     cursor: pointer;
     font-weight: bold;
     font-family: 'Menlo', monospace;
-    font-size: 0.85em; /* Smaller font size for button */
 }
 
 button:hover {
@@ -82,7 +80,7 @@ button:hover {
 h1 {
     margin: 10px 0;
     white-space: nowrap;
-    font-size: 1.15em;
+    font-size: 1.15em; /* Reverted font size */
 }
 
 #result {
@@ -99,7 +97,7 @@ h1 {
     width: 100%;
     text-align: center;
     cursor: pointer;
-    font-size: 0.85em; /* Smaller font size for result field */
+    font-size: 1.15em; /* Reverted font size */
 }
 
 .copy-message {
@@ -116,15 +114,18 @@ h1 {
     margin: 10px 0;
     display: flex;
     align-items: center;
-    font-size: 0.85em; /* Smaller font size for checkbox container */
+    font-size: 1em; /* Matching font size with dropdown selection */
 }
 
 /* Styling for checkbox */
 .checkbox-container input[type="checkbox"] {
-    width: 16px; /* Adjust width for better visibility */
-    height: 16px; /* Adjust height for better visibility */
+    width: 16px; /* Size adjusted for better visibility */
+    height: 16px; /* Size adjusted for better visibility */
     margin-right: 8px;
     cursor: pointer;
+    /* Ensure checkbox is not obstructed by other elements */
+    position: relative;
+    z-index: 1;
 }
 
 /* Styling for label */
@@ -132,4 +133,5 @@ h1 {
     color: #76ABAE;
     font-family: 'Menlo', monospace;
     cursor: pointer;
+    font-size: 1em; /* Matching font size with dropdown selection */
 }
