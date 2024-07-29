@@ -132,7 +132,7 @@ h1 {
     height: 17px;
     border: 1px solid #76ABAE; /* Darker border */
     border-radius: 3px;
-    background: #76ABAE; /* Dark background */
+    background: #2A2E34; /* Match the input field background */
     position: relative;
     transition: background 0.1s ease;
     cursor: pointer;
