@@ -112,12 +112,12 @@ h1 {
     margin: 10px 0;
     display: flex;
     align-items: center;
-    font-size: 1.5em; /* Increased font size */
+    font-size: 1em; /* Adjusted font size */
 }
 
 .checkbox-container input[type="checkbox"] {
-    width: 1.5em; /* Match the font size */
-    height: 1.5em; /* Match the font size */
+    width: 1em; /* Adjusted width */
+    height: 1em; /* Adjusted height */
     margin-right: 8px;
     cursor: pointer;
     accent-color: #76ABAE;
@@ -128,7 +128,7 @@ h1 {
     color: #76ABAE;
     font-family: 'Menlo', monospace;
     cursor: pointer;
-    font-size: 1.5em; /* Increased font size */
+    font-size: 1em; /* Adjusted font size */
 }
 
 .checkbox-container input[type="checkbox"]:checked {
@@ -140,9 +140,9 @@ h1 {
     position: absolute;
     top: 0;
     left: 0;
-    font-size: 1.2em; /* Make the checkmark larger */
+    font-size: 0.8em; /* Adjusted checkmark size */
     color: #76ABAE;
-    line-height: 1.5em; /* Center the checkmark */
+    line-height: 1em; /* Center the checkmark */
     text-align: center;
     width: 100%;
     height: 100%;
