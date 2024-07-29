@@ -5,7 +5,7 @@ html, body {
     justify-content: center;
     align-items: center;
     font-family: 'Menlo', monospace;
-    background-image: linear-gradient(to right bottom, #222831, #262b34, #292f38, #2d323b, #31363f);
+    background-image: linear-gradient(to right bottom, #121212, #1f1f1f, #2e2e2e, #3d3d3d, #4c4c4c);
     background-size: cover;
     background-attachment: fixed;
     font-size: 1.15em;
@@ -14,7 +14,7 @@ html, body {
 .calculator {
     max-width: 400px;
     padding: 20px;
-    background: #37414F;
+    background: #1c1c1c; /* Dark background for calculator */
     border-radius: 12px;
     box-shadow:
         0 1px 1px hsl(0deg 0% 0% / 0.075),
@@ -22,7 +22,7 @@ html, body {
         0 4px 4px hsl(0deg 0% 0% / 0.075),
         0 8px 8px hsl(0deg 0% 0% / 0.075),
         0 16px 16px hsl(0deg 0% 0% / 0.075);
-    color: #76ABAE;
+    color: #e0e0e0; /* Light text color for readability */
     text-align: center;
 }
 
@@ -30,11 +30,11 @@ input, select {
     width: 100%;
     padding: 12px;
     margin: 5px 0;
-    border: 1px solid #76ABAE;
+    border: 1px solid #616161; /* Darker border */
     border-radius: 4px;
     box-sizing: border-box;
-    background: #222831;
-    color: #76ABAE;
+    background: #2c2c2c; /* Dark input background */
+    color: #e0e0e0; /* Light text color */
     appearance: none;
     font-family: 'Menlo', monospace;
     color-scheme: dark;
@@ -42,12 +42,12 @@ input, select {
 
 /* Ensure correct color for businessDays field */
 #businessDays {
-    color: #76ABAE;
-    background: #222831;
+    color: #e0e0e0;
+    background: #2c2c2c;
 }
 
 #businessDays::placeholder {
-    color: #37414F;
+    color: #616161; /* Darker placeholder color */
 }
 
 /* Remove dropdown arrow */
@@ -55,9 +55,9 @@ select {
     background-image: none; /* Removes default dropdown arrow */
 }
 
-/* Remove calendar icon for date input */
+/* Restore calendar icon for date input */
 input[type="date"]::-webkit-calendar-picker-indicator {
-    display: none; /* Hides the calendar icon in WebKit browsers */
+    display: block; /* Shows the calendar icon in WebKit browsers */
 }
 
 /* Style button */
@@ -65,8 +65,8 @@ button {
     width: 100%;
     padding: 12px;
     margin: 5px 0;
-    background-color: #76ABAE;
-    color: #2a2a2b;
+    background-color: #4CAF50; /* Darker green button color */
+    color: #ffffff; /* White text color */
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -75,26 +75,27 @@ button {
 }
 
 button:hover {
-    background-color: #6c9e8e;
+    background-color: #45a049; /* Slightly lighter green for hover */
 }
 
 h1 {
     margin: 10px 0;
     white-space: nowrap;
     font-size: 1.15em;
+    color: #e0e0e0; /* Light color for heading */
 }
 
 /* Style result field */
 #result {
-    color: #31363F;
+    color: #1c1c1c;
     margin-top: 10px;
-    background: #EEEEEE;
+    background: #e0e0e0;
 }
 
 /* Style result field */
 .result-field {
-    background: #EEEEEE;
-    color: #31363F;
+    background: #e0e0e0;
+    color: #1c1c1c;
     border: none;
     padding: 12px;
     width: 100%;
@@ -105,7 +106,7 @@ h1 {
 /* Style copy message */
 .copy-message {
     position: absolute;
-    background: #76AE8D;
+    background: #4CAF50; /* Darker green for consistency */
     color: white;
     padding: 10px;
     border-radius: 4px;
@@ -120,7 +121,7 @@ h1 {
     margin: 5px 0;
 }
 
-/* Style checkbox input */
+/* Hide default checkbox appearance */
 .checkbox-wrapper-42 input[type="checkbox"] {
     display: none; /* Hide default checkbox */
 }
@@ -129,16 +130,16 @@ h1 {
 .checkbox-wrapper-42 .cbx {
     width: 17px;
     height: 17px;
-    border: 1px solid #76ABAE; /* Match color with other inputs */
+    border: 1px solid #616161; /* Darker border */
     border-radius: 3px;
-    background: #222831;
+    background: #2c2c2c; /* Dark background */
     position: relative;
     transition: background 0.1s ease;
     cursor: pointer;
     margin-right: 10px; /* Space between checkbox and label */
 }
 
-/* Style checkbox checkmark */
+/* Style checkmark */
 .checkbox-wrapper-42 .cbx:after {
     content: '';
     position: absolute;
@@ -148,15 +149,15 @@ h1 {
     height: 10px;
     opacity: 0;
     transform: rotate(45deg) scale(0);
-    border-right: 2px solid #76ABAE;
-    border-bottom: 2px solid #76ABAE;
+    border-right: 2px solid #ffffff; /* Light checkmark color */
+    border-bottom: 2px solid #ffffff; /* Light checkmark color */
     transition: all 0.3s ease;
 }
 
 /* Checkbox checked state */
 .checkbox-wrapper-42 input[type="checkbox"]:checked ~ .cbx {
-    background: #6871f1; /* Match color with other inputs */
-    border-color: transparent;
+    background: #4CAF50; /* Darker green background for checked state */
+    border-color: #4CAF50; /* Matching border color */
 }
 
 .checkbox-wrapper-42 input[type="checkbox"]:checked ~ .cbx:after {
