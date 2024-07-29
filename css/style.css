@@ -47,7 +47,7 @@ input, select {
 }
 
 #businessDays::placeholder {
-    color: #3F4248; /* Darker placeholder color to match input background */
+    color: #65676C; /* Darker placeholder color to match input background */
 }
 
 /* Remove dropdown arrow */
