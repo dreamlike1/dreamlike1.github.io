@@ -18,7 +18,6 @@ export async function fetchHolidays(country, year) {
     }
 
     try {
-        // Fetch holidays from Date Nager API
         const response = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${year}/${countryCode}`);
         
         if (!response.ok) {
@@ -26,30 +25,30 @@ export async function fetchHolidays(country, year) {
         }
 
         const responseText = await response.text();
-        console.log('Response Text:', responseText); // Debugging: log the raw response
-
-        let data;
+        
+        // Log an empty response as a warning
         if (!responseText.trim()) {
-            console.warn('Received empty response from Date Nager API');
-            data = []; // Return an empty array if response is empty
+            console.warn(`Empty response from Date Nager API for ${country}`);
+            data = [];
         } else {
+            let data;
             try {
                 data = JSON.parse(responseText); // Attempt to parse JSON
             } catch (error) {
-                console.error('Failed to parse JSON:', error);
-                data = []; // Return an empty array on parsing error
+                console.error(`Error parsing JSON from Date Nager API for ${country}:`, error);
+                data = [];
             }
-        }
 
-        // If no valid data from Date Nager API, try local API
-        if (!Array.isArray(data) || data.length === 0) {
-            console.warn(`No holiday data available from Date Nager API for ${country}, trying local Holidays API...`);
-            data = await fetchHolidaysFromLocalAPI(countryCode, year);
-        }
+            // If data is not valid, fall back to local API
+            if (!Array.isArray(data) || data.length === 0) {
+                console.warn(`No holiday data from Date Nager API for ${country}, trying local Holidays API...`);
+                data = await fetchHolidaysFromLocalAPI(countryCode, year);
+            }
 
-        // Store the result in cache
-        holidaysCache.set(country, data);
-        return data; // Ensure the result is returned
+            // Store the result in cache
+            holidaysCache.set(country, data);
+            return data; // Ensure the result is returned
+        }
     } catch (error) {
         console.error(`Error fetching holidays for ${country}:`, error);
         return []; // Return an empty array on error
@@ -84,5 +83,5 @@ export async function filterCountriesWithoutHolidays(year) {
 (async () => {
     const year = 2024;
     const result = await filterCountriesWithoutHolidays(year);
-    console.log(result); // This will log countries that have no holidays
+    console.log('Countries without holidays:', result); // Log the result succinctly
 })();
