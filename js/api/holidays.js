@@ -1,3 +1,4 @@
+// holidays.js
 import { countryCodeMapping } from './countryData.js';
 import { fetchHolidaysFromLocalAPI } from './holidaysAPI.js'; // Ensure this function is correctly imported
 
@@ -96,9 +97,19 @@ export async function filterCountriesWithoutHolidays(year) {
     return countriesWithoutHolidays;
 }
 
-// Example usage of the functions
-(async () => {
-    const year = 2024;
-    const result = await filterCountriesWithoutHolidays(year);
-    console.log(result); // This will log countries that have no holidays
-})();
+// Exporting fetchHolidays function
+export async function fetchHolidays(country, year) {
+    const countryCode = countryCodeMapping[country];
+    if (!countryCode) {
+        console.error(`No country code found for ${country}`);
+        return [];
+    }
+    // Check cache first
+    if (holidaysCache.has(country)) {
+        return holidaysCache.get(country);
+    }
+
+    // Fetch and cache holidays
+    await fetchAndStoreHolidays(country, year);
+    return holidaysCache.get(country) || [];
+}
