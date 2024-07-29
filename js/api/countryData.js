@@ -12,23 +12,24 @@ export const countryOptions = {
     expressFree: ["Japan", "South Korea"],
     economy: ["United States"],
     standard: [
-        "Anguilla", "Antigua and Barbuda", "Aruba", "Bahamas", "Belize",
-        "Belgium", "Bolivia", "Bosnia and Herzegovina", "Brazil", "Brunei",
-        "Bulgaria", "Canada", "Chile", "Colombia", "Costa Rica", "Croatia",
-        "Curaçao", "Denmark", "Dominica", "Dominican Republic", "Estonia",
-        "Finland", "France", "French Guiana", "Germany", "Greece", "Grenada",
-        "Guadeloupe", "Haiti", "Honduras", "Hong Kong", "Ireland", "Italy",
-        "Jamaica", "Japan", "Malaysia", "Malta", "Mexico", "Montserrat",
-        "Netherlands", "New Zealand", "Nicaragua", "Norway", "Panama",
-        "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Puerto Rico",
-        "Romania", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines",
-        "Singapore", "Slovakia", "Slovenia", "South Korea", "Spain", "Sweden",
-        "Switzerland", "Trinidad and Tobago", "Turks and Caicos Islands", 
-        "United Kingdom", "United States", "U.S. Virgin Islands", "Venezuela", 
-        "Vietnam"
+        "Anguilla", "Antigua and Barbuda", "Aruba", "Australia", "Bahamas",
+        "Belize", "Belgium", "Bolivia", "Bosnia and Herzegovina", "Brazil",
+        "Brunei", "Bulgaria", "Canada", "Chile", "Colombia", "Costa Rica",
+        "Croatia", "Curaçao", "Cyprus", "Denmark", "Dominica", "Dominican Republic",
+        "Estonia", "Finland", "France", "French Guiana", "Germany", "Greece",
+        "Grenada", "Guadeloupe", "Haiti", "Honduras", "Hong Kong", "Hungary",
+        "Ireland", "Italy", "Jamaica", "Japan", "Latvia", "Lithuania", "Luxembourg",
+        "Malta", "Malaysia", "Mexico", "Montserrat", "Netherlands", "New Zealand",
+        "Nicaragua", "Norway", "Panama", "Paraguay", "Peru", "Philippines",
+        "Poland", "Portugal", "Puerto Rico", "Romania", "Saint Kitts and Nevis",
+        "Saint Lucia", "Saint Vincent and the Grenadines", "Singapore", "Slovakia",
+        "Slovenia", "South Korea", "Spain", "Sweden", "Switzerland",
+        "Trinidad and Tobago", "Turks and Caicos Islands", "United Kingdom",
+        "United States", "U.S. Virgin Islands", "Venezuela", "Vietnam"
     ],
     collection: ["Canada", "United States"],
 };
+
 
 export const countryCodeMapping = {
     "Australia": "AU",
