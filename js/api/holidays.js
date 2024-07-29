@@ -57,6 +57,15 @@ export async function fetchHolidays(country, year) {
         if (!Array.isArray(data) || data.length === 0) {
             console.warn(`No holiday data available from Date Nager API for ${country}, trying local Holidays API...`);
             data = await fetchFromHolidaysAPI(countryCode, year);
+
+            // Log if the fallback was successful
+            if (data.length > 0) {
+                console.info(`Successfully fetched holiday data from local API for ${country}`);
+            } else {
+                console.warn(`No holiday data available from local API for ${country} either`);
+            }
+        } else {
+            console.info(`Successfully fetched holiday data from Date Nager API for ${country}`);
         }
 
         // Store the result in cache
