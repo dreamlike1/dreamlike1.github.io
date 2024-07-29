@@ -18,14 +18,30 @@ export async function fetchHolidays(country, year) {
     }
 
     try {
-        let data = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${year}/${countryCode}`);
+        // Fetch holidays from Date Nager API
+        const response = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${year}/${countryCode}`);
         
-        if (!data.ok) {
-            throw new Error(`Failed to fetch holidays from Date Nager API: ${data.statusText}`);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch holidays from Date Nager API: ${response.statusText}`);
         }
 
-        data = await data.json(); // Directly parse JSON
+        const responseText = await response.text();
+        console.log('Response Text:', responseText); // Debugging: log the raw response
 
+        let data;
+        if (!responseText.trim()) {
+            console.warn('Received empty response from Date Nager API');
+            data = []; // Return an empty array if response is empty
+        } else {
+            try {
+                data = JSON.parse(responseText); // Attempt to parse JSON
+            } catch (error) {
+                console.error('Failed to parse JSON:', error);
+                data = []; // Return an empty array on parsing error
+            }
+        }
+
+        // If no valid data from Date Nager API, try local API
         if (!Array.isArray(data) || data.length === 0) {
             console.warn(`No holiday data available from Date Nager API for ${country}, trying local Holidays API...`);
             data = await fetchHolidaysFromLocalAPI(countryCode, year);
