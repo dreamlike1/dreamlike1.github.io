@@ -78,7 +78,7 @@ button:hover {
 h1 {
     margin: 10px 0;
     white-space: nowrap;
-    font-size: 1em; /* Reduced font size */
+    font-size: 2em; /* Increased font size */
 }
 
 #result {
@@ -149,4 +149,8 @@ h1 {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.order-message {
+    font-size: 1em; /* Reduced font size */
 }
