@@ -38,7 +38,7 @@ async function fetchFromHolidaysAPI(countryCode, year) {
 }
 
 // Function to fetch holidays and cache the results
-export async function fetchHolidays(country, year) {
+async function fetchAndStoreHolidays(country, year) {
     const countryCode = countryCodeMapping[country];
     if (!countryCode) {
         console.error(`No country code found for ${country}`);
@@ -81,7 +81,7 @@ export async function filterCountriesWithoutHolidays(year) {
 
     // Fetch holidays for all countries in parallel
     const countries = Object.keys(countryCodeMapping);
-    const fetchPromises = countries.map(country => fetchHolidays(country, year));
+    const fetchPromises = countries.map(country => fetchAndStoreHolidays(country, year));
 
     // Wait for all fetch promises to complete
     await Promise.all(fetchPromises);
