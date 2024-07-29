@@ -91,9 +91,10 @@ export function getBusinessDate(date, country) {
     return businessDate;
 }
 
-// Function to filter countries without holidays from Date Nager API and save results in an array
+// Function to filter countries without holidays and save results in an array
 export async function filterCountriesWithoutHolidays(year) {
     const countriesWithoutHolidays = [];
+    const countriesWithNoHolidays = new Set();
 
     // Fetch holidays for all countries in parallel
     const countries = Object.keys(countryCodeMapping);
@@ -106,11 +107,12 @@ export async function filterCountriesWithoutHolidays(year) {
     countries.forEach(country => {
         const holidays = holidaysCache.get(country);
         if (!holidays || holidays.length === 0) {
-            countriesWithoutHolidays.push(country);
+            countriesWithNoHolidays.add(country);
         }
     });
 
-    return countriesWithoutHolidays;
+    // Convert Set to Array for consistency
+    return Array.from(countriesWithNoHolidays);
 }
 
 // Example usage of the functions
