@@ -115,7 +115,10 @@ h1 {
     align-items: center;
 }
 
+/* Styling for checkbox */
 .checkbox-container input[type="checkbox"] {
+    width: 20px; /* Adjust width as needed */
+    height: 20px; /* Adjust height as needed */
     margin-right: 8px;
     cursor: pointer;
 }
