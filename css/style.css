@@ -8,7 +8,7 @@ html, body {
     background-image: linear-gradient(to right bottom, #222831, #262b34, #292f38, #2d323b, #31363f);
     background-size: cover;
     background-attachment: fixed;
-    font-size: 1.15em; /* Reverted font size */
+    font-size: 1.15em;
 }
 
 .calculator {
@@ -50,14 +50,12 @@ input, select {
     color: #37414F;
 }
 
-/* Remove dropdown arrow */
 select {
-    background-image: none; /* Fixed to remove default dropdown arrow */
+    background-image: none;
 }
 
-/* Remove calendar icon for date input */
 input[type="date"]::-webkit-calendar-picker-indicator {
-    display: none; /* Hides the calendar icon in WebKit browsers */
+    display: none;
 }
 
 button {
@@ -80,7 +78,7 @@ button:hover {
 h1 {
     margin: 10px 0;
     white-space: nowrap;
-    font-size: 1.15em; /* Reverted font size */
+    font-size: 1.15em;
 }
 
 #result {
@@ -97,7 +95,7 @@ h1 {
     width: 100%;
     text-align: center;
     cursor: pointer;
-    font-size: 1.15em; /* Reverted font size */
+    font-size: 1.15em;
 }
 
 .copy-message {
@@ -114,39 +112,34 @@ h1 {
     margin: 10px 0;
     display: flex;
     align-items: center;
-    font-size: 0.85em; /* Smaller font size for checkbox container */
+    font-size: 0.85em;
 }
 
-/* Styling for checkbox */
 .checkbox-container input[type="checkbox"] {
-    width: 14px; /* Smaller size */
-    height: 14px; /* Smaller size */
+    width: 1em; /* Adjusted to match font size */
+    height: 1em; /* Adjusted to match font size */
     margin-right: 8px;
     cursor: pointer;
-    position: relative;
-    z-index: 1;
-    accent-color: #76ABAE; /* Adds color to the checkbox */
+    accent-color: #76ABAE;
 }
 
-/* Styling for label */
 .checkbox-container label {
     color: #76ABAE;
     font-family: 'Menlo', monospace;
     cursor: pointer;
-    font-size: 0.85em; /* Smaller font size for label */
+    font-size: 1em; /* Matching the font size of the text */
 }
 
-/* Style for checked state */
 .checkbox-container input[type="checkbox"]:checked {
-    accent-color: #76ABAE; /* Change checkbox color when selected */
+    accent-color: #76ABAE;
 }
 
 .checkbox-container input[type="checkbox"]:checked::after {
-    content: "✔"; /* Add checkmark symbol */
+    content: "✔";
     position: absolute;
     top: 0;
     left: 0;
-    font-size: 12px; /* Adjust checkmark size */
-    color: #76ABAE; /* Color for checkmark */
-    margin: 2px; /* Adjust position */
+    font-size: 0.85em; /* Adjusted to fit within the checkbox */
+    color: #76ABAE;
+    margin: 2px;
 }
