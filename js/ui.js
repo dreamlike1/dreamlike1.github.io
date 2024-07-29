@@ -1,6 +1,6 @@
 import { countryOptions } from './api/countryData.js';
 import { fetchHolidays } from './api/holidays.js'; // Updated path
-import { calculateBusinessDays, formatDate } from './dateUtils.js';
+import { calculateBusinessDays as utilCalculateBusinessDays, formatDate as utilFormatDate } from './dateUtils.js';
 
 // Assume holidays are stored globally or in a shared state
 let holidays = [];
@@ -102,6 +102,6 @@ function calculateBusinessDays(startDate, numDays, holidays) {
 function isBusinessDay(date, holidays) {
     const dayOfWeek = date.getDay();
     if (dayOfWeek === 0 || dayOfWeek === 6) return false; // Exclude weekends
-    const formattedDate = formatDate(date); // Ensure date format matches holiday format
+    const formattedDate = utilFormatDate(date); // Ensure date format matches holiday format
     return !holidays.includes(formattedDate); // Check if the date is a holiday
 }
