@@ -91,7 +91,7 @@ export function getBusinessDate(date, country) {
     return businessDate;
 }
 
-// Function to filter countries without holidays and save results in an array
+// Function to filter countries without holidays from Date Nager API and save results in an array
 export async function filterCountriesWithoutHolidays(year) {
     const countriesWithoutHolidays = [];
 
@@ -102,7 +102,7 @@ export async function filterCountriesWithoutHolidays(year) {
     // Wait for all fetch promises to complete
     await Promise.all(fetchPromises);
 
-    // Filter countries that have no holidays
+    // Filter countries that have no holidays from Date Nager API
     countries.forEach(country => {
         const holidays = holidaysCache.get(country);
         if (!holidays || holidays.length === 0) {
@@ -123,7 +123,11 @@ export async function filterCountriesWithoutHolidays(year) {
     const businessDate = getBusinessDate(date, country);
     console.log(`The business date for ${date.toDateString()} in ${country} is ${businessDate.toDateString()}`);
 
-    // Find countries without holidays
+    // Find countries without holidays from Date Nager API
     const countriesWithoutHolidays = await filterCountriesWithoutHolidays(year);
-    console.log('Countries without holidays:', countriesWithoutHolidays);
+    if (countriesWithoutHolidays.length > 0) {
+        console.log('Countries without holidays from Date Nager API:', countriesWithoutHolidays);
+    } else {
+        console.log('All countries have holidays from Date Nager API.');
+    }
 })();
