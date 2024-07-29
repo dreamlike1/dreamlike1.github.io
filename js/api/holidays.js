@@ -42,7 +42,7 @@ export async function fetchHolidays(country, year) {
     const countryCode = countryCodeMapping[country];
     if (!countryCode) {
         console.error(`No country code found for ${country}`);
-        return;
+        return [];
     }
 
     // Return cached data if available
@@ -63,6 +63,7 @@ export async function fetchHolidays(country, year) {
         return data; // Return the fetched data for immediate use
     } catch (error) {
         console.error(`Error fetching holidays for ${country}:`, error);
+        return []; // Return an empty array on error
     }
 }
 
@@ -74,6 +75,20 @@ export function isHoliday(date, country) {
     return countryHolidays.some(holiday => 
         new Date(holiday.date).toDateString() === date.toDateString()
     );
+}
+
+// Function to compute the business date considering holidays
+export function getBusinessDate(date, country) {
+    const countryHolidays = holidaysCache.get(country);
+    if (!countryHolidays) return date;
+
+    let businessDate = new Date(date);
+
+    while (isHoliday(businessDate, country)) {
+        businessDate.setDate(businessDate.getDate() + 1);
+    }
+
+    return businessDate;
 }
 
 // Function to filter countries without holidays and save results in an array
@@ -101,6 +116,14 @@ export async function filterCountriesWithoutHolidays(year) {
 // Example usage of the functions
 (async () => {
     const year = 2024;
-    const result = await filterCountriesWithoutHolidays(year);
-    console.log(result); // This will log countries that have no holidays
+    const date = new Date(); // Replace with the specific date you want to check
+    const country = 'US'; // Replace with the specific country you want to check
+
+    // Get business date for a specific date and country
+    const businessDate = getBusinessDate(date, country);
+    console.log(`The business date for ${date.toDateString()} in ${country} is ${businessDate.toDateString()}`);
+
+    // Find countries without holidays
+    const countriesWithoutHolidays = await filterCountriesWithoutHolidays(year);
+    console.log('Countries without holidays:', countriesWithoutHolidays);
 })();
