@@ -44,6 +44,7 @@ input, select {
 #businessDays {
     color: #76ABAE;
     background: #222831;
+    font-size: 0.85em; /* Smaller font size for input fields */
 }
 
 #businessDays::placeholder {
@@ -52,12 +53,12 @@ input, select {
 
 /* Remove dropdown arrow */
 select {
-    background-image: block; /* Removes default dropdown arrow */
+    background-image: none; /* Corrected to remove default dropdown arrow */
 }
 
 /* Remove calendar icon for date input */
 input[type="date"]::-webkit-calendar-picker-indicator {
-    display: block; /* Hides the calendar icon in WebKit browsers */
+    display: none; /* Hides the calendar icon in WebKit browsers */
 }
 
 button {
@@ -71,6 +72,7 @@ button {
     cursor: pointer;
     font-weight: bold;
     font-family: 'Menlo', monospace;
+    font-size: 0.85em; /* Smaller font size for button */
 }
 
 button:hover {
@@ -97,6 +99,7 @@ h1 {
     width: 100%;
     text-align: center;
     cursor: pointer;
+    font-size: 0.85em; /* Smaller font size for result field */
 }
 
 .copy-message {
@@ -113,12 +116,13 @@ h1 {
     margin: 10px 0;
     display: flex;
     align-items: center;
+    font-size: 0.85em; /* Smaller font size for checkbox container */
 }
 
 /* Styling for checkbox */
 .checkbox-container input[type="checkbox"] {
-    width: 20px; /* Adjust width as needed */
-    height: 20px; /* Adjust height as needed */
+    width: 16px; /* Adjust width for better visibility */
+    height: 16px; /* Adjust height for better visibility */
     margin-right: 8px;
     cursor: pointer;
 }
