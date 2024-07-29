@@ -1,4 +1,3 @@
-// ui.js
 import { countryOptions } from './api/countryData.js';
 import { fetchHolidays } from './api/holidays.js'; // Updated path
 import { calculateBusinessDays, formatDate } from './dateUtils.js';
@@ -9,7 +8,7 @@ export async function populateCountries() {
     const countries = countryOptions[selectedService] || [];
 
     countrySelect.innerHTML = '<option value="">Select a country</option>'; // Add default option
-    
+
     for (const country of countries) {
         // Fetch holidays for each country
         await fetchHolidays(country, new Date().getFullYear());
@@ -24,18 +23,29 @@ export async function populateCountries() {
 }
 
 export async function calculateBusinessDate() {
+    const startDate = new Date(document.getElementById('startDate').value);
     const dateRangeInput = document.getElementById('businessDays').value;
     const selectedCountry = document.getElementById('countrySelect').value;
 
-    if (!dateRangeInput || !selectedCountry) {
-        alert('Please enter a valid range of business days and select a country.');
+    if (!dateRangeInput || !selectedCountry || isNaN(startDate)) {
+        alert('Please enter a valid start date, range of business days, and select a country.');
         return;
     }
 
-    const startDate = new Date(document.getElementById('startDate').value);
-    const ranges = dateRangeInput.split('-').map(Number);
-    const numDaysStart = ranges[0];
-    const numDaysEnd = ranges[1] || ranges[0];
+    let numDaysStart, numDaysEnd;
+
+    // Handle different range formats
+    if (dateRangeInput.includes('-')) {
+        const ranges = dateRangeInput.split('-').map(Number);
+        numDaysStart = ranges[0];
+        numDaysEnd = ranges[1];
+    } else if (dateRangeInput.includes(',')) {
+        const ranges = dateRangeInput.split(',').map(Number);
+        numDaysStart = ranges[0];
+        numDaysEnd = ranges[1];
+    } else {
+        numDaysStart = numDaysEnd = Number(dateRangeInput);
+    }
 
     await fetchHolidays(selectedCountry, startDate.getFullYear());
 
@@ -62,3 +72,9 @@ export function setupEventListeners() {
         });
     });
 }
+
+// Initial setup
+document.addEventListener('DOMContentLoaded', () => {
+    populateCountries();
+    setupEventListeners();
+});
