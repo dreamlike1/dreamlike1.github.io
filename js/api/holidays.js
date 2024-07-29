@@ -1,5 +1,3 @@
-
-
 import { countryCodeMapping } from './countryData.js';
 import { fetchHolidaysFromLocalAPI } from './holidaysAPI.js'; // Ensure this function is correctly imported
 
@@ -55,6 +53,7 @@ export async function fetchHolidays(country, year) {
     try {
         let data = await fetchFromDateNagerAPI(countryCode, year);
 
+        // If Date Nager API returns empty or fails, fetch from local API
         if (!Array.isArray(data) || data.length === 0) {
             console.warn(`No holiday data available from Date Nager API for ${country}, trying local Holidays API...`);
             data = await fetchFromHolidaysAPI(countryCode, year);
