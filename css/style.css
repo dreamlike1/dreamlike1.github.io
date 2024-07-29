@@ -37,10 +37,10 @@ input, select {
     color: #76ABAE;
     appearance: none;
     font-family: 'Menlo', monospace;
-    position: relative;
     color-scheme: dark;
 }
 
+/* Ensure correct color for businessDays field */
 #businessDays {
     color: #76ABAE;
     background: #222831;
@@ -52,14 +52,15 @@ input, select {
 
 /* Remove dropdown arrow */
 select {
-    background-image: block; /* Removes default dropdown arrow */
+    background-image: none; /* Removes default dropdown arrow */
 }
 
 /* Remove calendar icon for date input */
 input[type="date"]::-webkit-calendar-picker-indicator {
-    display: block; /* Hides the calendar icon in WebKit browsers */
+    display: none; /* Hides the calendar icon in WebKit browsers */
 }
 
+/* Style button */
 button {
     width: 100%;
     padding: 12px;
@@ -83,12 +84,14 @@ h1 {
     font-size: 1.15em;
 }
 
+/* Style result field */
 #result {
     color: #31363F;
     margin-top: 10px;
     background: #EEEEEE;
 }
 
+/* Style result field */
 .result-field {
     background: #EEEEEE;
     color: #31363F;
@@ -99,6 +102,7 @@ h1 {
     cursor: pointer;
 }
 
+/* Style copy message */
 .copy-message {
     position: absolute;
     background: #76AE8D;
@@ -109,150 +113,94 @@ h1 {
     z-index: 10;
 }
 
- .checkbox-wrapper-42 input[type="checkbox"] {
-    display: none;
-    visibility: hidden;
-  }
+/* Style checkbox wrapper and adjust alignment */
+.checkbox-wrapper-42 {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+}
 
-  .checkbox-wrapper-42 label {
-    display: inline-block;
-  }
+/* Style checkbox input */
+.checkbox-wrapper-42 input[type="checkbox"] {
+    display: none; /* Hide default checkbox */
+}
 
-  .checkbox-wrapper-42 .cbx {
-    position: relative;
-    top: 1px;
+/* Style custom checkbox */
+.checkbox-wrapper-42 .cbx {
     width: 17px;
     height: 17px;
-    border: 1px solid #c8ccd4;
+    border: 1px solid #76ABAE; /* Match color with other inputs */
     border-radius: 3px;
-    vertical-align: middle;
+    background: #222831;
+    position: relative;
     transition: background 0.1s ease;
     cursor: pointer;
-  }
-  .checkbox-wrapper-42 .cbx:after {
+    margin-right: 10px; /* Space between checkbox and label */
+}
+
+/* Style checkbox checkmark */
+.checkbox-wrapper-42 .cbx:after {
     content: '';
     position: absolute;
-    top: 1px;
+    top: 2px;
     left: 5px;
     width: 5px;
-    height: 11px;
+    height: 10px;
     opacity: 0;
     transform: rotate(45deg) scale(0);
-    border-right: 2px solid #fff;
-    border-bottom: 2px solid #fff;
+    border-right: 2px solid #76ABAE;
+    border-bottom: 2px solid #76ABAE;
     transition: all 0.3s ease;
-    transition-delay: 0.15s;
-  }
-  .checkbox-wrapper-42 .lbl {
-    margin-left: 5px;
-    vertical-align: middle;
-    cursor: pointer;
-  }
-  .checkbox-wrapper-42 input[type="checkbox"]:checked ~ .cbx {
+}
+
+/* Checkbox checked state */
+.checkbox-wrapper-42 input[type="checkbox"]:checked ~ .cbx {
+    background: #6871f1; /* Match color with other inputs */
     border-color: transparent;
-    background: #6871f1;
-    animation: jelly-42 0.6s ease;
-  }
-  .checkbox-wrapper-42 input[type="checkbox"]:checked ~ .cbx:after {
+}
+
+.checkbox-wrapper-42 input[type="checkbox"]:checked ~ .cbx:after {
     opacity: 1;
     transform: rotate(45deg) scale(1);
-  }
-  .checkbox-wrapper-42 .cntr {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    width: 100%;
-    text-align: center;
-  }
-  @-moz-keyframes jelly-42 {
-    from {
-      transform: scale(1, 1);
-    }
-    30% {
-      transform: scale(1.25, 0.75);
-    }
-    40% {
-      transform: scale(0.75, 1.25);
-    }
-    50% {
-      transform: scale(1.15, 0.85);
-    }
-    65% {
-      transform: scale(0.95, 1.05);
-    }
-    75% {
-      transform: scale(1.05, 0.95);
-    }
-    to {
-      transform: scale(1, 1);
-    }
-  }
-  @-webkit-keyframes jelly-42 {
-    from {
-      transform: scale(1, 1);
-    }
-    30% {
-      transform: scale(1.25, 0.75);
-    }
-    40% {
-      transform: scale(0.75, 1.25);
-    }
-    50% {
-      transform: scale(1.15, 0.85);
-    }
-    65% {
-      transform: scale(0.95, 1.05);
-    }
-    75% {
-      transform: scale(1.05, 0.95);
-    }
-    to {
-      transform: scale(1, 1);
-    }
-  }
-  @-o-keyframes jelly-42 {
-    from {
-      transform: scale(1, 1);
-    }
-    30% {
-      transform: scale(1.25, 0.75);
-    }
-    40% {
-      transform: scale(0.75, 1.25);
-    }
-    50% {
-      transform: scale(1.15, 0.85);
-    }
-    65% {
-      transform: scale(0.95, 1.05);
-    }
-    75% {
-      transform: scale(1.05, 0.95);
-    }
-    to {
-      transform: scale(1, 1);
-    }
-  }
-  @keyframes jelly-42 {
-    from {
-      transform: scale(1, 1);
-    }
-    30% {
-      transform: scale(1.25, 0.75);
-    }
-    40% {
-      transform: scale(0.75, 1.25);
-    }
-    50% {
-      transform: scale(1.15, 0.85);
-    }
-    65% {
-      transform: scale(0.95, 1.05);
-    }
-    75% {
-      transform: scale(1.05, 0.95);
-    }
-    to {
-      transform: scale(1, 1);
-    }
-  }
+}
+
+/* Animation for checkbox */
+@-moz-keyframes jelly-42 {
+    from { transform: scale(1, 1); }
+    30% { transform: scale(1.25, 0.75); }
+    40% { transform: scale(0.75, 1.25); }
+    50% { transform: scale(1.15, 0.85); }
+    65% { transform: scale(0.95, 1.05); }
+    75% { transform: scale(1.05, 0.95); }
+    to { transform: scale(1, 1); }
+}
+
+@-webkit-keyframes jelly-42 {
+    from { transform: scale(1, 1); }
+    30% { transform: scale(1.25, 0.75); }
+    40% { transform: scale(0.75, 1.25); }
+    50% { transform: scale(1.15, 0.85); }
+    65% { transform: scale(0.95, 1.05); }
+    75% { transform: scale(1.05, 0.95); }
+    to { transform: scale(1, 1); }
+}
+
+@-o-keyframes jelly-42 {
+    from { transform: scale(1, 1); }
+    30% { transform: scale(1.25, 0.75); }
+    40% { transform: scale(0.75, 1.25); }
+    50% { transform: scale(1.15, 0.85); }
+    65% { transform: scale(0.95, 1.05); }
+    75% { transform: scale(1.05, 0.95); }
+    to { transform: scale(1, 1); }
+}
+
+@keyframes jelly-42 {
+    from { transform: scale(1, 1); }
+    30% { transform: scale(1.25, 0.75); }
+    40% { transform: scale(0.75, 1.25); }
+    50% { transform: scale(1.15, 0.85); }
+    65% { transform: scale(0.95, 1.05); }
+    75% { transform: scale(1.05, 0.95); }
+    to { transform: scale(1, 1); }
+}
