@@ -88,9 +88,11 @@ export async function filterCountriesWithoutHolidays(year) {
     // Check which countries have no holidays and need local API fetch
     for (const [index, country] of countries.entries()) {
         const holidays = allHolidays[index];
+
         if (!holidays.length) {
             console.log(`Country ${country} has no holidays from Date Nager API. Fetching from local API...`);
             const localHolidays = await fetchFromLocalAPI(countryCodeMapping[country], year);
+            
             if (localHolidays.length) {
                 holidaysCache.set(country, localHolidays);
             } else {
