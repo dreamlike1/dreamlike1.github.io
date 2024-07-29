@@ -1,6 +1,5 @@
-// ui.js
 import { countryOptions } from './api/countryData.js';
-import { fetchHolidays } from './api/holidays.js'; // Updated path
+import { fetchHolidaysFromLocalAPI } from './api/holidays.js'; // Corrected import
 import { calculateBusinessDays, formatDate } from './dateUtils.js';
 
 export async function populateCountries() {
@@ -10,10 +9,8 @@ export async function populateCountries() {
 
     countrySelect.innerHTML = '<option value="">Select a country</option>'; // Add default option
     
-    for (const country of countries) {
-        // Fetch holidays for each country
-        await fetchHolidays(country, new Date().getFullYear());
-    }
+    // Fetch holidays for each country and store them in cache
+    await Promise.all(countries.map(country => fetchHolidaysFromLocalAPI(country, new Date().getFullYear())));
 
     countries.forEach(country => {
         const option = document.createElement('option');
@@ -37,7 +34,7 @@ export async function calculateBusinessDate() {
     const numDaysStart = ranges[0];
     const numDaysEnd = ranges[1] || ranges[0];
 
-    await fetchHolidays(selectedCountry, startDate.getFullYear());
+    await fetchHolidaysFromLocalAPI(selectedCountry, startDate.getFullYear());
 
     const endDateStart = calculateBusinessDays(startDate, numDaysStart, selectedCountry);
     const endDateEnd = calculateBusinessDays(startDate, numDaysEnd, selectedCountry);
