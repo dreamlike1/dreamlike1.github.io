@@ -15,7 +15,7 @@ async function fetchFromDateNagerAPI(countryCode, year) {
         
         const responseText = await response.text();
         
-        if (!responseText) {
+        if (!responseText.trim()) {
             console.warn('Received empty response from Date Nager API');
             return []; // Return an empty array if the response is empty
         }
@@ -42,7 +42,7 @@ export async function fetchHolidays(country, year) {
     const countryCode = countryCodeMapping[country];
     if (!countryCode) {
         console.error(`No country code found for ${country}`);
-        return;
+        return [];
     }
 
     // Return cached data if available
@@ -53,6 +53,7 @@ export async function fetchHolidays(country, year) {
     try {
         let data = await fetchFromDateNagerAPI(countryCode, year);
 
+        // If no valid data from Date Nager API, try local API
         if (!Array.isArray(data) || data.length === 0) {
             console.warn(`No holiday data available from Date Nager API for ${country}, trying local Holidays API...`);
             data = await fetchFromHolidaysAPI(countryCode, year);
@@ -60,16 +61,16 @@ export async function fetchHolidays(country, year) {
 
         // Store the result in cache
         holidaysCache.set(country, data);
+        return data; // Ensure the result is returned
     } catch (error) {
         console.error(`Error fetching holidays for ${country}:`, error);
+        return []; // Return an empty array on error
     }
 }
 
 // Function to check if a given date is a holiday in a specified country
 export function isHoliday(date, country) {
-    const countryHolidays = holidaysCache.get(country);
-    if (!countryHolidays) return false;
-
+    const countryHolidays = holidaysCache.get(country) || [];
     return countryHolidays.some(holiday => 
         new Date(holiday.date).toDateString() === date.toDateString()
     );
@@ -88,7 +89,7 @@ export async function filterCountriesWithoutHolidays(year) {
 
     // Filter countries that have no holidays
     countries.forEach(country => {
-        if (!holidaysCache.get(country) || holidaysCache.get(country).length === 0) {
+        if (!(holidaysCache.get(country) || []).length) {
             countriesWithoutHolidays.push(country);
         }
     });
@@ -100,5 +101,5 @@ export async function filterCountriesWithoutHolidays(year) {
 (async () => {
     const year = 2024;
     const result = await filterCountriesWithoutHolidays(year);
-    console.log(result); // This will log countries that have no holidays
+    console.log('Countries without holidays:', result); // Log countries that have no holidays
 })();
