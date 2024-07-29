@@ -2,6 +2,9 @@ import { countryOptions } from './api/countryData.js';
 import { fetchHolidays } from './api/holidays.js'; // Updated path
 import { calculateBusinessDays, formatDate } from './dateUtils.js';
 
+// Assume holidays are stored globally or in a shared state
+let holidays = [];
+
 export async function populateCountries() {
     const countrySelect = document.getElementById('countrySelect');
     const selectedService = document.getElementById('serviceType').value;
@@ -10,8 +13,8 @@ export async function populateCountries() {
     countrySelect.innerHTML = '<option value="">Select a country</option>'; // Add default option
 
     for (const country of countries) {
-        // Fetch holidays for each country
-        await fetchHolidays(country, new Date().getFullYear());
+        // Fetch holidays and update global holidays array
+        holidays = await fetchHolidays(country, new Date().getFullYear());
     }
 
     countries.forEach(country => {
@@ -27,7 +30,7 @@ export async function calculateBusinessDate() {
     const dateRangeInput = document.getElementById('businessDays').value;
     const selectedCountry = document.getElementById('countrySelect').value;
 
-    if (!dateRangeInput || !selectedCountry || isNaN(startDate)) {
+    if (!dateRangeInput || !selectedCountry || isNaN(startDate.getTime())) {
         alert('Please enter a valid start date, range of business days, and select a country.');
         return;
     }
@@ -47,10 +50,12 @@ export async function calculateBusinessDate() {
         numDaysStart = numDaysEnd = Number(dateRangeInput);
     }
 
-    await fetchHolidays(selectedCountry, startDate.getFullYear());
+    // Fetch holidays for the selected country
+    holidays = await fetchHolidays(selectedCountry, startDate.getFullYear());
 
-    const endDateStart = calculateBusinessDays(startDate, numDaysStart, selectedCountry);
-    const endDateEnd = calculateBusinessDays(startDate, numDaysEnd, selectedCountry);
+    // Calculate the end dates considering holidays
+    const endDateStart = calculateBusinessDays(startDate, numDaysStart, holidays);
+    const endDateEnd = calculateBusinessDays(startDate, numDaysEnd, holidays);
 
     const formattedStart = formatDate(endDateStart);
     const formattedEnd = formatDate(endDateEnd);
@@ -78,3 +83,25 @@ document.addEventListener('DOMContentLoaded', () => {
     populateCountries();
     setupEventListeners();
 });
+
+// Example of calculateBusinessDays function
+function calculateBusinessDays(startDate, numDays, holidays) {
+    let currentDate = new Date(startDate);
+    let daysAdded = 0;
+
+    while (daysAdded < numDays) {
+        currentDate.setDate(currentDate.getDate() + 1);
+        if (isBusinessDay(currentDate, holidays)) {
+            daysAdded++;
+        }
+    }
+
+    return currentDate;
+}
+
+function isBusinessDay(date, holidays) {
+    const dayOfWeek = date.getDay();
+    if (dayOfWeek === 0 || dayOfWeek === 6) return false; // Exclude weekends
+    const formattedDate = formatDate(date); // Ensure date format matches holiday format
+    return !holidays.includes(formattedDate); // Check if the date is a holiday
+}
