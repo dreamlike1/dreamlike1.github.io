@@ -116,8 +116,8 @@ h1 {
 }
 
 .checkbox-container input[type="checkbox"] {
-    width: 1em; /* Adjusted width */
-    height: 1em; /* Adjusted height */
+    width: 0.8em; /* Smaller checkbox size */
+    height: 0.8em; /* Smaller checkbox size */
     margin-right: 8px;
     cursor: pointer;
     accent-color: #76ABAE;
@@ -138,14 +138,14 @@ h1 {
 .checkbox-container input[type="checkbox"]:checked::after {
     content: "✔";
     position: absolute;
-    top: 0;
-    left: 0;
-    font-size: 0.8em; /* Adjusted checkmark size */
+    top: -2px; /* Adjust positioning */
+    left: -2px; /* Adjust positioning */
+    font-size: 1em; /* Larger checkmark size */
     color: #76ABAE;
     line-height: 1em; /* Center the checkmark */
     text-align: center;
-    width: 100%;
-    height: 100%;
+    width: 1.2em; /* Adjust width */
+    height: 1.2em; /* Adjust height */
     display: flex;
     align-items: center;
     justify-content: center;
