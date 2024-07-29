@@ -33,7 +33,7 @@ input, select {
     border: 1px solid #76ABAE; /* Darker border */
     border-radius: 4px;
     box-sizing: border-box;
-    background: #76ABAE; /* Dark input background */
+    background: #2A2E34; /* Darker shade for input background */
     color: #EEEEEE; /* Light text color */
     appearance: none;
     font-family: 'Menlo', monospace;
@@ -43,11 +43,11 @@ input, select {
 /* Ensure correct color for businessDays field */
 #businessDays {
     color: #EEEEEE;
-    background: #76ABAE;
+    background: #2A2E34; /* Darker shade for background */
 }
 
 #businessDays::placeholder {
-    color: #31363F; /* Darker placeholder color */
+    color: #2A2E34; /* Darker placeholder color to match input background */
 }
 
 /* Remove dropdown arrow */
@@ -65,7 +65,7 @@ button {
     width: 100%;
     padding: 12px;
     margin: 5px 0;
-    background-color: #76ABAE; /* Darker green button color */
+    background-color: #76ABAE; /* Updated button color */
     color: #ffffff; /* White text color */
     border: none;
     border-radius: 4px;
