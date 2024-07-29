@@ -1,8 +1,14 @@
 import { countryCodeMapping } from './countryData.js';
 import { fetchHolidaysFromLocalAPI } from './holidaysAPI.js'; 
 
+// Cache to store holiday data for quick access
 const holidaysCache = new Map();
 
+/**
+ * Fetches data from a given URL and returns it as JSON.
+ * @param {string} url - The URL to fetch data from.
+ * @returns {Promise<object|null>} - The JSON data or null if an error occurs.
+ */
 async function fetchData(url) {
     try {
         const response = await fetch(url);
@@ -21,11 +27,23 @@ async function fetchData(url) {
     }
 }
 
+/**
+ * Fetches holiday data from the Date Nager API.
+ * @param {string} countryCode - The country code.
+ * @param {number} year - The year to fetch holidays for.
+ * @returns {Promise<object[]>} - The holiday data or an empty array if an error occurs.
+ */
 async function fetchFromDateNagerAPI(countryCode, year) {
     const url = `https://date.nager.at/api/v3/PublicHolidays/${year}/${countryCode}`;
     return fetchData(url);
 }
 
+/**
+ * Fetches holiday data from a local API.
+ * @param {string} countryCode - The country code.
+ * @param {number} year - The year to fetch holidays for.
+ * @returns {Promise<object[]>} - The holiday data or an empty array if an error occurs.
+ */
 async function fetchFromHolidaysAPI(countryCode, year) {
     try {
         return await fetchHolidaysFromLocalAPI(countryCode, year);
@@ -35,6 +53,11 @@ async function fetchFromHolidaysAPI(countryCode, year) {
     }
 }
 
+/**
+ * Fetches and stores holiday data for a specific country.
+ * @param {string} country - The country name.
+ * @param {number} year - The year to fetch holidays for.
+ */
 async function fetchAndStoreHolidays(country, year) {
     const countryCode = countryCodeMapping[country];
     if (!countryCode) {
@@ -58,12 +81,23 @@ async function fetchAndStoreHolidays(country, year) {
     }
 }
 
+/**
+ * Checks if a specific date is a holiday in a given country.
+ * @param {Date} date - The date to check.
+ * @param {string} country - The country name.
+ * @returns {boolean} - True if the date is a holiday, false otherwise.
+ */
 export function isHoliday(date, country) {
     const countryHolidays = holidaysCache.get(country);
     if (!countryHolidays) return false;
     return countryHolidays.some(holiday => new Date(holiday.date).toDateString() === date.toDateString());
 }
 
+/**
+ * Fetches holiday data for all countries in batches to manage concurrency.
+ * @param {string[]} countries - List of country names.
+ * @param {number} year - The year to fetch holidays for.
+ */
 async function fetchHolidaysWithConcurrencyControl(countries, year) {
     const MAX_CONCURRENT_REQUESTS = 5;
     let index = 0;
@@ -78,12 +112,18 @@ async function fetchHolidaysWithConcurrencyControl(countries, year) {
     await processBatch();
 }
 
+/**
+ * Finds countries without holidays for a given year.
+ * @param {number} year - The year to check for holidays.
+ * @returns {Promise<string[]>} - List of countries without holidays.
+ */
 export async function filterCountriesWithoutHolidays(year) {
     const countries = Object.keys(countryCodeMapping);
     await fetchHolidaysWithConcurrencyControl(countries, year);
     return countries.filter(country => !holidaysCache.get(country) || holidaysCache.get(country).length === 0);
 }
 
+// Example usage: logs countries without holidays for the year 2024
 (async () => {
     const year = 2024;
     const result = await filterCountriesWithoutHolidays(year);
