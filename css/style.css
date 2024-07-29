@@ -78,7 +78,7 @@ button:hover {
 h1 {
     margin: 10px 0;
     white-space: nowrap;
-    font-size: 2em; /* Increased font size */
+    font-size: 1.5em; /* Adjusted font size */
 }
 
 #result {
@@ -140,7 +140,7 @@ h1 {
     position: absolute;
     top: 0;
     left: 0;
-    font-size: 1.5em; /* Match the checkbox size */
+    font-size: 1.2em; /* Make the checkmark larger */
     color: #76ABAE;
     line-height: 1.5em; /* Center the checkmark */
     text-align: center;
@@ -152,5 +152,5 @@ h1 {
 }
 
 .order-message {
-    font-size: 1em; /* Reduced font size */
+    font-size: 1em; /* Match the font size of dropdowns */
 }
