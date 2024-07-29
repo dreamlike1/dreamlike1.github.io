@@ -82,14 +82,20 @@ export async function filterCountriesWithoutHolidays(year) {
 
     // Fetch holidays for all countries in parallel
     const countries = Object.keys(countryCodeMapping);
+    console.log(`Fetching holidays for countries:`, countries);
+
     const fetchPromises = countries.map(country => fetchHolidays(country, year));
 
     // Wait for all fetch promises to complete
     await Promise.all(fetchPromises);
 
+    console.log(`Completed fetching holidays. Checking cache...`);
+
     // Filter countries that have no holidays
     countries.forEach(country => {
-        if (!holidaysCache.get(country) || holidaysCache.get(country).length === 0) {
+        const holidays = holidaysCache.get(country);
+        if (!holidays || holidays.length === 0) {
+            console.log(`No holidays found for ${country}`);
             countriesWithoutHolidays.push(country);
         }
     });
@@ -101,5 +107,6 @@ export async function filterCountriesWithoutHolidays(year) {
 (async () => {
     const year = 2024;
     const result = await filterCountriesWithoutHolidays(year);
-    console.log(result); // This will log countries that have no holidays
+    console.log(`Countries without holidays in ${year}:`, result);
 })();
+
