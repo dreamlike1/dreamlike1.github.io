@@ -114,18 +114,18 @@ h1 {
     margin: 10px 0;
     display: flex;
     align-items: center;
-    font-size: 1em; /* Matching font size with dropdown selection */
+    font-size: 0.85em; /* Smaller font size for checkbox container */
 }
 
 /* Styling for checkbox */
 .checkbox-container input[type="checkbox"] {
-    width: 16px; /* Size adjusted for better visibility */
-    height: 16px; /* Size adjusted for better visibility */
+    width: 14px; /* Smaller size */
+    height: 14px; /* Smaller size */
     margin-right: 8px;
     cursor: pointer;
-    /* Ensure checkbox is not obstructed by other elements */
     position: relative;
     z-index: 1;
+    accent-color: #76ABAE; /* Adds color to the checkbox */
 }
 
 /* Styling for label */
@@ -133,5 +133,20 @@ h1 {
     color: #76ABAE;
     font-family: 'Menlo', monospace;
     cursor: pointer;
-    font-size: 1em; /* Matching font size with dropdown selection */
+    font-size: 0.85em; /* Smaller font size for label */
+}
+
+/* Style for checked state */
+.checkbox-container input[type="checkbox"]:checked {
+    accent-color: #76ABAE; /* Change checkbox color when selected */
+}
+
+.checkbox-container input[type="checkbox"]:checked::after {
+    content: "✔"; /* Add checkmark symbol */
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 12px; /* Adjust checkmark size */
+    color: #76ABAE; /* Color for checkmark */
+    margin: 2px; /* Adjust position */
 }
