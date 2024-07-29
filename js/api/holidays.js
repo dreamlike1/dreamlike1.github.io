@@ -1,10 +1,8 @@
 import { countryCodeMapping } from './countryData.js';
 import { fetchHolidaysFromLocalAPI } from './holidaysAPI.js'; 
 
-// Cache for storing fetched holiday data
 const holidaysCache = new Map();
 
-// Utility function to handle API responses
 async function fetchData(url) {
     try {
         const response = await fetch(url);
@@ -23,13 +21,11 @@ async function fetchData(url) {
     }
 }
 
-// Fetch holidays from Date Nager API
 async function fetchFromDateNagerAPI(countryCode, year) {
     const url = `https://date.nager.at/api/v3/PublicHolidays/${year}/${countryCode}`;
     return fetchData(url);
 }
 
-// Fetch holidays from local API
 async function fetchFromHolidaysAPI(countryCode, year) {
     try {
         return await fetchHolidaysFromLocalAPI(countryCode, year);
@@ -39,7 +35,6 @@ async function fetchFromHolidaysAPI(countryCode, year) {
     }
 }
 
-// Fetch and store holidays with caching
 async function fetchAndStoreHolidays(country, year) {
     const countryCode = countryCodeMapping[country];
     if (!countryCode) {
@@ -47,7 +42,6 @@ async function fetchAndStoreHolidays(country, year) {
         return;
     }
 
-    // Return cached data if available
     if (holidaysCache.has(country)) {
         return holidaysCache.get(country);
     }
@@ -64,17 +58,14 @@ async function fetchAndStoreHolidays(country, year) {
     }
 }
 
-// Check if a given date is a holiday in a specified country
 export function isHoliday(date, country) {
     const countryHolidays = holidaysCache.get(country);
     if (!countryHolidays) return false;
     return countryHolidays.some(holiday => new Date(holiday.date).toDateString() === date.toDateString());
 }
 
-// Control concurrency for fetching holidays
-const MAX_CONCURRENT_REQUESTS = 5;
-
 async function fetchHolidaysWithConcurrencyControl(countries, year) {
+    const MAX_CONCURRENT_REQUESTS = 5;
     let index = 0;
     const processBatch = async () => {
         const batch = countries.slice(index, index + MAX_CONCURRENT_REQUESTS);
@@ -87,14 +78,12 @@ async function fetchHolidaysWithConcurrencyControl(countries, year) {
     await processBatch();
 }
 
-// Filter countries that do not have holidays
 export async function filterCountriesWithoutHolidays(year) {
     const countries = Object.keys(countryCodeMapping);
     await fetchHolidaysWithConcurrencyControl(countries, year);
     return countries.filter(country => !holidaysCache.get(country) || holidaysCache.get(country).length === 0);
 }
 
-// Example usage of the functions
 (async () => {
     const year = 2024;
     const result = await filterCountriesWithoutHolidays(year);
