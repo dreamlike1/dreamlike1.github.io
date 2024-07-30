@@ -207,9 +207,9 @@ h1 {
     to { transform: scale(1, 1); }
 }
 
-/* Style switch button */
 .switch-button {
-    width: 100%;
+    width: 80%; /* Adjusted width to make it smaller */
+    max-width: 300px; /* Optional: maximum width to keep it from getting too large */
     padding: 12px;
     margin: 20px 0;
     background-color: #5F9EA0; /* Darker button color */
@@ -219,6 +219,9 @@ h1 {
     cursor: pointer;
     font-weight: bold;
     font-family: 'Menlo', monospace;
+    display: block; /* Ensure it behaves like a block-level element */
+    margin-left: auto; /* Center align horizontally */
+    margin-right: auto; /* Center align horizontally */
 }
 
 .switch-button:hover {
