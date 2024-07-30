@@ -4,14 +4,16 @@ export function setupSwitchButton() {
     const switchButton = document.getElementById('switchButton');
     const calculatorBox = document.getElementById('calculatorBox');
     const couponExpiryBox = document.getElementById('couponBox');
-    const boxTitle = document.getElementById('boxTitle'); // Assuming this is correctly set in your HTML
+    const boxTitle = document.getElementById('boxTitle');
     const couponTitle = document.getElementById('couponTitle');
     const couponDateInput = document.getElementById('couponDate');
     const addDaysInput = document.getElementById('addDays');
     const removeExtraDayCheckbox = document.getElementById('cbx-43');
+    const resultInput = document.getElementById('result');
     const couponResultInput = document.getElementById('couponResult');
+    const calculateButton = document.getElementById('calculateButton');
     const couponCalculateButton = document.getElementById('couponCalculateButton');
-    const copyMessage = document.getElementById('copyMessage'); // Get the copy message element
+    const copyMessage = document.getElementById('copyMessage');
 
     switchButton.addEventListener('click', () => {
         if (calculatorBox.classList.contains('hidden')) {
@@ -37,26 +39,25 @@ export function setupSwitchButton() {
         couponTitle.textContent = 'Business Date Calculator';
     }
 
+    calculateButton.addEventListener('click', () => {
+        // Your calculation logic for Business Date Calculator
+        // Example logic to calculate and display result
+        resultInput.value = "Your calculated result";
+    });
+
     couponCalculateButton.addEventListener('click', () => {
-        const startDate = new Date(couponDateInput.value);
-        const addDays = parseInt(addDaysInput.value);
-        let expiryDate = new Date(startDate.setDate(startDate.getDate() + addDays));
+        // Your calculation logic for Coupon Expiry
+        // Example logic to calculate and display coupon expiry result
+        couponResultInput.value = "Your calculated coupon result";
+    });
 
-        if (removeExtraDayCheckbox.checked) {
-            expiryDate.setDate(expiryDate.getDate() - 1);
-        }
-
-        couponResultInput.value = formatDate(expiryDate);
+    resultInput.addEventListener('click', () => {
+        copyToClipboard(resultInput.value);
     });
 
     couponResultInput.addEventListener('click', () => {
         copyToClipboard(couponResultInput.value);
     });
-
-    function formatDate(date) {
-        const options = { month: 'long', day: 'numeric', year: 'numeric' };
-        return new Intl.DateTimeFormat('en-US', options).format(date);
-    }
 
     function copyToClipboard(text) {
         navigator.clipboard.writeText(text)
