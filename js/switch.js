@@ -1,19 +1,17 @@
 // js/switch.js
 
-// Function to handle setup of switch button and related functionality
 export function setupSwitchButton() {
     const switchButton = document.getElementById('switchButton');
     const calculatorBox = document.getElementById('calculatorBox');
     const couponExpiryBox = document.getElementById('couponBox');
-    const boxTitle = document.getElementById('calculatorBox').querySelector('h1');
-    const couponTitle = document.getElementById('couponBox').querySelector('h1');
-    const resultInput = document.getElementById('businessDays');
-    const couponResultInput = document.getElementById('addDays');
-    const calculateButton = document.getElementById('calculateButton');
+    const boxTitle = document.getElementById('boxTitle');
+    const couponTitle = document.getElementById('couponTitle');
+    const couponDateInput = document.getElementById('couponDate');
+    const addDaysInput = document.getElementById('addDays');
+    const removeExtraDayCheckbox = document.getElementById('cbx-43');
+    const couponResultInput = document.getElementById('couponResult');
     const couponCalculateButton = document.getElementById('couponCalculateButton');
-    const copyMessage = document.getElementById('copyMessage');
 
-    // Event listener for switch button
     switchButton.addEventListener('click', () => {
         if (calculatorBox.classList.contains('hidden')) {
             showCalculatorBox();
@@ -22,7 +20,6 @@ export function setupSwitchButton() {
         }
     });
 
-    // Function to show calculator box and update titles
     function showCalculatorBox() {
         calculatorBox.classList.remove('hidden');
         couponExpiryBox.classList.add('hidden');
@@ -31,53 +28,28 @@ export function setupSwitchButton() {
         couponTitle.textContent = 'Coupon Expiry';
     }
 
-    // Function to show coupon expiry box and update titles
     function showCouponExpiryBox() {
         calculatorBox.classList.add('hidden');
         couponExpiryBox.classList.remove('hidden');
-        switchButton.textContent = 'Switch to Business Date Calculator';
+        switchButton.textContent = 'Switch to ETA Calculator';
         boxTitle.textContent = 'Coupon Expiry';
         couponTitle.textContent = 'Business Date Calculator';
     }
 
-    // Event listener for calculate button in calculator box
-    calculateButton.addEventListener('click', () => {
-        // Placeholder logic for calculator button click
-        resultInput.value = "Your calculated result";
-    });
-
-    // Event listener for calculate button in coupon expiry box
     couponCalculateButton.addEventListener('click', () => {
-        // Placeholder logic for coupon expiry button click
-        couponResultInput.value = "Your calculated coupon result";
+        const startDate = new Date(couponDateInput.value);
+        const addDays = parseInt(addDaysInput.value);
+        let expiryDate = new Date(startDate.setDate(startDate.getDate() + addDays));
+
+        if (removeExtraDayCheckbox.checked) {
+            expiryDate.setDate(expiryDate.getDate() - 1);
+        }
+
+        couponResultInput.value = formatDate(expiryDate);
     });
 
-    // Event listener for copying result in calculator box
-    resultInput.addEventListener('click', () => {
-        copyToClipboard(resultInput.value);
-    });
-
-    // Event listener for copying result in coupon expiry box
-    couponResultInput.addEventListener('click', () => {
-        copyToClipboard(couponResultInput.value);
-    });
-
-    // Function to copy text to clipboard
-    function copyToClipboard(text) {
-        navigator.clipboard.writeText(text)
-            .then(() => {
-                showCopyMessage();
-            })
-            .catch(err => {
-                console.error('Failed to copy: ', err);
-            });
-    }
-
-    // Function to display "Copied!" message
-    function showCopyMessage() {
-        copyMessage.style.display = 'block';
-        setTimeout(() => {
-            copyMessage.style.display = 'none';
-        }, 2000);
+    function formatDate(date) {
+        const options = { month: 'long', day: 'numeric', year: 'numeric' };
+        return new Intl.DateTimeFormat('en-US', options).format(date);
     }
 }
