@@ -31,12 +31,12 @@ export function populateBusinessDays() {
     const businessDaysInput = document.getElementById('businessDays');
 
     if (serviceType === 'expressPaid') {
-        if (country === 'BR') {
+        if (country === 'Brazil') {
             businessDaysInput.value = '2-5';
-        } else if (country === 'NZ') {
+        } else if (country === 'New Zealand') {
             businessDaysInput.value = '4-7';
         } else {
-            businessDaysInput.value = '';
+            businessDaysInput.value = '2-3';
         }
     } else {
         businessDaysInput.value = '';
