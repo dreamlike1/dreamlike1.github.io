@@ -19,6 +19,7 @@ html, body {
     width: 100%;
     max-width: 400px; /* Ensures the container doesn't get too wide */
     position: relative; /* To use absolute positioning inside it */
+    padding-bottom: 80px; /* Add padding at the bottom for the switch button */
 }
 
 /* General styling for boxes */
