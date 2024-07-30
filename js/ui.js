@@ -30,7 +30,31 @@ export function populateBusinessDays() {
     const country = document.getElementById('countrySelect').value;
     const businessDaysInput = document.getElementById('businessDays');
 
-    if (serviceType === 'expressPaid') {
+    if (serviceType === 'expressFree') {
+        businessDaysInput.value = '2-3';
+    } else if (serviceType === 'standard') {
+        if (country === 'New Zealand') {
+            businessDaysInput.value = '7-10';
+        } else if (country === 'United States') {
+            businessDaysInput.value = '';
+        } else {
+            businessDaysInput.value = '5-8';
+        }
+    } else if (serviceType === 'economy') {
+        if (country === 'United States') {
+            businessDaysInput.value = '7-14';
+        } else {
+            businessDaysInput.value = '';
+        }
+    } else if (serviceType === 'collection') {
+        if (country === 'United States') {
+            businessDaysInput.value = '1-3';
+        } else if (country === 'Canada') {
+            businessDaysInput.value = '3-4';
+        } else {
+            businessDaysInput.value = '';
+        }
+    } else if (serviceType === 'expressPaid') {
         if (country === 'Brazil') {
             businessDaysInput.value = '2-5';
         } else if (country === 'New Zealand') {
