@@ -1,56 +1,240 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business Date Calculator</title>
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-    <div class="container">
-        <div id="calculatorBox" class="box">
-            <h1>Business Date Calculator</h1>
-            <div style="position: relative;">
-                <select id="serviceType">
-                    <option value="expressPaid" selected>Express (Paid)</option>
-                    <option value="expressFree">Express (Free)</option>
-                    <option value="standard">Standard</option>
-                    <option value="economy">Economy</option>
-                    <option value="collection">Collection</option>
-                </select>
-            </div>
-            <div style="position: relative;">
-                <select id="countrySelect">
-                    <!-- Options will be populated dynamically -->
-                </select>
-            </div>
-            <div style="position: relative;">
-                <input type="date" id="startDate" required>
-            </div>
-            <div class="checkbox-wrapper-42">
-                <input id="cbx-42" type="checkbox" />
-                <label class="cbx" for="cbx-42"></label>
-                <label class="lbl" for="cbx-42">Order is past 5pm</label>
-            </div>
-            <input type="text" id="businessDays" placeholder="Business Days (ex. 1-2 or 1,2)" required>
-            <button id="calculateButton">Calculate</button>
-            <input type="text" id="result" class="result-field" readonly>
-            <div id="copyMessage" class="copy-message">Copied!</div>
-        </div>
-        <button id="switchButton" class="switch-button">Switch to Coupon Expiry</button>
-        <div id="couponBox" class="box hidden">
-            <h1 id="couponTitle">Coupon Expiry</h1>
-            <div style="position: relative;">
-                <input type="text" id="addDays" placeholder="Add Days" required>
-            </div>
-            <div style="position: relative;">
-                <input type="date" id="couponDate" required>
-            </div>
-            <button id="couponCalculateButton">Calculate</button>
-            <input type="text" id="couponResult" class="result-field" readonly>
-        </div>
-    </div>
-    <script type="module" src="js/main.js"></script>
-    <script type="module" src="js/switch.js"></script>
-</body>
-</html>
+/* General styling for body and container */
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Menlo', monospace;
+    background-image: linear-gradient(to right bottom, #222831, #31363F);
+    background-size: cover;
+    background-attachment: fixed;
+    font-size: 1.15em;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 400px; /* Ensures the container doesn't get too wide */
+}
+
+/* General styling for boxes */
+.box {
+    padding: 20px;
+    background: #31363F; /* Secondary background for boxes */
+    border-radius: 12px;
+    box-shadow:
+        0 1px 1px rgba(0, 0, 0, 0.075),
+        0 2px 2px rgba(0, 0, 0, 0.075),
+        0 4px 4px rgba(0, 0, 0, 0.075),
+        0 8px 8px rgba(0, 0, 0, 0.075),
+        0 16px 16px rgba(0, 0, 0, 0.075);
+    color: #EEEEEE; /* Light text color for readability */
+    text-align: center;
+    margin-bottom: 20px; /* Space between boxes and button */
+}
+
+/* Hide the box */
+.hidden {
+    display: none;
+}
+
+/* Ensure titles fit on a single line */
+h1, #couponTitle {
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden; /* Hide overflow text */
+    text-overflow: ellipsis; /* Add ellipsis for overflow text */
+    font-size: 1.15em;
+}
+
+/* Style input and select elements */
+input, select {
+    width: 100%;
+    padding: 12px;
+    margin: 5px 0;
+    border: 1px solid #76ABAE; /* Darker border */
+    border-radius: 4px;
+    box-sizing: border-box;
+    background: #2A2E34; /* Darker shade for input background */
+    color: #EEEEEE; /* Light text color */
+    appearance: none;
+    font-family: 'Menlo', monospace;
+    color-scheme: dark;
+}
+
+/* Ensure correct color for businessDays field */
+#businessDays, #addDays {
+    color: #EEEEEE;
+    background: #2A2E34; /* Darker shade for background */
+}
+
+#businessDays::placeholder, #addDays::placeholder {
+    color: #65676C; /* Darker placeholder color to match input background */
+}
+
+/* Remove dropdown arrow */
+select {
+    background-image: none; /* Removes default dropdown arrow */
+}
+
+/* Restore calendar icon for date input */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    display: block; /* Shows the calendar icon in WebKit browsers */
+}
+
+/* Style button */
+button {
+    width: 100%;
+    padding: 12px;
+    margin: 5px 0;
+    background-color: #76ABAE; /* Updated button color */
+    color: #ffffff; /* White text color */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: 'Menlo', monospace;
+}
+
+button:hover {
+    background-color: #6b9f97; /* Slightly lighter green for hover */
+}
+
+/* Style switch button */
+.switch-button {
+    width: 80%; /* Adjusted width to make it smaller */
+    max-width: 300px; /* Optional: maximum width to keep it from getting too large */
+    padding: 12px;
+    margin: 20px 0; /* Space around the button */
+    background-color: #5F9EA0; /* Darker button color */
+    color: #ffffff; /* White text color */
+    border: none;
+    border-radius: 20px; /* More rounded edges */
+    cursor: pointer;
+    font-weight: bold;
+    font-family: 'Menlo', monospace;
+    display: block; /* Ensure it behaves like a block-level element */
+    margin-left: auto; /* Center align horizontally */
+    margin-right: auto; /* Center align horizontally */
+}
+
+.switch-button:hover {
+    background-color: #4F8C8A; /* Slightly lighter color for hover */
+}
+
+/* Style result field */
+.result-field {
+    background: #EEEEEE;
+    color: #31363F;
+    border: none;
+    padding: 12px;
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+/* Style copy message */
+.copy-message {
+    position: absolute;
+    background: #76ABAE; /* Darker green for consistency */
+    color: white;
+    padding: 10px;
+    border-radius: 4px;
+    display: none;
+    z-index: 10;
+}
+
+/* Style checkbox wrapper and adjust alignment */
+.checkbox-wrapper-42 {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+}
+
+/* Hide default checkbox appearance */
+.checkbox-wrapper-42 input[type="checkbox"] {
+    display: none; /* Hide default checkbox */
+}
+
+/* Style custom checkbox */
+.checkbox-wrapper-42 .cbx {
+    width: 17px;
+    height: 17px;
+    border: 1px solid #76ABAE; /* Darker border */
+    border-radius: 3px;
+    background: #2A2E34; /* Match the input field background */
+    position: relative;
+    transition: background 0.1s ease;
+    cursor: pointer;
+    margin-right: 10px; /* Space between checkbox and label */
+}
+
+/* Style checkmark */
+.checkbox-wrapper-42 .cbx:after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 5px;
+    width: 5px;
+    height: 10px;
+    opacity: 0;
+    transform: rotate(45deg) scale(0);
+    border-right: 2px solid #EEEEEE; /* Light checkmark color */
+    border-bottom: 2px solid #EEEEEE; /* Light checkmark color */
+    transition: all 0.3s ease;
+}
+
+/* Checkbox checked state */
+.checkbox-wrapper-42 input[type="checkbox"]:checked ~ .cbx {
+    background: #76ABAE; /* Darker green background for checked state */
+    border-color: #76ABAE; /* Matching border color */
+}
+
+.checkbox-wrapper-42 input[type="checkbox"]:checked ~ .cbx:after {
+    opacity: 1;
+    transform: rotate(45deg) scale(1);
+}
+
+/* Animation for checkbox */
+@-moz-keyframes jelly-42 {
+    from { transform: scale(1, 1); }
+    30% { transform: scale(1.25, 0.75); }
+    40% { transform: scale(0.75, 1.25); }
+    50% { transform: scale(1.15, 0.85); }
+    65% { transform: scale(0.95, 1.05); }
+    75% { transform: scale(1.05, 0.95); }
+    to { transform: scale(1, 1); }
+}
+
+@-webkit-keyframes jelly-42 {
+    from { transform: scale(1, 1); }
+    30% { transform: scale(1.25, 0.75); }
+    40% { transform: scale(0.75, 1.25); }
+    50% { transform: scale(1.15, 0.85); }
+    65% { transform: scale(0.95, 1.05); }
+    75% { transform: scale(1.05, 0.95); }
+    to { transform: scale(1, 1); }
+}
+
+@-o-keyframes jelly-42 {
+    from { transform: scale(1, 1); }
+    30% { transform: scale(1.25, 0.75); }
+    40% { transform: scale(0.75, 1.25); }
+    50% { transform: scale(1.15, 0.85); }
+    65% { transform: scale(0.95, 1.05); }
+    75% { transform: scale(1.05, 0.95); }
+    to { transform: scale(1, 1); }
+}
+
+@keyframes jelly-42 {
+    from { transform: scale(1, 1); }
+    30% { transform: scale(1.25, 0.75); }
+    40% { transform: scale(0.75, 1.25); }
+    50% { transform: scale(1.15, 0.85); }
+    65% { transform: scale(0.95, 1.05); }
+    75% { transform: scale(1.05, 0.95); }
+    to { transform: scale(1, 1); }
+}
