@@ -11,7 +11,7 @@ export function setupSwitchButton() {
     const removeExtraDayCheckbox = document.getElementById('cbx-43');
     const couponResultInput = document.getElementById('couponResult');
     const couponCalculateButton = document.getElementById('couponCalculateButton');
-    const copyResultButton = document.getElementById('copyCouponResult'); // Assuming you have a button for copying result
+    const copyMessage = document.getElementById('copyMessage');
 
     switchButton.addEventListener('click', () => {
         if (calculatorBox.classList.contains('hidden')) {
@@ -49,10 +49,9 @@ export function setupSwitchButton() {
         couponResultInput.value = formatDate(expiryDate);
     });
 
-    copyResultButton.addEventListener('click', () => {
+    couponResultInput.addEventListener('click', () => {
         couponResultInput.select();
         document.execCommand('copy');
-        const copyMessage = document.getElementById('copyMessage');
         copyMessage.style.display = 'block';
         setTimeout(() => {
             copyMessage.style.display = 'none';
