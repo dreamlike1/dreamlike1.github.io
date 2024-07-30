@@ -25,6 +25,24 @@ export async function populateCountries() {
     });
 }
 
+export function populateBusinessDays() {
+    const serviceType = document.getElementById('serviceType').value;
+    const country = document.getElementById('countrySelect').value;
+    const businessDaysInput = document.getElementById('businessDays');
+
+    if (serviceType === 'expressPaid') {
+        if (country === 'BR') {
+            businessDaysInput.value = '2-5';
+        } else if (country === 'NZ') {
+            businessDaysInput.value = '4-7';
+        } else {
+            businessDaysInput.value = '';
+        }
+    } else {
+        businessDaysInput.value = '';
+    }
+}
+
 export async function calculateBusinessDate() {
     let startDate = new Date(document.getElementById('startDate').value);
     const dateRangeInput = document.getElementById('businessDays').value;
@@ -70,7 +88,11 @@ export async function calculateBusinessDate() {
 }
 
 export function setupEventListeners() {
-    document.getElementById('serviceType').addEventListener('change', populateCountries);
+    document.getElementById('serviceType').addEventListener('change', () => {
+        populateCountries();
+        populateBusinessDays();
+    });
+    document.getElementById('countrySelect').addEventListener('change', populateBusinessDays);
     document.getElementById('calculateButton').addEventListener('click', calculateBusinessDate);
     document.getElementById('result').addEventListener('click', () => {
         const resultField = document.getElementById('result');
