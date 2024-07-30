@@ -1,3 +1,5 @@
+/* style.css */
+
 /* General styling for body and container */
 html, body {
     height: 100%;
@@ -38,6 +40,7 @@ html, body {
     margin-bottom: 60px; /* Space between boxes and button */
     position: relative; /* For positioning elements within the box */
     min-height: 200px; /* Ensures the box has a minimum height */
+    transition: opacity 0.3s ease-in-out; /* Added transition for opacity */
 }
 
 /* Ensure the switch button stays at the bottom */
@@ -64,7 +67,8 @@ html, body {
 
 /* Hide the box */
 .hidden {
-    display: none;
+    opacity: 0;
+    pointer-events: none; /* Ensures hidden elements are not clickable */
 }
 
 /* Ensure titles fit on a single line */
@@ -243,4 +247,3 @@ button:hover {
     75% { transform: scale(1.05, 0.95); }
     to { transform: scale(1, 1); }
 }
-
