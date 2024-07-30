@@ -1,8 +1,8 @@
+/* General styling for body and container */
 html, body {
     height: 100%;
     margin: 0;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     font-family: 'Menlo', monospace;
@@ -12,10 +12,18 @@ html, body {
     font-size: 1.15em;
 }
 
-.calculator {
-    max-width: 400px;
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 400px; /* Ensures the container doesn't get too wide */
+}
+
+/* General styling for boxes */
+.box {
     padding: 20px;
-    background: #31363F; /* Secondary background for calculator */
+    background: #31363F; /* Secondary background for boxes */
     border-radius: 12px;
     box-shadow:
         0 1px 1px rgba(0, 0, 0, 0.075),
@@ -25,8 +33,15 @@ html, body {
         0 16px 16px rgba(0, 0, 0, 0.075);
     color: #EEEEEE; /* Light text color for readability */
     text-align: center;
+    margin-bottom: 20px; /* Space between boxes and button */
 }
 
+/* Hide the box */
+.hidden {
+    display: none;
+}
+
+/* Style input and select elements */
 input, select {
     width: 100%;
     padding: 12px;
@@ -42,12 +57,12 @@ input, select {
 }
 
 /* Ensure correct color for businessDays field */
-#businessDays {
+#businessDays, #addDays {
     color: #EEEEEE;
     background: #2A2E34; /* Darker shade for background */
 }
 
-#businessDays::placeholder {
+#businessDays::placeholder, #addDays::placeholder {
     color: #65676C; /* Darker placeholder color to match input background */
 }
 
@@ -66,7 +81,7 @@ button {
     width: 100%;
     padding: 12px;
     margin: 5px 0;
-    background-color: #5F9EA0; /* Darker button color */
+    background-color: #76ABAE; /* Updated button color */
     color: #ffffff; /* White text color */
     border: none;
     border-radius: 4px;
@@ -76,21 +91,29 @@ button {
 }
 
 button:hover {
+    background-color: #6b9f97; /* Slightly lighter green for hover */
+}
+
+/* Style switch button */
+.switch-button {
+    width: 80%; /* Adjusted width to make it smaller */
+    max-width: 300px; /* Optional: maximum width to keep it from getting too large */
+    padding: 12px;
+    margin: 20px 0;
+    background-color: #5F9EA0; /* Darker button color */
+    color: #ffffff; /* White text color */
+    border: none;
+    border-radius: 20px; /* More rounded edges */
+    cursor: pointer;
+    font-weight: bold;
+    font-family: 'Menlo', monospace;
+    display: block; /* Ensure it behaves like a block-level element */
+    margin-left: auto; /* Center align horizontally */
+    margin-right: auto; /* Center align horizontally */
+}
+
+.switch-button:hover {
     background-color: #4F8C8A; /* Slightly lighter color for hover */
-}
-
-h1 {
-    margin: 10px 0;
-    white-space: nowrap;
-    font-size: 1.15em;
-    color: #EEEEEE; /* Light color for heading */
-}
-
-/* Style result field */
-#result {
-    color: #31363F;
-    margin-top: 10px;
-    background: #EEEEEE;
 }
 
 /* Style result field */
@@ -102,6 +125,7 @@ h1 {
     width: 100%;
     text-align: center;
     cursor: pointer;
+    margin-top: 10px;
 }
 
 /* Style copy message */
@@ -205,25 +229,4 @@ h1 {
     65% { transform: scale(0.95, 1.05); }
     75% { transform: scale(1.05, 0.95); }
     to { transform: scale(1, 1); }
-}
-
-.switch-button {
-    width: 80%; /* Adjusted width to make it smaller */
-    max-width: 300px; /* Optional: maximum width to keep it from getting too large */
-    padding: 12px;
-    margin: 20px 0;
-    background-color: #5F9EA0; /* Darker button color */
-    color: #ffffff; /* White text color */
-    border: none;
-    border-radius: 20px; /* More rounded edges */
-    cursor: pointer;
-    font-weight: bold;
-    font-family: 'Menlo', monospace;
-    display: block; /* Ensure it behaves like a block-level element */
-    margin-left: auto; /* Center align horizontally */
-    margin-right: auto; /* Center align horizontally */
-}
-
-.switch-button:hover {
-    background-color: #4F8C8A; /* Slightly lighter color for hover */
 }
