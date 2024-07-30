@@ -121,10 +121,10 @@ export function setupEventListeners() {
     document.getElementById('result').addEventListener('click', () => {
         const resultField = document.getElementById('result');
         navigator.clipboard.writeText(resultField.value).then(() => {
-            const copyMessage = document.getElementById('copyMessage');
-            copyMessage.style.display = 'block';
+            const copyMessageCalculator = document.getElementById('copyMessageCalculator');
+            copyMessageCalculator.style.display = 'block';
             setTimeout(() => {
-                copyMessage.style.display = 'none';
+                copyMessageCalculator.style.display = 'none';
             }, 2000);
         });
     });
