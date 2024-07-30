@@ -48,6 +48,18 @@ export function setupSwitchButton() {
         couponResultInput.value = formatDate(expiryDate);
     });
 
+    couponResultInput.addEventListener('click', () => {
+        navigator.clipboard.writeText(couponResultInput.value).then(() => {
+            const copyMessageCoupon = document.getElementById('copyMessageCoupon');
+            copyMessageCoupon.style.display = 'block';
+            setTimeout(() => {
+                copyMessageCoupon.style.display = 'none';
+            }, 2000);
+        }).catch(err => {
+            console.error('Failed to copy: ', err);
+        });
+    });
+
     function formatDate(date) {
         const options = { month: 'long', day: 'numeric', year: 'numeric' };
         return new Intl.DateTimeFormat('en-US', options).format(date);
