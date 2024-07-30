@@ -41,6 +41,14 @@ html, body {
     display: none;
 }
 
+/* Ensure titles fit on a single line */
+h1, #couponTitle {
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden; /* Hide overflow text */
+    text-overflow: ellipsis; /* Add ellipsis for overflow text */
+    font-size: 1.15em;
+}
+
 /* Style input and select elements */
 input, select {
     width: 100%;
