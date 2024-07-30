@@ -7,36 +7,50 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="calculator">
-        <h1>Business Date Calculator</h1>
-        <div style="position: relative;">
-            <select id="serviceType">
-                <option value="expressPaid" selected>Express (Paid)</option>
-                <option value="expressFree">Express (Free)</option>
-                <option value="standard">Standard</option>
-                <option value="economy">Economy</option>
-                <option value="collection">Collection</option>
-            </select>
+    <div class="container">
+        <div id="calculatorBox" class="box">
+            <h1 id="boxTitle">Business Date Calculator</h1>
+            <div style="position: relative;">
+                <select id="serviceType">
+                    <option value="expressPaid" selected>Express (Paid)</option>
+                    <option value="expressFree">Express (Free)</option>
+                    <option value="standard">Standard</option>
+                    <option value="economy">Economy</option>
+                    <option value="collection">Collection</option>
+                </select>
+            </div>
+            <div style="position: relative;">
+                <select id="countrySelect">
+                    <!-- Options will be populated dynamically -->
+                </select>
+            </div>
+            <div style="position: relative;">
+                <input type="date" id="startDate" required>
+            </div>
+            <div class="checkbox-wrapper-42">
+                <input id="cbx-42" type="checkbox" />
+                <label class="cbx" for="cbx-42"></label>
+                <label class="lbl" for="cbx-42">Order is past 5pm</label>
+            </div>
+            <input type="text" id="businessDays" placeholder="Business Days (ex. 1-2 or 1,2)" required>
+            <button id="calculateButton">Calculate</button>
+            <input type="text" id="result" class="result-field" readonly>
+            <div id="copyMessage" class="copy-message">Copied!</div>
         </div>
-        <div style="position: relative;">
-            <select id="countrySelect">
-                <!-- Options will be populated dynamically -->
-            </select>
+
+        <div id="couponExpiryBox" class="box hidden">
+            <h1 id="couponTitle">Coupon Expiry</h1>
+            <div style="position: relative;">
+                <input type="text" id="addDays" placeholder="Add Days" required>
+            </div>
+            <div style="position: relative;">
+                <input type="date" id="couponDate" required>
+            </div>
+            <input type="text" id="couponResult" class="result-field" readonly>
         </div>
-        <div style="position: relative;">
-            <input type="date" id="startDate" required>
-        </div>
-        <div class="checkbox-wrapper-42">
-            <input id="cbx-42" type="checkbox" />
-            <label class="cbx" for="cbx-42"></label>
-            <label class="lbl" for="cbx-42">Order is past 5pm</label>
-        </div>
-        <input type="text" id="businessDays" placeholder="Business Days (ex. 1-2 or 1,2)" required>
-        <button id="calculateButton">Calculate</button>
-        <input type="text" id="result" class="result-field" readonly>
-        <div id="copyMessage" class="copy-message">Copied!</div>
+
+        <button id="switchButton" class="switch-button">Switch to Coupon Expiry</button>
     </div>
-    <button id="switchButton" class="switch-button">Switch to Coupon Expiry</button>
     <script type="module" src="js/main.js"></script>
 </body>
 </html>
