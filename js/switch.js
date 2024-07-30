@@ -4,14 +4,14 @@ export function setupSwitchButton() {
     const switchButton = document.getElementById('switchButton');
     const calculatorBox = document.getElementById('calculatorBox');
     const couponExpiryBox = document.getElementById('couponBox');
-    const boxTitle = document.getElementById('boxTitle');
+    const boxTitle = document.getElementById('boxTitle'); // Assuming this is correctly set in your HTML
     const couponTitle = document.getElementById('couponTitle');
     const couponDateInput = document.getElementById('couponDate');
     const addDaysInput = document.getElementById('addDays');
     const removeExtraDayCheckbox = document.getElementById('cbx-43');
     const couponResultInput = document.getElementById('couponResult');
     const couponCalculateButton = document.getElementById('couponCalculateButton');
-    const copyMessage = document.getElementById('copyMessage');
+    const copyMessage = document.getElementById('copyMessage'); // Get the copy message element
 
     switchButton.addEventListener('click', () => {
         if (calculatorBox.classList.contains('hidden')) {
