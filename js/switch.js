@@ -13,16 +13,28 @@ export function setupSwitchButton() {
     const couponCalculateButton = document.getElementById('couponCalculateButton');
 
     switchButton.addEventListener('click', () => {
-        if (calculatorBox.classList.toggle('hidden')) {
-            switchButton.textContent = 'Switch to Coupon Expiry';
-            boxTitle.textContent = 'Business Date Calculator';
-            couponExpiryBox.classList.add('hidden');
+        if (calculatorBox.classList.contains('hidden')) {
+            showCalculatorBox();
         } else {
-            switchButton.textContent = 'Switch to ETA Calculator';
-            boxTitle.textContent = 'Coupon Expiry';
-            calculatorBox.classList.add('hidden');
+            showCouponExpiryBox();
         }
     });
+
+    function showCalculatorBox() {
+        calculatorBox.classList.remove('hidden');
+        couponExpiryBox.classList.add('hidden');
+        switchButton.textContent = 'Switch to Coupon Expiry';
+        boxTitle.textContent = 'Business Date Calculator';
+        couponTitle.textContent = 'Coupon Expiry';
+    }
+
+    function showCouponExpiryBox() {
+        calculatorBox.classList.add('hidden');
+        couponExpiryBox.classList.remove('hidden');
+        switchButton.textContent = 'Switch to ETA Calculator';
+        boxTitle.textContent = 'Coupon Expiry';
+        couponTitle.textContent = 'Business Date Calculator';
+    }
 
     couponCalculateButton.addEventListener('click', () => {
         const startDate = new Date(couponDateInput.value);
