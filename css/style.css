@@ -18,7 +18,7 @@ html, body {
     align-items: center;
     width: 100%;
     max-width: 400px; /* Ensures the container doesn't get too wide */
-    position: relative; /* To use absolute positioning inside it */
+    position: relative; /* For absolute positioning inside it */
     padding-bottom: 80px; /* Add padding at the bottom for the switch button */
 }
 
@@ -35,8 +35,9 @@ html, body {
         0 16px 16px rgba(0, 0, 0, 0.075);
     color: #EEEEEE; /* Light text color for readability */
     text-align: center;
-    margin-bottom: 20px; /* Space between boxes and button */
-    position: relative; /* For absolute positioning of button */
+    margin-bottom: 60px; /* Space between boxes and button */
+    position: relative; /* For positioning elements within the box */
+    min-height: 200px; /* Ensures the box has a minimum height */
 }
 
 /* Ensure the switch button stays at the bottom */
@@ -51,7 +52,7 @@ html, body {
     cursor: pointer;
     font-weight: bold;
     font-family: 'Menlo', monospace;
-    position: absolute; /* Position the button absolutely within its container */
+    position: fixed; /* Position the button fixedly */
     bottom: 20px; /* Align it at the bottom with some margin */
     left: 50%; /* Center horizontally */
     transform: translateX(-50%); /* Center horizontally */
@@ -107,6 +108,25 @@ select {
 /* Restore calendar icon for date input */
 input[type="date"]::-webkit-calendar-picker-indicator {
     display: block; /* Shows the calendar icon in WebKit browsers */
+}
+
+/* Style button */
+button {
+    width: 100%;
+    padding: 12px;
+    margin: 5px 0;
+    background-color: #76ABAE; /* Updated button color */
+    color: #ffffff; /* White text color */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: 'Menlo', monospace;
+    position: relative; /* Ensures it's positioned correctly within the box */
+}
+
+button:hover {
+    background-color: #6b9f97; /* Slightly lighter green for hover */
 }
 
 /* Style result field */
@@ -223,3 +243,4 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     75% { transform: scale(1.05, 0.95); }
     to { transform: scale(1, 1); }
 }
+
