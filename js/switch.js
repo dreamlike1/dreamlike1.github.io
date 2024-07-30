@@ -1,69 +1,54 @@
-// js/switch.js
-
-// Function to copy text to clipboard
+// Function to handle copy to clipboard functionality
 function copyToClipboard(text) {
     navigator.clipboard.writeText(text).then(() => {
-        const copyMessage = document.querySelector('.copy-message'); // Select the correct copy message element
-        copyMessage.textContent = 'Copied!';
-        copyMessage.style.display = 'block';
+        const copyMessage = document.querySelector('.copy-message.show');
+        if (copyMessage) {
+            copyMessage.classList.remove('show');
+        }
         setTimeout(() => {
-            copyMessage.style.display = 'none';
-        }, 2000);
-    }).catch(err => {
-        console.error('Failed to copy:', err);
+            copyMessage.classList.add('show');
+            setTimeout(() => {
+                copyMessage.classList.remove('show');
+            }, 2000);
+        }, 50); // slight delay to ensure the message appears after removal
     });
 }
 
-export function setupSwitchButton() {
-    const switchButton = document.getElementById('switchButton');
-    const calculatorBox = document.getElementById('calculatorBox');
-    const couponExpiryBox = document.getElementById('couponBox'); // Make sure this matches your HTML ID
-    const boxTitle = document.getElementById('boxTitle'); // Ensure this matches your HTML ID
-    const couponTitle = document.getElementById('couponTitle');
-    const couponDateInput = document.getElementById('couponDate');
-    const addDaysInput = document.getElementById('addDays');
-    const removeExtraDayCheckbox = document.getElementById('cbx-43'); // Corrected ID for checkbox
+// Event listener for copying result in calculatorBox
+document.getElementById('result').addEventListener('click', () => {
+    copyToClipboard(document.getElementById('result').value);
+});
 
-    switchButton.addEventListener('click', () => {
-        if (calculatorBox.classList.contains('hidden')) {
-            // Show calculator box and hide coupon expiry box
-            calculatorBox.classList.remove('hidden');
-            couponExpiryBox.classList.add('hidden');
-            switchButton.textContent = 'Switch to Coupon Expiry';
-            boxTitle.textContent = 'Business Date Calculator';
-        } else {
-            // Show coupon expiry box and hide calculator box
-            calculatorBox.classList.add('hidden');
-            couponExpiryBox.classList.remove('hidden');
-            switchButton.textContent = 'Switch to ETA Calculator';
-            couponTitle.textContent = 'Coupon Expiry';
-        }
-    });
+// Event listener for copying result in couponBox
+document.getElementById('couponResult').addEventListener('click', () => {
+    copyToClipboard(document.getElementById('couponResult').value);
+});
 
-    // Function to calculate expiry date
-    function calculateExpiryDate() {
-        const startDate = new Date(couponDateInput.value);
-        const addDays = parseInt(addDaysInput.value);
-        let expiryDate = new Date(startDate);
+// Function to calculate expiry date in couponBox and format result
+function calculateExpiryDate() {
+    const startDate = new Date(document.getElementById('couponDate').value);
+    const addDays = parseInt(document.getElementById('addDays').value);
+    let expiryDate = new Date(startDate);
 
-        // Add days
-        expiryDate.setDate(expiryDate.getDate() + addDays);
+    // Add days
+    expiryDate.setDate(expiryDate.getDate() + addDays);
 
-        // Remove one day if checkbox is checked
-        if (removeExtraDayCheckbox.checked) {
-            expiryDate.setDate(expiryDate.getDate() - 1);
-        }
-
-        // Format expiryDate to text format
-        const formattedExpiryDate = `${expiryDate.getFullYear()}-${('0' + (expiryDate.getMonth() + 1)).slice(-2)}-${('0' + expiryDate.getDate()).slice(-2)}`;
-
-        // Update the result field or perform any other action with formattedExpiryDate
-        document.getElementById('couponResult').value = formattedExpiryDate;
-
-        // Copy to clipboard functionality
-        copyToClipboard(formattedExpiryDate);
+    // Remove one day if checkbox is checked
+    if (document.getElementById('cbx-43').checked) {
+        expiryDate.setDate(expiryDate.getDate() - 1);
     }
 
-    // Event listener for Calculate button
-    document.getElementById('couponCalculateButton').addEventListener('click', calculateExpiryDate);
+    // Format expiryDate to text format (e.g., Jan 12 2024)
+    const months = [
+        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ];
+    const formattedExpiryDate = `${months[expiryDate.getMonth()]} ${expiryDate.getDate()} ${expiryDate.getFullYear()}`;
+
+    // Update the couponResult field with formattedExpiryDate
+    document.getElementById('couponResult').value = formattedExpiryDate;
 }
+
+// Event listener for Calculate button in couponBox
+document.getElementById('couponCalculateButton').addEventListener('click', calculateExpiryDate);
+
