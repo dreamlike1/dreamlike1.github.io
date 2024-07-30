@@ -50,16 +50,28 @@ export function setupSwitchButton() {
     });
 
     couponResultInput.addEventListener('click', () => {
-        couponResultInput.select();
-        document.execCommand('copy');
-        copyMessage.style.display = 'block';
-        setTimeout(() => {
-            copyMessage.style.display = 'none';
-        }, 2000);
+        copyToClipboard(couponResultInput.value);
     });
 
     function formatDate(date) {
         const options = { month: 'long', day: 'numeric', year: 'numeric' };
         return new Intl.DateTimeFormat('en-US', options).format(date);
+    }
+
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text)
+            .then(() => {
+                showCopyMessage();
+            })
+            .catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+    }
+
+    function showCopyMessage() {
+        copyMessage.style.display = 'block';
+        setTimeout(() => {
+            copyMessage.style.display = 'none';
+        }, 2000);
     }
 }
