@@ -1,54 +1,83 @@
-// Function to handle copy to clipboard functionality
-function copyToClipboard(text) {
-    navigator.clipboard.writeText(text).then(() => {
-        const copyMessage = document.querySelector('.copy-message.show');
-        if (copyMessage) {
-            copyMessage.classList.remove('show');
+// js/switch.js
+
+// Function to handle setup of switch button and related functionality
+export function setupSwitchButton() {
+    const switchButton = document.getElementById('switchButton');
+    const calculatorBox = document.getElementById('calculatorBox');
+    const couponExpiryBox = document.getElementById('couponBox');
+    const boxTitle = document.getElementById('calculatorBox').querySelector('h1');
+    const couponTitle = document.getElementById('couponBox').querySelector('h1');
+    const resultInput = document.getElementById('businessDays');
+    const couponResultInput = document.getElementById('addDays');
+    const calculateButton = document.getElementById('calculateButton');
+    const couponCalculateButton = document.getElementById('couponCalculateButton');
+    const copyMessage = document.getElementById('copyMessage');
+
+    // Event listener for switch button
+    switchButton.addEventListener('click', () => {
+        if (calculatorBox.classList.contains('hidden')) {
+            showCalculatorBox();
+        } else {
+            showCouponExpiryBox();
         }
-        setTimeout(() => {
-            copyMessage.classList.add('show');
-            setTimeout(() => {
-                copyMessage.classList.remove('show');
-            }, 2000);
-        }, 50); // slight delay to ensure the message appears after removal
     });
-}
 
-// Event listener for copying result in calculatorBox
-document.getElementById('result').addEventListener('click', () => {
-    copyToClipboard(document.getElementById('result').value);
-});
-
-// Event listener for copying result in couponBox
-document.getElementById('couponResult').addEventListener('click', () => {
-    copyToClipboard(document.getElementById('couponResult').value);
-});
-
-// Function to calculate expiry date in couponBox and format result
-function calculateExpiryDate() {
-    const startDate = new Date(document.getElementById('couponDate').value);
-    const addDays = parseInt(document.getElementById('addDays').value);
-    let expiryDate = new Date(startDate);
-
-    // Add days
-    expiryDate.setDate(expiryDate.getDate() + addDays);
-
-    // Remove one day if checkbox is checked
-    if (document.getElementById('cbx-43').checked) {
-        expiryDate.setDate(expiryDate.getDate() - 1);
+    // Function to show calculator box and update titles
+    function showCalculatorBox() {
+        calculatorBox.classList.remove('hidden');
+        couponExpiryBox.classList.add('hidden');
+        switchButton.textContent = 'Switch to Coupon Expiry';
+        boxTitle.textContent = 'Business Date Calculator';
+        couponTitle.textContent = 'Coupon Expiry';
     }
 
-    // Format expiryDate to text format (e.g., Jan 12 2024)
-    const months = [
-        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-    ];
-    const formattedExpiryDate = `${months[expiryDate.getMonth()]} ${expiryDate.getDate()} ${expiryDate.getFullYear()}`;
+    // Function to show coupon expiry box and update titles
+    function showCouponExpiryBox() {
+        calculatorBox.classList.add('hidden');
+        couponExpiryBox.classList.remove('hidden');
+        switchButton.textContent = 'Switch to Business Date Calculator';
+        boxTitle.textContent = 'Coupon Expiry';
+        couponTitle.textContent = 'Business Date Calculator';
+    }
 
-    // Update the couponResult field with formattedExpiryDate
-    document.getElementById('couponResult').value = formattedExpiryDate;
+    // Event listener for calculate button in calculator box
+    calculateButton.addEventListener('click', () => {
+        // Placeholder logic for calculator button click
+        resultInput.value = "Your calculated result";
+    });
+
+    // Event listener for calculate button in coupon expiry box
+    couponCalculateButton.addEventListener('click', () => {
+        // Placeholder logic for coupon expiry button click
+        couponResultInput.value = "Your calculated coupon result";
+    });
+
+    // Event listener for copying result in calculator box
+    resultInput.addEventListener('click', () => {
+        copyToClipboard(resultInput.value);
+    });
+
+    // Event listener for copying result in coupon expiry box
+    couponResultInput.addEventListener('click', () => {
+        copyToClipboard(couponResultInput.value);
+    });
+
+    // Function to copy text to clipboard
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text)
+            .then(() => {
+                showCopyMessage();
+            })
+            .catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+    }
+
+    // Function to display "Copied!" message
+    function showCopyMessage() {
+        copyMessage.style.display = 'block';
+        setTimeout(() => {
+            copyMessage.style.display = 'none';
+        }, 2000);
+    }
 }
-
-// Event listener for Calculate button in couponBox
-document.getElementById('couponCalculateButton').addEventListener('click', calculateExpiryDate);
-
