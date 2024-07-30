@@ -35,7 +35,7 @@
             <input type="text" id="businessDays" placeholder="Business Days (ex. 1-2 or 1,2)" required>
             <button id="calculateButton">Calculate</button>
             <input type="text" id="result" class="result-field" readonly>
-            <div id="copyMessage" class="copy-message">Copied!</div>
+            <div id="copyMessageCalculator" class="copy-message">Copied!</div> <!-- Unique ID for calculatorBox -->
         </div>
         <button id="switchButton" class="switch-button">Switch to Coupon Expiry</button>
         <div id="couponBox" class="box hidden">
@@ -53,7 +53,7 @@
             </div>
             <button id="couponCalculateButton">Calculate</button>
             <input type="text" id="couponResult" class="result-field" readonly>
-            <div id="copyMessage" class="copy-message">Copied!</div>
+            <div id="copyMessageCoupon" class="copy-message">Copied!</div> <!-- Unique ID for couponBox -->
         </div>
     </div>
     <script type="module" src="js/main.js"></script>
