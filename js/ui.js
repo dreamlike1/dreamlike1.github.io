@@ -26,13 +26,19 @@ export async function populateCountries() {
 }
 
 export async function calculateBusinessDate() {
-    const startDate = new Date(document.getElementById('startDate').value);
+    let startDate = new Date(document.getElementById('startDate').value);
     const dateRangeInput = document.getElementById('businessDays').value;
     const selectedCountry = document.getElementById('countrySelect').value;
+    const past5pmCheckbox = document.getElementById('cbx-42');
 
     if (!dateRangeInput || !selectedCountry || isNaN(startDate.getTime())) {
         alert('Please enter a valid start date, range of business days, and select a country.');
         return;
+    }
+
+    // Add one day if the checkbox is ticked
+    if (past5pmCheckbox.checked) {
+        startDate.setDate(startDate.getDate() + 1);
     }
 
     let numDaysStart, numDaysEnd;
