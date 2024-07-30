@@ -150,9 +150,6 @@ button:hover {
     border-radius: 4px;
     display: none;
     z-index: 10;
-    bottom: 10px; /* Adjust position to fit design */
-    left: 50%;
-    transform: translateX(-50%);
 }
 
 /* Style checkbox wrapper and adjust alignment */
