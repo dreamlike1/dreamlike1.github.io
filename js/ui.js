@@ -84,8 +84,7 @@ export async function calculateBusinessDate() {
 
     // Add one day if the checkbox is ticked and skip holidays/weekends
     if (past5pmCheckbox.checked) {
-        startDate.setDate(startDate.getDate() + 1);
-        // Skip weekends and holidays if the next day is a non-business day
+        // Move start date to the next business day if it falls on a weekend or holiday
         while (!isBusinessDay(startDate, selectedCountry)) {
             startDate.setDate(startDate.getDate() + 1);
         }
@@ -156,3 +155,4 @@ document.addEventListener('DOMContentLoaded', () => {
     populateCountries();
     setupEventListeners();
 });
+
