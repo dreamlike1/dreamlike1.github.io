@@ -22,7 +22,7 @@ async function fetchHolidaysFromNager(countryCode) {
 // Function to fetch holidays from Calenderific API as a fallback
 async function fetchHolidaysFromCalenderific(countryCode) {
   try {
-    const response = await fetch(`https://api.calenderific.com/v2/holidays?&api_key=YOUR_API_KEY&country=${countryCode}&year=2024`);
+    const response = await fetch(`https://api.calenderific.com/v2/holidays?&api_key=c7oz2Y1sepuJbV8tyB1gik7SFumpoeUt&country=${countryCode}&year=2024`);
     if (!response.ok) {
       console.error(`Calenderific API request failed: ${response.statusText} (Status: ${response.status})`);
       return null;
