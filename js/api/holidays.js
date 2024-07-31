@@ -7,7 +7,7 @@ const holidayCache = new Map();
 const noHolidayCountriesFromNager = [];
 
 // Fetch API key from environment variables (client-side)
-const CALENDERIFIC_API_KEY = process.env.NEXT_PUBLIC_API_KEY;
+const CALENDERIFIC_API_KEY = 'c7oz2Y1sepuJbV8tyB1gik7SFumpoeUt';
 
 if (!CALENDERIFIC_API_KEY) {
   console.error('Calenderific API key is not defined in environment variables.');
