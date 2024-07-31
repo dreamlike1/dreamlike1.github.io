@@ -1,3 +1,5 @@
+// api/holidays.js (This file will be placed in the 'api' folder for Vercel functions)
+
 const API_URL = 'https://calendarific.com/api/v2/holidays';
 
 /**
@@ -41,7 +43,24 @@ function transformToDateNagerFormat(holidays, countryCode) {
 }
 
 /**
- * Serverless function to fetch and transform holidays data.
+ * Fetch and transform holidays data for a specific country and year.
+ * @param {string} countryCode - The country code.
+ * @param {number} year - The year.
+ * @returns {Promise<Array>} - A promise that resolves to an array of holidays.
+ */
+export async function fetchHolidaysFromLocalAPI(countryCode, year) {
+    try {
+        const holidays = await fetchHolidaysFromAPI(countryCode, year);
+        const transformedHolidays = transformToDateNagerFormat(holidays, countryCode);
+        return transformedHolidays;
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
+}
+
+/**
+ * Serverless function to handle API requests.
  * @param {object} req - The request object.
  * @param {object} res - The response object.
  */
@@ -53,9 +72,8 @@ export default async function handler(req, res) {
     }
 
     try {
-        const holidays = await fetchHolidaysFromAPI(countryCode, year);
-        const transformedHolidays = transformToDateNagerFormat(holidays, countryCode);
-        res.status(200).json(transformedHolidays);
+        const holidays = await fetchHolidaysFromLocalAPI(countryCode, year);
+        res.status(200).json(holidays);
     } catch (error) {
         res.status(500).json({ error: `Failed to fetch holidays: ${error.message}` });
     }
