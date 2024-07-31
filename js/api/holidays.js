@@ -22,7 +22,7 @@ async function fetchHolidaysFromNager(countryCode) {
 // Function to fetch holidays from Calenderific API as a fallback
 async function fetchHolidaysFromCalenderific(countryCode) {
   try {
-    const response = await fetch(`https://api.calenderific.com/v2/holidays?&api_key=c7oz2Y1sepuJbV8tyB1gik7SFumpoeUt&country=${countryCode}&year=2024`);
+    const response = await fetch(`https://calendarific.com/api/v2/holidays?&api_key=c7oz2Y1sepuJbV8tyB1gik7SFumpoeUt&country=${countryCode}&year=2024`);
     if (!response.ok) {
       console.error(`Calenderific API request failed: ${response.statusText} (Status: ${response.status})`);
       return null;
@@ -35,7 +35,11 @@ async function fetchHolidaysFromCalenderific(countryCode) {
     }));
     return holidays;
   } catch (error) {
-    console.error(`Error fetching holidays from Calenderific for ${countryCode}:`, error);
+    if (error.message.includes('Failed to fetch')) {
+      console.error(`Network error or DNS resolution issue while fetching holidays from Calenderific for ${countryCode}:`, error);
+    } else {
+      console.error(`Error fetching holidays from Calenderific for ${countryCode}:`, error);
+    }
     return null;
   }
 }
