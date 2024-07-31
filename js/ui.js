@@ -1,37 +1,9 @@
 import { countryOptions } from './api/countryData.js';
 import { fetchHolidays } from './api/holidays.js'; // Updated path
-import { calculateBusinessDays as utilsCalculateBusinessDays, formatDate } from './dateUtils.js'; // Directly import functions
+import { calculateBusinessDays, formatDate } from './dateUtils.js'; // Directly import functions
 
 // Assume holidays are stored globally or in a shared state
 let holidays = [];
-
-// Utility function to check if a date is a holiday or weekend
-function isNonBusinessDay(date, holidays) {
-    const dayOfWeek = date.getDay();
-    const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6); // Sunday or Saturday
-    const isHoliday = holidays.some(holiday => {
-        const holidayDate = new Date(holiday.date);
-        return date.getTime() === holidayDate.getTime();
-    });
-    return isWeekend || isHoliday;
-}
-
-// Function to calculate business days while skipping weekends and holidays
-function calculateBusinessDays(startDate, numDays, holidays) {
-    let currentDate = new Date(startDate);
-    let daysAdded = 0;
-
-    while (daysAdded < numDays) {
-        currentDate.setDate(currentDate.getDate() + 1);
-
-        // Check if the current date is a non-business day
-        if (!isNonBusinessDay(currentDate, holidays)) {
-            daysAdded++;
-        }
-    }
-
-    return currentDate;
-}
 
 export async function populateCountries() {
     const countrySelect = document.getElementById('countrySelect');
@@ -99,10 +71,16 @@ export async function calculateBusinessDate() {
     let startDate = new Date(document.getElementById('startDate').value);
     const dateRangeInput = document.getElementById('businessDays').value;
     const selectedCountry = document.getElementById('countrySelect').value;
+    const past5pmCheckbox = document.getElementById('cbx-42');
 
     if (!dateRangeInput || !selectedCountry || isNaN(startDate.getTime())) {
         alert('Please enter a valid start date, range of business days, and select a country.');
         return;
+    }
+
+    // Add one day if the checkbox is ticked
+    if (past5pmCheckbox.checked) {
+        startDate.setDate(startDate.getDate() + 1);
     }
 
     let numDaysStart, numDaysEnd;
@@ -123,9 +101,9 @@ export async function calculateBusinessDate() {
     // Fetch holidays for the selected country
     holidays = await fetchHolidays(selectedCountry, startDate.getFullYear());
 
-    // Calculate the end dates considering holidays and weekends
-    const endDateStart = calculateBusinessDays(startDate, numDaysStart, holidays);
-    const endDateEnd = calculateBusinessDays(startDate, numDaysEnd, holidays);
+    // Calculate the end dates considering holidays
+    const endDateStart = calculateBusinessDays(startDate, numDaysStart, selectedCountry);
+    const endDateEnd = calculateBusinessDays(startDate, numDaysEnd, selectedCountry);
 
     const formattedStart = formatDate(endDateStart);
     const formattedEnd = formatDate(endDateEnd);
