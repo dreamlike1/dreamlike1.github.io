@@ -75,7 +75,7 @@ export async function calculateBusinessDate() {
     let startDate = new Date(document.getElementById('startDate').value);
     const dateRangeInput = document.getElementById('businessDays').value;
     const selectedCountry = document.getElementById('countrySelect').value;
-    const checkbox = document.getElementById('cbx-43'); // Adjusted to use cbx-43 for the checkbox ID
+    const checkbox = document.getElementById('cbx-42'); // Adjusted to use cbx-43 for the checkbox ID
 
     if (!dateRangeInput || !selectedCountry || isNaN(startDate.getTime())) {
         alert('Please enter a valid start date, range of business days, and select a country.');
