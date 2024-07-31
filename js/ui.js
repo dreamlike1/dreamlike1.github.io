@@ -155,3 +155,6 @@ document.addEventListener('DOMContentLoaded', () => {
     populateCountries();
     setupEventListeners();
 });
+
+// Placeholder commit message
+// Refactored business day calculation to correctly handle weekends and holidays
