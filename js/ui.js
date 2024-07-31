@@ -85,14 +85,7 @@ export async function calculateBusinessDate() {
     // Fetch holidays for the selected country
     holidays = await fetchHolidays(selectedCountry, startDate.getFullYear());
 
-    // Adjust start date if checkbox is checked to skip weekends and holidays
-    if (past5pmCheckbox.checked) {
-        while (!isBusinessDay(startDate, selectedCountry)) {
-            startDate.setDate(startDate.getDate() + 1);
-        }
-    }
-
-    // Determine number of business days to add
+    // Calculate business end dates without adjusting start date
     let numDaysStart, numDaysEnd;
     if (dateRangeInput.includes('-')) {
         const ranges = dateRangeInput.split('-').map(Number);
@@ -106,16 +99,23 @@ export async function calculateBusinessDate() {
         numDaysStart = numDaysEnd = Number(dateRangeInput);
     }
 
-    // Calculate end dates considering adjusted start date and holidays
     const endDateStart = calculateBusinessDays(startDate, numDaysStart, selectedCountry);
     const endDateEnd = calculateBusinessDays(startDate, numDaysEnd, selectedCountry);
 
-    // Format dates for display
-    const formattedStart = formatDate(endDateStart);
-    const formattedEnd = formatDate(endDateEnd);
-
-    // Display result
-    document.getElementById('result').value = `Between ${formattedStart} and ${formattedEnd}`;
+    // Adjust end date if it lands on a holiday or weekend and checkbox is checked
+    if (past5pmCheckbox.checked) {
+        let adjustedEndDateEnd = endDateEnd;
+        while (!isBusinessDay(adjustedEndDateEnd, selectedCountry)) {
+            adjustedEndDateEnd.setDate(adjustedEndDateEnd.getDate() + 1);
+        }
+        const formattedStart = formatDate(endDateStart);
+        const formattedEnd = formatDate(adjustedEndDateEnd);
+        document.getElementById('result').value = `Between ${formattedStart} and ${formattedEnd}`;
+    } else {
+        const formattedStart = formatDate(endDateStart);
+        const formattedEnd = formatDate(endDateEnd);
+        document.getElementById('result').value = `Between ${formattedStart} and ${formattedEnd}`;
+    }
 }
 
 // Function to set up event listeners for interactive elements
