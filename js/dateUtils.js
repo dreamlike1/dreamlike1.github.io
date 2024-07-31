@@ -7,7 +7,7 @@ export function formatDate(date) {
 }
 
 // Function to adjust the start date based on checkbox status
-function adjustStartDate(startDate, 'cbx-42', country) {
+function adjustStartDate(startDate,'cbx-42', country) {
     let adjustedDate = new Date(startDate);
 
     const checkbox = document.getElementById('cbx-42');
