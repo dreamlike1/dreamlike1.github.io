@@ -1,6 +1,6 @@
 import { countryOptions } from './api/countryData.js';
 import { fetchHolidays } from './api/holidays.js'; // Updated path
-import { calculateBusinessDays, formatDate } from './dateUtils.js'; // Directly import functions
+import { calculateBusinessDays as utilsCalculateBusinessDays, formatDate } from './dateUtils.js'; // Directly import functions
 
 // Assume holidays are stored globally or in a shared state
 let holidays = [];
@@ -17,7 +17,7 @@ function isNonBusinessDay(date, holidays) {
 }
 
 // Function to calculate business days while skipping weekends and holidays
-export function calculateBusinessDays(startDate, numDays, holidays) {
+function calculateBusinessDays(startDate, numDays, holidays) {
     let currentDate = new Date(startDate);
     let daysAdded = 0;
 
