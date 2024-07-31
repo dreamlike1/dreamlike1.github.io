@@ -82,11 +82,12 @@ export async function calculateBusinessDate() {
         return;
     }
 
-    // Fetch holidays for the selected country
-    holidays = await fetchHolidays(selectedCountry, startDate.getFullYear());
-
     // Check if checkbox is checked to adjust start date
     if (past5pmCheckbox.checked) {
+        // Fetch holidays for the selected country
+        holidays = await fetchHolidays(selectedCountry, startDate.getFullYear());
+
+        // Adjust start date to skip weekends and holidays
         while (!isBusinessDay(startDate, selectedCountry)) {
             startDate.setDate(startDate.getDate() + 1);
         }
@@ -156,5 +157,3 @@ document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
 });
 
-// Placeholder commit message
-// Refactored business day calculation to correctly handle weekends and holidays
