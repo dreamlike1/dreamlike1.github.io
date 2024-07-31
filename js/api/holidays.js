@@ -9,6 +9,10 @@ const noHolidayCountriesFromNager = [];
 // Fetch API key from environment variables
 const CALENDERIFIC_API_KEY = process.env.CALENDERIFIC_API_KEY;
 
+if (!CALENDERIFIC_API_KEY) {
+  console.error('Calenderific API key is not defined in environment variables.');
+}
+
 // Function to fetch holidays from Nager.Date API
 async function fetchHolidaysFromNager(countryCode, year) {
   try {
@@ -41,6 +45,10 @@ async function fetchHolidaysFromNager(countryCode, year) {
 // Function to fetch holidays from Calenderific API as a fallback
 async function fetchHolidaysFromCalenderific(countryCode, year) {
   try {
+    if (!CALENDERIFIC_API_KEY) {
+      throw new Error('Calenderific API key is not defined.');
+    }
+
     const response = await fetch(`https://calendarific.com/api/v2/holidays?&api_key=${CALENDERIFIC_API_KEY}&country=${countryCode}&year=${year}`);
     if (!response.ok) {
       console.error(`Calenderific API request failed: ${response.statusText} (Status: ${response.status})`);
