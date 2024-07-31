@@ -1,11 +1,37 @@
-
-
 import { countryOptions } from './api/countryData.js';
 import { fetchHolidays } from './api/holidays.js'; // Updated path
 import { calculateBusinessDays, formatDate } from './dateUtils.js'; // Directly import functions
 
 // Assume holidays are stored globally or in a shared state
 let holidays = [];
+
+// Utility function to check if a date is a holiday or weekend
+function isNonBusinessDay(date, holidays) {
+    const dayOfWeek = date.getDay();
+    const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6); // Sunday or Saturday
+    const isHoliday = holidays.some(holiday => {
+        const holidayDate = new Date(holiday.date);
+        return date.getTime() === holidayDate.getTime();
+    });
+    return isWeekend || isHoliday;
+}
+
+// Function to calculate business days while skipping weekends and holidays
+export function calculateBusinessDays(startDate, numDays, holidays) {
+    let currentDate = new Date(startDate);
+    let daysAdded = 0;
+
+    while (daysAdded < numDays) {
+        currentDate.setDate(currentDate.getDate() + 1);
+
+        // Check if the current date is a non-business day
+        if (!isNonBusinessDay(currentDate, holidays)) {
+            daysAdded++;
+        }
+    }
+
+    return currentDate;
+}
 
 export async function populateCountries() {
     const countrySelect = document.getElementById('countrySelect');
@@ -80,11 +106,6 @@ export async function calculateBusinessDate() {
         return;
     }
 
-    // Add one day if the checkbox is ticked
-    if (past5pmCheckbox.checked) {
-        startDate.setDate(startDate.getDate() + 1);
-    }
-
     let numDaysStart, numDaysEnd;
 
     // Handle different range formats
@@ -103,9 +124,15 @@ export async function calculateBusinessDate() {
     // Fetch holidays for the selected country
     holidays = await fetchHolidays(selectedCountry, startDate.getFullYear());
 
-    // Calculate the end dates considering holidays
-    const endDateStart = calculateBusinessDays(startDate, numDaysStart, selectedCountry);
-    const endDateEnd = calculateBusinessDays(startDate, numDaysEnd, selectedCountry);
+    // Calculate the end dates considering holidays and weekends
+    const endDateStart = calculateBusinessDays(startDate, numDaysStart, holidays);
+    const endDateEnd = calculateBusinessDays(startDate, numDaysEnd, holidays);
+
+    // Adjust the end date based on the checkbox state
+    if (past5pmCheckbox.checked) {
+        endDateStart.setDate(endDateStart.getDate() + 1);
+        endDateEnd.setDate(endDateEnd.getDate() + 1);
+    }
 
     const formattedStart = formatDate(endDateStart);
     const formattedEnd = formatDate(endDateEnd);
