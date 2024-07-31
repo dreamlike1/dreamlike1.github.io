@@ -1,3 +1,4 @@
+// Import statements for dependencies
 import { countryOptions } from './api/countryData.js';
 import { fetchHolidays } from './api/holidays.js'; // Updated path
 import { calculateBusinessDays, formatDate } from './dateUtils.js'; // Directly import functions
@@ -5,6 +6,7 @@ import { calculateBusinessDays, formatDate } from './dateUtils.js'; // Directly 
 // Assume holidays are stored globally or in a shared state
 let holidays = [];
 
+// Function to populate countries in a select element
 export async function populateCountries() {
     const countrySelect = document.getElementById('countrySelect');
     const selectedService = document.getElementById('serviceType').value;
@@ -25,6 +27,7 @@ export async function populateCountries() {
     });
 }
 
+// Function to populate business days based on service type and country
 export function populateBusinessDays() {
     const serviceType = document.getElementById('serviceType').value;
     const country = document.getElementById('countrySelect').value;
@@ -67,6 +70,7 @@ export function populateBusinessDays() {
     }
 }
 
+// Function to calculate business date considering weekends and holidays
 export async function calculateBusinessDate() {
     let startDate = new Date(document.getElementById('startDate').value);
     const dateRangeInput = document.getElementById('businessDays').value;
@@ -78,9 +82,13 @@ export async function calculateBusinessDate() {
         return;
     }
 
-    // Add one day if the checkbox is ticked
+    // Add one day if the checkbox is ticked and skip holidays/weekends
     if (past5pmCheckbox.checked) {
         startDate.setDate(startDate.getDate() + 1);
+        // Skip weekends and holidays if the next day is a non-business day
+        while (!isBusinessDay(startDate, selectedCountry)) {
+            startDate.setDate(startDate.getDate() + 1);
+        }
     }
 
     let numDaysStart, numDaysEnd;
@@ -111,6 +119,7 @@ export async function calculateBusinessDate() {
     document.getElementById('result').value = `Between ${formattedStart} and ${formattedEnd}`;
 }
 
+// Function to set up event listeners for interactive elements
 export function setupEventListeners() {
     document.getElementById('serviceType').addEventListener('change', () => {
         populateCountries();
@@ -130,7 +139,19 @@ export function setupEventListeners() {
     });
 }
 
-// Initial setup
+// Function to check if a given date is a business day (not a weekend or holiday)
+function isBusinessDay(date, country) {
+    const dayOfWeek = date.getDay();
+    // Check if it's a weekend (Saturday or Sunday)
+    if (dayOfWeek === 0 || dayOfWeek === 6) {
+        return false;
+    }
+    // Check if it's a holiday
+    const formattedDate = formatDate(date);
+    return !holidays.includes(formattedDate); // Assuming holidays are stored globally or in shared state
+}
+
+// Initial setup when the DOM content is loaded
 document.addEventListener('DOMContentLoaded', () => {
     populateCountries();
     setupEventListeners();
