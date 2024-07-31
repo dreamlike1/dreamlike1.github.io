@@ -1,6 +1,6 @@
 // holidaysAPI.js
 
-const calendarificAPIKey = process.env.CALENDARIFIC_API_KEY;
+const calendarificAPIKey = c7oz2Y1sepuJbV8tyB1gik7SFumpoeUt;
 const cache = {};
 
 // List of countries and years
