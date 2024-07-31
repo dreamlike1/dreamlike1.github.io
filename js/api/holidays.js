@@ -25,19 +25,16 @@ async function fetchHolidaysFromNager(countryCode, year) {
       return [];
     }
 
-    const text = await response.text();
-    
-    // Attempt to parse the response text
-    try {
-      const holidays = JSON.parse(text);
-      return holidays;
-    } catch (parseError) {
-      console.error(`Error parsing JSON for ${countryCode} from Nager.Date API:`, parseError);
-      return [];
-    }
+    const holidays = await response.json();
+    return holidays;
 
   } catch (error) {
-    console.error(`Error fetching holidays from Nager for ${countryCode}:`, error);
+    console.error(`Error fetching holidays from Nager for ${countryCode}:`, {
+      message: error.message,
+      countryCode,
+      year,
+      stack: error.stack
+    });
     return [];
   }
 }
@@ -65,7 +62,12 @@ async function fetchHolidaysFromCalenderific(countryCode, year) {
     if (error.message.includes('Failed to fetch')) {
       console.error(`Network error or DNS resolution issue while fetching holidays from Calenderific for ${countryCode}:`, error);
     } else {
-      console.error(`Error fetching holidays from Calenderific for ${countryCode}:`, error);
+      console.error(`Error fetching holidays from Calenderific for ${countryCode}:`, {
+        message: error.message,
+        countryCode,
+        year,
+        stack: error.stack
+      });
     }
     return null;
   }
@@ -100,7 +102,7 @@ export async function fetchHolidays(country, year) {
   const countryCode = countryCodeMapping[country];
   if (!countryCode) {
     console.error(`No country code found for ${country}`);
-    return;
+    return null;
   }
 
   // Return cached data if available
@@ -130,7 +132,10 @@ export async function fetchHolidays(country, year) {
     holidayCache.set(countryCode, data);
     return data;
   } catch (error) {
-    console.error(`Error fetching holidays for ${country}:`, error);
+    console.error(`Error fetching holidays for ${country}:`, {
+      message: error.message,
+      stack: error.stack
+    });
     return null;
   }
 }
@@ -152,7 +157,10 @@ export async function isHoliday(date, country) {
     // Check if the date matches any holiday date
     return holidays.some(holiday => holiday.date === date);
   } catch (error) {
-    console.error(`Error in isHoliday function for ${country}:`, error);
+    console.error(`Error in isHoliday function for ${country}:`, {
+      message: error.message,
+      stack: error.stack
+    });
     return false;
   }
 }
