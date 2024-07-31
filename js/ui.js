@@ -99,7 +99,6 @@ export async function calculateBusinessDate() {
     let startDate = new Date(document.getElementById('startDate').value);
     const dateRangeInput = document.getElementById('businessDays').value;
     const selectedCountry = document.getElementById('countrySelect').value;
-    const past5pmCheckbox = document.getElementById('cbx-42');
 
     if (!dateRangeInput || !selectedCountry || isNaN(startDate.getTime())) {
         alert('Please enter a valid start date, range of business days, and select a country.');
@@ -127,12 +126,6 @@ export async function calculateBusinessDate() {
     // Calculate the end dates considering holidays and weekends
     const endDateStart = calculateBusinessDays(startDate, numDaysStart, holidays);
     const endDateEnd = calculateBusinessDays(startDate, numDaysEnd, holidays);
-
-    // Adjust the end date based on the checkbox state
-    if (past5pmCheckbox.checked) {
-        endDateStart.setDate(endDateStart.getDate() + 1);
-        endDateEnd.setDate(endDateEnd.getDate() + 1);
-    }
 
     const formattedStart = formatDate(endDateStart);
     const formattedEnd = formatDate(endDateEnd);
