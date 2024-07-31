@@ -1,158 +1,114 @@
-// Import statements for dependencies
-import { countryOptions } from './api/countryData.js';
-import { fetchHolidays } from './api/holidays.js'; // Updated path
-import { calculateBusinessDays, formatDate } from './dateUtils.js'; // Directly import functions
+import { countryCodeMapping } from './countryData.js';
+import { fetchHolidaysFromLocalAPI } from './holidaysAPI.js'; // Ensure this function is correctly imported
 
-// Assume holidays are stored globally or in a shared state
-let holidays = [];
+// Store holidays data with a cache
+const holidaysCache = new Map();
 
-// Function to populate countries in a select element
-export async function populateCountries() {
-    const countrySelect = document.getElementById('countrySelect');
-    const selectedService = document.getElementById('serviceType').value;
-    const countries = countryOptions[selectedService] || [];
-
-    countrySelect.innerHTML = '<option value="">Select a country</option>'; // Add default option
-
-    for (const country of countries) {
-        // Fetch holidays and update global holidays array
-        holidays = await fetchHolidays(country, new Date().getFullYear());
-    }
-
-    countries.forEach(country => {
-        const option = document.createElement('option');
-        option.value = country;
-        option.textContent = country;
-        countrySelect.appendChild(option);
-    });
-}
-
-// Function to populate business days based on service type and country
-export function populateBusinessDays() {
-    const serviceType = document.getElementById('serviceType').value;
-    const country = document.getElementById('countrySelect').value;
-    const businessDaysInput = document.getElementById('businessDays');
-
-    if (serviceType === 'expressFree') {
-        businessDaysInput.value = '2-3';
-    } else if (serviceType === 'standard') {
-        if (country === 'New Zealand') {
-            businessDaysInput.value = '7-10';
-        } else if (country === 'United States') {
-            businessDaysInput.value = '';
-        } else {
-            businessDaysInput.value = '5-8';
+// Function to fetch holidays from Date Nager API
+async function fetchFromDateNagerAPI(countryCode, year) {
+    try {
+        const response = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${year}/${countryCode}`);
+        
+        if (!response.ok) {
+            throw new Error(`Failed to fetch holidays from Date Nager API: ${response.statusText}`);
         }
-    } else if (serviceType === 'economy') {
-        if (country === 'United States') {
-            businessDaysInput.value = '7-14';
-        } else {
-            businessDaysInput.value = '';
+        
+        const responseText = await response.text();
+        
+        if (!responseText) {
+            console.warn('Received empty response from Date Nager API');
+            return []; // Return an empty array if the response is empty
         }
-    } else if (serviceType === 'collection') {
-        if (country === 'United States') {
-            businessDaysInput.value = '1-3';
-        } else if (country === 'Canada') {
-            businessDaysInput.value = '3-4';
-        } else {
-            businessDaysInput.value = '';
-        }
-    } else if (serviceType === 'expressPaid') {
-        if (country === 'Brazil') {
-            businessDaysInput.value = '2-5';
-        } else if (country === 'New Zealand') {
-            businessDaysInput.value = '4-7';
-        } else {
-            businessDaysInput.value = '2-3';
-        }
-    } else {
-        businessDaysInput.value = '';
+        
+        return JSON.parse(responseText);
+    } catch (error) {
+        console.error(`Error fetching holidays from Date Nager API:`, error);
+        return []; // Return an empty array on error
     }
 }
 
-// Function to calculate business date considering weekends and holidays
-export async function calculateBusinessDate() {
-    let startDate = new Date(document.getElementById('startDate').value);
-    const dateRangeInput = document.getElementById('businessDays').value;
-    const selectedCountry = document.getElementById('countrySelect').value;
-    const past5pmCheckbox = document.getElementById('cbx-42');
+// Function to fetch holidays from the local API
+async function fetchFromHolidaysAPI(countryCode, year) {
+    try {
+        return await fetchHolidaysFromLocalAPI(countryCode, year); // Use the local function here
+    } catch (error) {
+        console.error(`Error fetching holidays from local Holidays API for ${countryCode}:`, error);
+        return []; // Return an empty array if there's an error
+    }
+}
 
-    if (!dateRangeInput || !selectedCountry || isNaN(startDate.getTime())) {
-        alert('Please enter a valid start date, range of business days, and select a country.');
+// Function to fetch holidays and cache the results
+export async function fetchHolidays(country, year) {
+    const countryCode = countryCodeMapping[country];
+    if (!countryCode) {
+        console.error(`No country code found for ${country}`);
         return;
     }
 
-    // Add one day if the checkbox is ticked and skip holidays/weekends
-    if (past5pmCheckbox.checked) {
-        startDate.setDate(startDate.getDate() + 1);
-        // Skip weekends and holidays if the next day is a non-business day
-        while (!isBusinessDay(startDate, selectedCountry)) {
-            startDate.setDate(startDate.getDate() + 1);
+    // Return cached data if available
+    if (holidaysCache.has(country)) {
+        return holidaysCache.get(country);
+    }
+
+    try {
+        let data = await fetchFromDateNagerAPI(countryCode, year);
+
+        // If Date Nager API returns empty or fails, fetch from local API
+        if (!Array.isArray(data) || data.length === 0) {
+            console.warn(`No holiday data available from Date Nager API for ${country}, trying local Holidays API...`);
+            data = await fetchFromHolidaysAPI(countryCode, year);
+
+            // Log if the fallback was successful
+            if (data.length > 0) {
+                console.info(`Successfully fetched holiday data from local API for ${country}`);
+            } else {
+                console.warn(`No holiday data available from local API for ${country} either`);
+            }
+        } else {
+            console.info(`Successfully fetched holiday data from Date Nager API for ${country}`);
         }
+
+        // Store the result in cache
+        holidaysCache.set(country, data);
+    } catch (error) {
+        console.error(`Error fetching holidays for ${country}:`, error);
     }
-
-    let numDaysStart, numDaysEnd;
-
-    // Handle different range formats
-    if (dateRangeInput.includes('-')) {
-        const ranges = dateRangeInput.split('-').map(Number);
-        numDaysStart = ranges[0];
-        numDaysEnd = ranges[1];
-    } else if (dateRangeInput.includes(',')) {
-        const ranges = dateRangeInput.split(',').map(Number);
-        numDaysStart = ranges[0];
-        numDaysEnd = ranges[1];
-    } else {
-        numDaysStart = numDaysEnd = Number(dateRangeInput);
-    }
-
-    // Fetch holidays for the selected country
-    holidays = await fetchHolidays(selectedCountry, startDate.getFullYear());
-
-    // Calculate the end dates considering holidays
-    const endDateStart = calculateBusinessDays(startDate, numDaysStart, selectedCountry);
-    const endDateEnd = calculateBusinessDays(startDate, numDaysEnd, selectedCountry);
-
-    const formattedStart = formatDate(endDateStart);
-    const formattedEnd = formatDate(endDateEnd);
-
-    document.getElementById('result').value = `Between ${formattedStart} and ${formattedEnd}`;
 }
 
-// Function to set up event listeners for interactive elements
-export function setupEventListeners() {
-    document.getElementById('serviceType').addEventListener('change', () => {
-        populateCountries();
-        populateBusinessDays();
+// Function to check if a given date is a holiday in a specified country
+export function isHoliday(date, country) {
+    const countryHolidays = holidaysCache.get(country);
+    if (!countryHolidays) return false;
+
+    return countryHolidays.some(holiday => 
+        new Date(holiday.date).toDateString() === date.toDateString()
+    );
+}
+
+// Function to filter countries without holidays and save results in an array
+export async function filterCountriesWithoutHolidays(year) {
+    const countriesWithoutHolidays = [];
+
+    // Fetch holidays for all countries in parallel
+    const countries = Object.keys(countryCodeMapping);
+    const fetchPromises = countries.map(country => fetchHolidays(country, year));
+
+    // Wait for all fetch promises to complete
+    await Promise.all(fetchPromises);
+
+    // Filter countries that have no holidays
+    countries.forEach(country => {
+        if (!holidaysCache.get(country) || holidaysCache.get(country).length === 0) {
+            countriesWithoutHolidays.push(country);
+        }
     });
-    document.getElementById('countrySelect').addEventListener('change', populateBusinessDays);
-    document.getElementById('calculateButton').addEventListener('click', calculateBusinessDate);
-    document.getElementById('result').addEventListener('click', () => {
-        const resultField = document.getElementById('result');
-        navigator.clipboard.writeText(resultField.value).then(() => {
-            const copyMessageCalculator = document.getElementById('copyMessageCalculator');
-            copyMessageCalculator.style.display = 'block';
-            setTimeout(() => {
-                copyMessageCalculator.style.display = 'none';
-            }, 2000);
-        });
-    });
+
+    return countriesWithoutHolidays;
 }
 
-// Function to check if a given date is a business day (not a weekend or holiday)
-function isBusinessDay(date, country) {
-    const dayOfWeek = date.getDay();
-    // Check if it's a weekend (Saturday or Sunday)
-    if (dayOfWeek === 0 || dayOfWeek === 6) {
-        return false;
-    }
-    // Check if it's a holiday
-    const formattedDate = formatDate(date);
-    return !holidays.includes(formattedDate); // Assuming holidays are stored globally or in shared state
-}
-
-// Initial setup when the DOM content is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    populateCountries();
-    setupEventListeners();
-});
+// Example usage of the functions
+(async () => {
+    const year = 2024;
+    const result = await filterCountriesWithoutHolidays(year);
+    console.log(result); // This will log countries that have no holidays
+})();
