@@ -82,9 +82,11 @@ export async function calculateBusinessDate() {
         return;
     }
 
-    // Add one day if the checkbox is ticked and skip holidays/weekends
+    // Fetch holidays for the selected country
+    holidays = await fetchHolidays(selectedCountry, startDate.getFullYear());
+
+    // Add one day if the checkbox is ticked and skip weekends/holidays
     if (past5pmCheckbox.checked) {
-        // Move start date to the next business day if it falls on a weekend or holiday
         while (!isBusinessDay(startDate, selectedCountry)) {
             startDate.setDate(startDate.getDate() + 1);
         }
@@ -104,9 +106,6 @@ export async function calculateBusinessDate() {
     } else {
         numDaysStart = numDaysEnd = Number(dateRangeInput);
     }
-
-    // Fetch holidays for the selected country
-    holidays = await fetchHolidays(selectedCountry, startDate.getFullYear());
 
     // Calculate the end dates considering holidays
     const endDateStart = calculateBusinessDays(startDate, numDaysStart, selectedCountry);
@@ -155,4 +154,3 @@ document.addEventListener('DOMContentLoaded', () => {
     populateCountries();
     setupEventListeners();
 });
-
