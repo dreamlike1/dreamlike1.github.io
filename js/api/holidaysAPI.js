@@ -1,7 +1,5 @@
 // holidaysAPI.js
 
-const axios = require('axios');
-
 const calendarificAPIKey = process.env.CALENDARIFIC_API_KEY;
 const cache = {};
 
@@ -43,15 +41,14 @@ async function fetchHolidaysFromLocalAPI(countryCode, year) {
     }
     
     try {
-        const response = await axios.get('https://calendarific.com/api/v2/holidays', {
-            params: {
-                api_key: calendarificAPIKey,
-                country: countryCode,
-                year: year
-            }
-        });
+        const response = await fetch(`https://calendarific.com/api/v2/holidays?api_key=${calendarificAPIKey}&country=${countryCode}&year=${year}`);
         
-        const holidays = response.data.response.holidays;
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        const holidays = data.response.holidays;
         const transformedHolidays = transformToNagerDateFormat(holidays, countryCode);
         
         // Cache the result
