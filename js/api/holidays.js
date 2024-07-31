@@ -19,14 +19,19 @@ async function fetchHolidaysFromNager(countryCode, year) {
     const response = await fetch(`https://date.nager.at/api/v3/publicholidays/${year}/${countryCode}`);
     if (!response.ok) throw new Error(`Nager API request failed: ${response.statusText}`);
     
-    // Check if response body is empty
-    if (response.headers.get('Content-Length') === '0') {
+    const text = await response.text();
+    if (!text) {
       console.warn(`Empty response body for ${countryCode} from Nager.Date API`);
       return [];
     }
 
-    return await response.json();
-
+    try {
+      return JSON.parse(text);
+    } catch (error) {
+      console.error(`Error parsing JSON from Nager.Date API response for ${countryCode}:`, error);
+      return [];
+    }
+    
   } catch (error) {
     console.error(`Error fetching holidays from Nager for ${countryCode}:`, error);
     return [];
@@ -45,12 +50,25 @@ async function fetchHolidaysFromCalenderific(countryCode, year) {
       console.error(`Calenderific API request failed: ${response.statusText} (Status: ${response.status})`);
       return null;
     }
-    const data = await response.json();
-    return data.response.holidays.map(holiday => ({
-      date: holiday.date.iso,
-      localName: holiday.name,
-      countryCode: countryCode
-    }));
+
+    const text = await response.text();
+    if (!text) {
+      console.warn(`Empty response body for ${countryCode} from Calenderific API`);
+      return null;
+    }
+
+    try {
+      const data = JSON.parse(text);
+      return data.response.holidays.map(holiday => ({
+        date: holiday.date.iso,
+        localName: holiday.name,
+        countryCode: countryCode
+      }));
+    } catch (error) {
+      console.error(`Error parsing JSON from Calenderific API response for ${countryCode}:`, error);
+      return null;
+    }
+    
   } catch (error) {
     console.error(`Error fetching holidays from Calenderific for ${countryCode}:`, error);
     return null;
