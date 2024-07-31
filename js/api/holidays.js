@@ -6,23 +6,42 @@ const holidayCache = new Map();
 // List of countries with no holidays found from Nager.Date API
 const noHolidayCountriesFromNager = [];
 
+// Fetch API key from environment variables
+const CALENDERIFIC_API_KEY = process.env.CALENDERIFIC_API_KEY;
+
 // Function to fetch holidays from Nager.Date API
 async function fetchHolidaysFromNager(countryCode, year) {
   try {
     const response = await fetch(`https://date.nager.at/api/v3/publicholidays/${year}/${countryCode}`);
     if (!response.ok) throw new Error(`Nager API request failed: ${response.statusText}`);
-    const holidays = await response.json();
-    return holidays;
+    
+    // Check if response body is empty
+    if (response.headers.get('Content-Length') === '0') {
+      console.warn(`Empty response body for ${countryCode} from Nager.Date API`);
+      return [];
+    }
+
+    const text = await response.text();
+    
+    // Attempt to parse the response text
+    try {
+      const holidays = JSON.parse(text);
+      return holidays;
+    } catch (parseError) {
+      console.error(`Error parsing JSON for ${countryCode} from Nager.Date API:`, parseError);
+      return [];
+    }
+
   } catch (error) {
     console.error(`Error fetching holidays from Nager for ${countryCode}:`, error);
-    return null;
+    return [];
   }
 }
 
 // Function to fetch holidays from Calenderific API as a fallback
 async function fetchHolidaysFromCalenderific(countryCode, year) {
   try {
-    const response = await fetch(`https://calendarific.com/api/v2/holidays?&api_key=c7oz2Y1sepuJbV8tyB1gik7SFumpoeUt&country=${countryCode}&year=${year}`);
+    const response = await fetch(`https://calendarific.com/api/v2/holidays?&api_key=${CALENDERIFIC_API_KEY}&country=${countryCode}&year=${year}`);
     if (!response.ok) {
       console.error(`Calenderific API request failed: ${response.statusText} (Status: ${response.status})`);
       return null;
