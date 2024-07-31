@@ -2,7 +2,7 @@
 
 const axios = require('axios');
 
-const calendarificAPIKey = 'YOUR_CALENDARIFIC_API_KEY';
+const calendarificAPIKey = process.env.CALENDARIFIC_API_KEY;
 const cache = {};
 
 // List of countries and years
