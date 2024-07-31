@@ -35,7 +35,7 @@ function transformToNagerDateFormat(holidays, countryCode) {
  * @param {number} year - The year for which to fetch holidays.
  * @returns {Promise<Array>} - A promise that resolves to an array of holidays.
  */
-async function fetchHolidaysFromCalendarific(countryCode, year) {
+async function fetchHolidaysFromLocalAPI(countryCode, year) {
     const cacheKey = `${countryCode}-${year}`;
     
     if (cache[cacheKey]) {
@@ -75,5 +75,8 @@ export async function getHolidays(countryCode, year) {
         throw new Error(`Unsupported country code: ${countryCode} or year: ${year}`);
     }
     
-    return fetchHolidaysFromCalendarific(countryCode, year);
+    return fetchHolidaysFromLocalAPI(countryCode, year);
 }
+
+// Export fetchHolidaysFromLocalAPI for external use
+export { fetchHolidaysFromLocalAPI };
