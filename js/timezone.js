@@ -10,13 +10,14 @@ export function updateTimezoneDisplay(selectedCountryTimezone) {
         const utcTime = userLocalTime.toISOString();
         
         // Convert UTC time to selected timezone
-        const options = { timeZone: selectedCountryTimezone, timeZoneName: 'short' };
+        const options = { timeZone: selectedCountryTimezone, hour: '2-digit', minute: '2-digit', second: '2-digit', timeZoneName: 'short' };
         const convertedTime = new Intl.DateTimeFormat('en-US', options).format(new Date(utcTime));
         
         timezoneElement.textContent = `Current Time in ${selectedCountryTimezone}: ${convertedTime}`;
     } else {
         // No country selected; show placeholder text
-        timezoneElement.textContent = `Current Timezone in User's Local Time: ${userLocalTime.toLocaleString()}`;
+        const localTime = userLocalTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        timezoneElement.textContent = `Current Time in User's Local Time: ${localTime}`;
     }
 }
 
@@ -29,11 +30,16 @@ export function onCountryChange(event) {
 // Function to initialize the timezone display
 export function initializeTimezone() {
     const startDateInput = document.getElementById('startDate');
-    const timezoneElement = document.createElement('div');
-    timezoneElement.id = 'timezoneText'; // Unique ID for the timezone text
-    timezoneElement.classList.add('timezone-text'); // Add the CSS class
-    startDateInput.parentElement.appendChild(timezoneElement); // Add the timezone text below the startDate input
-
+    const timezoneElement = document.getElementById('timezoneText'); // Get the existing timezone text element
+    
+    if (!timezoneElement) {
+        // If timezone text element does not exist, create it
+        const timezoneTextElement = document.createElement('p');
+        timezoneTextElement.id = 'timezoneText'; // Unique ID for the timezone text
+        timezoneTextElement.classList.add('timezone-text'); // Add the CSS class
+        startDateInput.parentElement.appendChild(timezoneTextElement); // Add the timezone text below the startDate input
+    }
+    
     const countrySelect = document.getElementById('countrySelect');
     if (countrySelect) {
         countrySelect.addEventListener('change', onCountryChange);
