@@ -244,11 +244,24 @@ button:hover {
     to { transform: scale(1, 1); }
 }
 
-/* Style for timezone text */
+/* New container for timezone text and select */
+.flex-container {
+    display: flex;
+    align-items: center; /* Align items vertically centered */
+    justify-content: flex-start; /* Align items to the start (left) */
+    width: 100%; /* Ensure it takes full width */
+}
+
+/* Style the timezone text to ensure it aligns properly */
 .timezone-text {
     font-size: 0.1em; /* Smaller font size */
     color: #CCCCCC; /* Light grey for contrast */
-    margin-top: 5px; /* Space above the timezone text */
-    text-align: center; /* Center align the text */
+    margin-left: 10px; /* Space between select and timezone text */
+    margin-bottom: 10px; /* Space below the timezone text */
     white-space: nowrap; /* Ensure text stays on one line */
+}
+
+/* Adjust the select to align with the timezone text */
+select {
+    margin-right: 10px; /* Space between timezone text and select */
 }
