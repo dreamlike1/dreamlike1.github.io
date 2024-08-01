@@ -243,3 +243,11 @@ button:hover {
     75% { transform: scale(1.05, 0.95); }
     to { transform: scale(1, 1); }
 }
+
+/* Style for timezone text */
+.timezone-text {
+    font-size: 0.9em;
+    color: #CCCCCC; /* Light grey for contrast */
+    margin-top: 5px; /* Space above the timezone text */
+    text-align: center; /* Center align the text */
+}
