@@ -246,7 +246,7 @@ button:hover {
 
 /* Style for timezone text */
 .timezone-text {
-    font-size: 0.8em; /* Smaller font size */
+    font-size: 0.1em; /* Smaller font size */
     color: #CCCCCC; /* Light grey for contrast */
     margin-top: 5px; /* Space above the timezone text */
     text-align: center; /* Center align the text */
