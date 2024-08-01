@@ -1,7 +1,7 @@
 // js/main.js
 import { populateCountries, setupEventListeners } from './ui.js';
 import { setupSwitchButton } from './switch.js'; // Import the switch button setup function
-import { initializeTimezone } from './timezone.js'; // Import the timezone initialization function
+import { initializeTimezone } from '.timezone/timezone.js'; // Import the timezone initialization function
 
 document.addEventListener('DOMContentLoaded', () => {
     populateCountries();
