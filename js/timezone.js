@@ -18,7 +18,6 @@ export function updateTimezoneDisplay(selectedCountry) {
             timeZone: selectedCountryTimezone,
             hour: '2-digit',
             minute: '2-digit',
-            second: '2-digit',
             timeZoneName: 'short'
         };
         const convertedTime = new Intl.DateTimeFormat('en-US', options).format(new Date(utcTime));
@@ -26,7 +25,7 @@ export function updateTimezoneDisplay(selectedCountry) {
         timezoneElement.textContent = `Current Time in Capital of ${selectedCountry}: ${convertedTime}`;
     } else {
         // No valid time zone; show placeholder text
-        const localTime = userLocalTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const localTime = userLocalTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         timezoneElement.textContent = `Current Time in User's Local Time: ${localTime}`;
     }
 }
