@@ -9,7 +9,7 @@ html, body {
     background-image: linear-gradient(to right bottom, #222831, #31363F);
     background-size: cover;
     background-attachment: fixed;
-    font-size: 1.15em;
+    font-size: 0.5em;
 }
 
 .container {
@@ -245,10 +245,10 @@ button:hover {
 }
 
 /* New container for timezone text and select */
-.flex-container {
+.input-group {
     display: flex;
-    align-items: center; /* Align items vertically centered */
-    justify-content: flex-start; /* Align items to the start (left) */
+    flex-direction: column; /* Stack elements vertically */
+    align-items: flex-start; /* Align items to the left */
     width: 100%; /* Ensure it takes full width */
 }
 
@@ -256,12 +256,11 @@ button:hover {
 .timezone-text {
     font-size: 0.1em; /* Smaller font size */
     color: #CCCCCC; /* Light grey for contrast */
-    margin-left: 10px; /* Space between select and timezone text */
     margin-bottom: 10px; /* Space below the timezone text */
     white-space: nowrap; /* Ensure text stays on one line */
 }
 
 /* Adjust the select to align with the timezone text */
 select {
-    margin-right: 10px; /* Space between timezone text and select */
+    margin-bottom: 10px; /* Space between select and timezone text */
 }
