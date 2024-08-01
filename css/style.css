@@ -265,3 +265,7 @@ button:hover {
 select {
     margin-bottom: 10px; /* Space between select and timezone text */
 }
+
+.lbl {
+    font-size: 0.5em; /* Change this value to adjust the font size */
+}
