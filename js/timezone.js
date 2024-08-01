@@ -1,5 +1,7 @@
+// js/timezone.js
+
 // Function to update the timezone display
-function updateTimezoneDisplay(selectedCountryTimezone) {
+export function updateTimezoneDisplay(selectedCountryTimezone) {
     const timezoneElement = document.getElementById('timezoneText');
     const userLocalTime = new Date();
     
@@ -19,25 +21,25 @@ function updateTimezoneDisplay(selectedCountryTimezone) {
 }
 
 // Function to handle the country change event
-function onCountryChange(event) {
+export function onCountryChange(event) {
     const selectedCountryTimezone = event.target.value;
     updateTimezoneDisplay(selectedCountryTimezone);
 }
 
-// Event listener for DOMContentLoaded to set up the country change listener
-document.addEventListener('DOMContentLoaded', () => {
-    const countrySelect = document.getElementById('countrySelect');
-    if (countrySelect) {
-        countrySelect.addEventListener('change', onCountryChange);
-    }
-
-    // Create and style the timezone text element
+// Function to initialize the timezone display
+export function initializeTimezone() {
     const startDateInput = document.getElementById('startDate');
     const timezoneElement = document.createElement('div');
     timezoneElement.id = 'timezoneText'; // Unique ID for the timezone text
     timezoneElement.classList.add('timezone-text'); // Add the CSS class
     startDateInput.parentElement.appendChild(timezoneElement); // Add the timezone text below the startDate input
 
-    // Set initial timezone display
-    updateTimezoneDisplay(countrySelect ? countrySelect.value : null);
-});
+    const countrySelect = document.getElementById('countrySelect');
+    if (countrySelect) {
+        countrySelect.addEventListener('change', onCountryChange);
+        updateTimezoneDisplay(countrySelect.value);
+    } else {
+        // If country select is not found, initialize with empty
+        updateTimezoneDisplay(null);
+    }
+}
