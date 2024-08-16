@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Date Calculator</title>
+    <!-- Include Fomantic UI CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.8/dist/semantic.min.css">
+    <!-- Include your custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div id="calculatorBox" class="box">
+            <h1 id="boxTitle">Business Date Calculator</h1>
+            <div class="ui form">
+                <div class="field">
+                    <select id="serviceType" class="ui dropdown" name="serviceType">
+                        <option value="" disabled selected>Select Service Type</option>
+                        <option value="expressPaid" selected>Express (Paid)</option>
+                        <option value="expressFree">Express (Free)</option>
+                        <option value="standard">Standard</option>
+                        <option value="economy">Economy</option>
+                        <option value="collection">Collection</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <select id="countrySelect" class="ui search dropdown" name="country">
+                        <option value="" disabled selected>Select Country</option>
+                    </select>
+                    <p id="timezoneText" class="timezone-text"></p>
+                </div>
+                <div class="field">
+                    <!--<input type="date" id="StartDate" required>-->
+                    <div class="ui calendar">
+                        <div class="ui input right icon">
+                            <input type="text" placeholder="Date" id="startDate">
+                            <i class="calendar icon"></i>
+                        </div>
+                    </div>
+                <div class="field">
+                    <div class="checkbox-wrapper-42">
+                        <input id="cbx-42" type="checkbox" />
+                        <label class="cbx" for="cbx-42"></label>
+                        <label class="lbl" for="cbx-42">Order is past 5pm</label>
+                    </div>
+                </div>
+                </div>
+                <div class="field">
+                    <div class="ui input">
+                        <input type="text" id="businessDays" placeholder="Business Days (ex. 1-2 or 1,2)" required>
+                    </div>
+                </div>
+                <button id="calculateButton" class="ui button">Calculate</button>
+                <input type="text" id="result" class="result-field" readonly>
+                <div id="warningMessage" class="warning-message hidden">The selected country's holidays are not updated, resulting in inaccurate information.</div>
+                <div id="copyMessageCalculator" class="copy-message">Copied!</div>
+            </div>
+        </div>
+        <button id="switchButton" class="switch-button ui button">Switch to Coupon Expiry</button>
+        <div id="couponBox" class="box hidden">
+            <h1 id="couponTitle">Coupon Expiry</h1>
+            <div class="ui form">
+                <div class="field">
+                    <div class="ui calendar">
+                        <div class="ui input right icon">
+                            <input type="text" placeholder="Date" id="couponDate">
+                            <i class="calendar icon"></i>
+                        </div>
+                    </div>
+                    <!--<input type="date" id="couponDate" required>-->
+                </div>
+                <div class="field">
+                    <div class="ui input">
+                        <input type="text" id="addDays" placeholder="Add Days" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="checkbox-wrapper-42">
+                        <input id="cbx-43" type="checkbox" />
+                        <label class="cbx" for="cbx-43"></label>
+                        <label class="lbl" for="cbx-43" style="white-space: nowrap;">Remove extra day (for email ready)</label>
+                    </div>
+                </div>
+                <button id="couponCalculateButton" class="ui button">Calculate</button>
+                <input type="text" id="couponResult" class="result-field" readonly>
+                <div id="copyMessageCoupon" class="copy-message">Copied!</div>
+            </div>
+        </div>
+    </div>
+    <!-- Include jQuery first -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Include Fomantic UI JS -->
+    <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.8/dist/semantic.min.js"></script>
+    <!-- Include your custom JS -->
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
