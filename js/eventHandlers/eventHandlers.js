@@ -1,3 +1,9 @@
+import { fetchHolidaysForYears } from '../api/holidays.js';
+import { initializeDateSelector } from '../calendar/calendar.js';
+import { populateCountries } from '../ui/countryUtils.js';
+import { populateBusinessDays } from '../ui/ui.js';
+import { calculateBusinessDate } from '../ui/dateCalculation.js';
+
 export function setupEventListeners() {
     const serviceTypeElement = document.getElementById('serviceType');
     const countrySelectElement = document.getElementById('countrySelect');
@@ -11,11 +17,18 @@ export function setupEventListeners() {
     serviceTypeElement.addEventListener('change', async () => {
         console.log('Service Type Changed');
         const serviceType = serviceTypeElement.value;
+        const currentCountry = countrySelectElement.value;
 
-        // Reset the country selection
-        countrySelectElement.value = ''; // Clears the country selection
         await populateCountries(serviceType);
         populateBusinessDays();
+
+        // Automatically select the previous country if it's available in the new service type
+        const newOptions = Array.from(countrySelectElement.options).map(option => option.value);
+        if (newOptions.includes(currentCountry)) {
+            countrySelectElement.value = currentCountry;
+        } else {
+            countrySelectElement.value = ''; // Clear the selection if the country is not available
+        }
 
         // Handle country validation after changing the service type
         const selectedCountry = countrySelectElement.value;
