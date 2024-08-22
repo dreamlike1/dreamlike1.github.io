@@ -22,7 +22,7 @@ export function setupEventListeners() {
         await populateCountries(serviceType);
         populateBusinessDays();
 
-        // Default to the first available country instead of keeping the old selection
+        // Default to the first available country
         const firstOption = countrySelectElement.options[0];
         if (firstOption) {
             countrySelectElement.value = firstOption.value;
