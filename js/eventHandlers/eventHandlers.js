@@ -121,7 +121,7 @@ export function setupEventListeners() {
         
         console.log(`Checking visibility conditions: Country = ${selectedCountry}, Service Type = ${serviceType}`);
         
-        if (selectedCountry === 'united-states' && serviceType === 'standard') {
+        if (selectedCountry === 'United States' && serviceType === 'standard') {
             console.log('Conditions met: Showing result fields.');
             resultFieldElement.style.display = 'block';
             standardResultFieldElement.style.display = 'block';
