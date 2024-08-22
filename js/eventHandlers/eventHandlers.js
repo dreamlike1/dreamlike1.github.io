@@ -1,9 +1,3 @@
-import { fetchHolidaysForYears } from '../api/holidays.js';
-import { initializeDateSelector } from '../calendar/calendar.js';
-import { populateCountries } from '../ui/countryUtils.js';
-import { populateBusinessDays } from '../ui/ui.js';
-import { calculateBusinessDate } from '../ui/dateCalculation.js';
-
 export function setupEventListeners() {
     const serviceTypeElement = document.getElementById('serviceType');
     const countrySelectElement = document.getElementById('countrySelect');
@@ -19,40 +13,22 @@ export function setupEventListeners() {
         const serviceType = serviceTypeElement.value;
         const currentCountry = countrySelectElement.value;
 
+        // Update country options based on selected service type
         await populateCountries(serviceType);
         populateBusinessDays();
 
-        // Automatically select the previous country if it's available in the new service type
-        const newOptions = Array.from(countrySelectElement.options).map(option => option.value);
-        if (newOptions.includes(currentCountry)) {
-            countrySelectElement.value = currentCountry;
-        } else {
-            countrySelectElement.value = ''; // Clear the selection if the country is not available
-        }
+        // Reset country selection to "Select A Country" or placeholder
+        countrySelectElement.value = ''; // Assuming '' is the value for "Select A Country"
 
-        // Handle country validation after changing the service type
-        const selectedCountry = countrySelectElement.value;
-        if (selectedCountry) {
-            const countryName = countrySelectElement.options[countrySelectElement.selectedIndex]?.text;
-            const currentYear = new Date().getFullYear();
-            const endYear = currentYear + 3;
+        // Clear warning message as no country is selected
+        warningMessageElement.classList.add('hidden');
 
-            try {
-                const holidays = await fetchHolidaysForYears(countryName, currentYear, endYear);
-                console.log('Holidays:', holidays);
+        // Initialize date selector with no holidays
+        initializeDateSelector([]);
 
-                if (!holidays || holidays.length === 0) {
-                    warningMessageElement.classList.remove('hidden');
-                } else {
-                    warningMessageElement.classList.add('hidden');
-                }
-
-                initializeDateSelector(holidays);
-
-            } catch (error) {
-                console.error(`Error fetching holidays for ${countryName}:`, error);
-            }
-        }
+        // Optionally, you may want to clear the result fields
+        resultFieldElement.style.display = 'none';
+        standardResultFieldElement.style.display = 'none';
     });
 
     countrySelectElement.addEventListener('change', async (event) => {
