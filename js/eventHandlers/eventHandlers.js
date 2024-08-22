@@ -16,7 +16,16 @@ export function setupEventListeners() {
 
     async function handleServiceTypeChange() {
         const serviceType = serviceTypeElement.value;
+        const currentCountry = countrySelectElement.value; // Preserve current country value
+
+        console.log(`Service Type changed to: ${serviceType}`);
+        console.log(`Preserving current country value: ${currentCountry}`);
+
         await populateCountries(serviceType);
+
+        // Restore the selected country value if available
+        countrySelectElement.value = currentCountry;
+
         populateBusinessDays();
         updateResultFieldsVisibility();
     }
@@ -27,6 +36,8 @@ export function setupEventListeners() {
             const countryName = event.target.options[event.target.selectedIndex]?.text;
             const currentYear = new Date().getFullYear();
             const endYear = currentYear + 3;
+
+            console.log(`Country changed to: ${selectedCountry}`);
 
             try {
                 const holidays = await fetchHolidaysForYears(countryName, currentYear, endYear);
@@ -94,7 +105,7 @@ export function setupEventListeners() {
     function updateResultFieldsVisibility() {
         const serviceType = serviceTypeElement.value;
         const selectedCountry = countrySelectElement.value;
-        
+
         console.log(`Checking visibility conditions: Country = ${selectedCountry}, Service Type = ${serviceType}`);
         
         if (selectedCountry === 'united-states' && serviceType === 'standard') {
