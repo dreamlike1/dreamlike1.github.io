@@ -1,4 +1,3 @@
-// js/eventHandlers/eventHandlers.js
 import { fetchHolidaysForYears } from '../api/holidays.js';
 import { initializeDateSelector } from '../calendar/calendar.js';
 import { populateCountries } from '../ui/countryUtils.js';
@@ -16,6 +15,7 @@ export function setupEventListeners() {
     const warningMessageElement = document.getElementById('warningMessage');
 
     serviceTypeElement.addEventListener('change', async () => {
+        console.log('Service Type Changed');
         const serviceType = serviceTypeElement.value;
         const currentCountry = countrySelectElement.value;
 
@@ -39,7 +39,8 @@ export function setupEventListeners() {
 
             try {
                 const holidays = await fetchHolidaysForYears(countryName, currentYear, endYear);
-                
+                console.log('Holidays:', holidays);
+
                 if (!holidays || holidays.length === 0) {
                     warningMessageElement.classList.remove('hidden');
                 } else {
@@ -55,6 +56,7 @@ export function setupEventListeners() {
     });
 
     countrySelectElement.addEventListener('change', async (event) => {
+        console.log('Country Changed');
         const selectedCountry = event.target.value;
         if (selectedCountry) {
             const countryName = event.target.options[event.target.selectedIndex]?.text;
@@ -63,7 +65,8 @@ export function setupEventListeners() {
 
             try {
                 const holidays = await fetchHolidaysForYears(countryName, currentYear, endYear);
-                
+                console.log('Holidays:', holidays);
+
                 if (!holidays || holidays.length === 0) {
                     warningMessageElement.classList.remove('hidden');
                 } else {
@@ -81,6 +84,7 @@ export function setupEventListeners() {
     });
 
     calculateButtonElement.addEventListener('click', async () => {
+        console.log('Calculate Button Clicked');
         const startDateInput = document.getElementById('startDate').value;
         const dateRangeInput = document.getElementById('businessDays').value;
         const selectedCountry = document.getElementById('countrySelect').value;
@@ -99,7 +103,13 @@ export function setupEventListeners() {
         }
 
         // Fetch holidays for the selected country
-        const holidays = await fetchHolidaysForYears(selectedCountry, new Date().getFullYear(), new Date().getFullYear() + 3);
+        let holidays = [];
+        try {
+            holidays = await fetchHolidaysForYears(selectedCountry, new Date().getFullYear(), new Date().getFullYear() + 3);
+            console.log('Holidays:', holidays);
+        } catch (error) {
+            console.error('Error fetching holidays:', error);
+        }
 
         // Check if holidays were successfully fetched
         if (!Array.isArray(holidays)) {
@@ -109,6 +119,11 @@ export function setupEventListeners() {
         try {
             // Calculate the business dates
             await calculateBusinessDate();
+            console.log('Business Date Calculation Done');
+            
+            // Ensure result fields are visible
+            resultFieldElement.style.display = 'block';
+            standardResultFieldElement.style.display = 'block';
         } catch (error) {
             console.error('Error calculating business dates:', error);
             alert('Error calculating business dates. Please check the input and try again.');
