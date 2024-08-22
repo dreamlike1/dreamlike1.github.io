@@ -17,17 +17,17 @@ export function setupEventListeners() {
     serviceTypeElement.addEventListener('change', async () => {
         console.log('Service Type Changed');
         const serviceType = serviceTypeElement.value;
-        const currentCountry = countrySelectElement.value;
 
+        // Update the list of countries based on the new service type
         await populateCountries(serviceType);
         populateBusinessDays();
 
-        // Automatically select the previous country if it's available in the new service type
-        const newOptions = Array.from(countrySelectElement.options).map(option => option.value);
-        if (newOptions.includes(currentCountry)) {
-            countrySelectElement.value = currentCountry;
+        // Default to the first available country instead of keeping the old selection
+        const firstOption = countrySelectElement.options[0];
+        if (firstOption) {
+            countrySelectElement.value = firstOption.value;
         } else {
-            countrySelectElement.value = ''; // Clear the selection if the country is not available
+            countrySelectElement.value = ''; // Clear the selection if no options are available
         }
 
         // Handle country validation after changing the service type
