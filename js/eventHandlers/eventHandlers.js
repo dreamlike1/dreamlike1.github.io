@@ -14,20 +14,28 @@ export function setupEventListeners() {
     const copyMessageStandardResultElement = document.getElementById('copyMessageStandardResult');
     const warningMessageElement = document.getElementById('warningMessage');
 
+    let previousCountry = ''; // Variable to store the previously selected country
+
     serviceTypeElement.addEventListener('change', async () => {
         console.log('Service Type Changed');
         const serviceType = serviceTypeElement.value;
+        const previousCountryValue = countrySelectElement.value;
 
         // Update the list of countries based on the new service type
         await populateCountries(serviceType);
         populateBusinessDays();
 
-        // Default to the first available country
-        const firstOption = countrySelectElement.options[0];
-        if (firstOption) {
-            countrySelectElement.value = firstOption.value;
+        // Check if the previously selected country is available
+        const newOptions = Array.from(countrySelectElement.options).map(option => option.value);
+        if (newOptions.includes(previousCountryValue)) {
+            countrySelectElement.value = previousCountryValue; // Reselect the previous country
         } else {
-            countrySelectElement.value = ''; // Clear the selection if no options are available
+            const firstOption = countrySelectElement.options[0];
+            if (firstOption) {
+                countrySelectElement.value = firstOption.value; // Default to the first option
+            } else {
+                countrySelectElement.value = ''; // Clear the selection if no options are available
+            }
         }
 
         // Handle country validation after changing the service type
@@ -53,6 +61,9 @@ export function setupEventListeners() {
                 console.error(`Error fetching holidays for ${countryName}:`, error);
             }
         }
+
+        // Store the currently selected country for future reference
+        previousCountry = countrySelectElement.value;
     });
 
     countrySelectElement.addEventListener('change', async (event) => {
