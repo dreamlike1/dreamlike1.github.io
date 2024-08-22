@@ -14,39 +14,14 @@ export function setupEventListeners() {
     const copyMessageStandardResultElement = document.getElementById('copyMessageStandardResult');
     const warningMessageElement = document.getElementById('warningMessage');
 
-    serviceTypeElement.addEventListener('change', async () => {
+    async function handleServiceTypeChange() {
         const serviceType = serviceTypeElement.value;
         await populateCountries(serviceType);
         populateBusinessDays();
-        
-        // Handle country validation after changing the service type
-        const selectedCountry = countrySelectElement.value;
-        if (selectedCountry) {
-            const countryName = countrySelectElement.options[countrySelectElement.selectedIndex]?.text;
-            const currentYear = new Date().getFullYear();
-            const endYear = currentYear + 3;
-
-            try {
-                const holidays = await fetchHolidaysForYears(countryName, currentYear, endYear);
-                
-                if (!holidays || holidays.length === 0) {
-                    warningMessageElement.classList.remove('hidden');
-                } else {
-                    warningMessageElement.classList.add('hidden');
-                }
-
-                initializeDateSelector(holidays);
-
-            } catch (error) {
-                console.error(`Error fetching holidays for ${countryName}:`, error);
-            }
-        }
-
-        // Update result field visibility based on country and service type
         updateResultFieldsVisibility();
-    });
+    }
 
-    countrySelectElement.addEventListener('change', async (event) => {
+    async function handleCountryChange(event) {
         const selectedCountry = event.target.value;
         if (selectedCountry) {
             const countryName = event.target.options[event.target.selectedIndex]?.text;
@@ -69,11 +44,12 @@ export function setupEventListeners() {
             }
 
             populateBusinessDays();
+            updateResultFieldsVisibility();
         }
+    }
 
-        // Update result field visibility based on country and service type
-        updateResultFieldsVisibility();
-    });
+    serviceTypeElement.addEventListener('change', handleServiceTypeChange);
+    countrySelectElement.addEventListener('change', handleCountryChange);
 
     calculateButtonElement.addEventListener('click', async () => {
         const startDateInput = document.getElementById('startDate').value;
@@ -121,7 +97,7 @@ export function setupEventListeners() {
         
         console.log(`Checking visibility conditions: Country = ${selectedCountry}, Service Type = ${serviceType}`);
         
-        if (selectedCountry === 'United States' && serviceType === 'standard') {
+        if (selectedCountry === 'united-states' && serviceType === 'standard') {
             console.log('Conditions met: Showing result fields.');
             resultFieldElement.style.display = 'block';
             standardResultFieldElement.style.display = 'block';
