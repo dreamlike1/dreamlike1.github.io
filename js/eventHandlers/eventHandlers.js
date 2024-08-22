@@ -1,3 +1,4 @@
+// js/eventhandlers.js
 
 import { fetchHolidaysForYears } from '../api/holidays.js';
 import { initializeDateSelector } from '../calendar/calendar.js';
@@ -24,6 +25,7 @@ export function setupEventListeners() {
         const selectedCountry = countrySelectElement.value;
         if (selectedCountry) {
             const countryName = countrySelectElement.options[countrySelectElement.selectedIndex]?.text;
+            console.log('Selected Country after service type change:', countryName);
             const currentYear = new Date().getFullYear();
             const endYear = currentYear + 3;
 
@@ -46,8 +48,11 @@ export function setupEventListeners() {
 
     countrySelectElement.addEventListener('change', async (event) => {
         const selectedCountry = event.target.value;
+        console.log('Selected Country on change event:', selectedCountry);
+
         if (selectedCountry) {
             const countryName = event.target.options[event.target.selectedIndex]?.text;
+            console.log('Country Name from options:', countryName);
             const currentYear = new Date().getFullYear();
             const endYear = currentYear + 3;
 
