@@ -1,3 +1,9 @@
+import { fetchHolidaysForYears } from '../api/holidays.js';
+import { initializeDateSelector } from '../calendar/calendar.js';
+import { populateCountries } from '../ui/countryUtils.js';
+import { populateBusinessDays } from '../ui/ui.js';
+import { calculateBusinessDate } from '../ui/dateCalculation.js';
+
 export function setupEventListeners() {
     const serviceTypeElement = document.getElementById('serviceType');
     const countrySelectElement = document.getElementById('countrySelect');
@@ -10,19 +16,16 @@ export function setupEventListeners() {
 
     let previousCountry = ''; // Variable to store the previously selected country
 
-    serviceTypeElement.addEventListener('change', async () => {
-        console.log('Service Type Changed');
+    async function updateCountries() {
+        console.log('Updating Countries');
         const serviceType = serviceTypeElement.value;
-        const previousCountryValue = countrySelectElement.value;
-
-        // Update the list of countries based on the new service type
         await populateCountries(serviceType);
         populateBusinessDays();
 
         // Check if the previously selected country is available
         const newOptions = Array.from(countrySelectElement.options).map(option => option.value);
-        if (newOptions.includes(previousCountryValue)) {
-            countrySelectElement.value = previousCountryValue; // Reselect the previous country
+        if (newOptions.includes(previousCountry)) {
+            countrySelectElement.value = previousCountry; // Reselect the previous country
         } else {
             const firstOption = countrySelectElement.options[0];
             if (firstOption) {
@@ -31,8 +34,10 @@ export function setupEventListeners() {
                 countrySelectElement.value = ''; // Clear the selection if no options are available
             }
         }
+    }
 
-        // Handle country validation after changing the service type
+    async function handleCountryChange() {
+        console.log('Country Changed');
         const selectedCountry = countrySelectElement.value;
         if (selectedCountry) {
             const countryName = countrySelectElement.options[countrySelectElement.selectedIndex]?.text;
@@ -56,44 +61,24 @@ export function setupEventListeners() {
             }
         }
 
+        // Ensure result fields are visible
+        resultFieldElement.style.display = 'block';
+        standardResultFieldElement.style.display = 'block';
+    }
+
+    serviceTypeElement.addEventListener('change', async () => {
+        await updateCountries();
+
+        // Handle country validation after changing the service type
+        await handleCountryChange();
+        
         // Store the currently selected country for future reference
         previousCountry = countrySelectElement.value;
-
-        // Ensure result fields are visible
-        resultFieldElement.style.display = 'block';
-        standardResultFieldElement.style.display = 'block';
     });
 
-    countrySelectElement.addEventListener('change', async (event) => {
-        console.log('Country Changed');
-        const selectedCountry = event.target.value;
-        if (selectedCountry) {
-            const countryName = event.target.options[event.target.selectedIndex]?.text;
-            const currentYear = new Date().getFullYear();
-            const endYear = currentYear + 3;
-
-            try {
-                const holidays = await fetchHolidaysForYears(countryName, currentYear, endYear);
-                console.log('Holidays:', holidays);
-
-                if (!holidays || holidays.length === 0) {
-                    warningMessageElement.classList.remove('hidden');
-                } else {
-                    warningMessageElement.classList.add('hidden');
-                }
-
-                initializeDateSelector(holidays);
-
-            } catch (error) {
-                console.error(`Error fetching holidays for ${countryName}:`, error);
-            }
-
-            populateBusinessDays();
-        }
-        
-        // Ensure result fields are visible
-        resultFieldElement.style.display = 'block';
-        standardResultFieldElement.style.display = 'block';
+    countrySelectElement.addEventListener('change', async () => {
+        await handleCountryChange();
+        populateBusinessDays();
     });
 
     calculateButtonElement.addEventListener('click', async () => {
