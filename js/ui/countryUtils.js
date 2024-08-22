@@ -1,4 +1,5 @@
 // js/ui/countryUtils.js
+
 import { fetchHolidaysForYears } from '../api/holidays.js';
 import { listNoHolidayCountries } from '../api/holidays.js';
 import { countryOptions } from '../api/countryData.js';
@@ -51,6 +52,9 @@ async function initializeDropdown(dropdown, options) {
     if (options.length > 0) {
         dropdown.dropdown('set selected', options[0].value);
     }
+
+    // Log dropdown state after initialization
+    console.log('Dropdown state after initialization:', dropdown.dropdown('get value'));
 }
 
 async function fetchAndCacheHolidays(countries) {
