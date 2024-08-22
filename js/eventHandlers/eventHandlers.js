@@ -1,9 +1,3 @@
-import { fetchHolidaysForYears } from '../api/holidays.js';
-import { initializeDateSelector } from '../calendar/calendar.js';
-import { populateCountries } from '../ui/countryUtils.js';
-import { populateBusinessDays } from '../ui/ui.js';
-import { calculateBusinessDate } from '../ui/dateCalculation.js';
-
 export function setupEventListeners() {
     const serviceTypeElement = document.getElementById('serviceType');
     const countrySelectElement = document.getElementById('countrySelect');
@@ -64,6 +58,10 @@ export function setupEventListeners() {
 
         // Store the currently selected country for future reference
         previousCountry = countrySelectElement.value;
+
+        // Ensure result fields are visible
+        resultFieldElement.style.display = 'block';
+        standardResultFieldElement.style.display = 'block';
     });
 
     countrySelectElement.addEventListener('change', async (event) => {
@@ -92,6 +90,10 @@ export function setupEventListeners() {
 
             populateBusinessDays();
         }
+        
+        // Ensure result fields are visible
+        resultFieldElement.style.display = 'block';
+        standardResultFieldElement.style.display = 'block';
     });
 
     calculateButtonElement.addEventListener('click', async () => {
