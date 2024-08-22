@@ -24,15 +24,17 @@ export async function calculateBusinessDate() {
     const holidays = await getHolidaysForCountry(selectedCountry);
 
     // Check if holidays were successfully fetched
-    if (!Array.isArray(holidays)) {
-        console.error('No holidays data found or error fetching holidays.');
-        return;
-    }
+    if (!Array.isArray(holidays) || holidays.length === 0) {
+        // Open a new tab to the external date calculator
+        window.open('https://www.timeanddate.com/date/weekdayadd.html', '_blank');
 
-    // Handle case where no holidays are available
-    if (holidays.length === 0) {
-        // Redirect to the alternative date calculator
-        window.location.href = 'https://www.timeanddate.com/date/weekdayadd.html';
+        // Reset input fields
+        document.getElementById('startDate').value = '';
+        document.getElementById('businessDays').value = '';
+        document.getElementById('countrySelect').value = '';
+        document.getElementById('result').value = '';
+        document.getElementById('standardResult').value = '';
+
         return;
     }
 
