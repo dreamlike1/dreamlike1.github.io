@@ -41,6 +41,9 @@ export function setupEventListeners() {
                 console.error(`Error fetching holidays for ${countryName}:`, error);
             }
         }
+
+        // Update result field visibility based on country and service type
+        updateResultFieldsVisibility();
     });
 
     countrySelectElement.addEventListener('change', async (event) => {
@@ -67,6 +70,9 @@ export function setupEventListeners() {
 
             populateBusinessDays();
         }
+
+        // Update result field visibility based on country and service type
+        updateResultFieldsVisibility();
     });
 
     calculateButtonElement.addEventListener('click', async () => {
@@ -108,6 +114,23 @@ export function setupEventListeners() {
             window.open('https://www.timeanddate.com/date/weekdayadd.html', '_blank');
         }
     });
+
+    function updateResultFieldsVisibility() {
+        const serviceType = serviceTypeElement.value;
+        const selectedCountry = countrySelectElement.value;
+        
+        console.log(`Checking visibility conditions: Country = ${selectedCountry}, Service Type = ${serviceType}`);
+        
+        if (selectedCountry === 'united-states' && serviceType === 'standard') {
+            console.log('Conditions met: Showing result fields.');
+            resultFieldElement.style.display = 'block';
+            standardResultFieldElement.style.display = 'block';
+        } else {
+            console.log('Conditions not met: Hiding result fields.');
+            resultFieldElement.style.display = 'none';
+            standardResultFieldElement.style.display = 'none';
+        }
+    }
 
     resultFieldElement.addEventListener('click', () => {
         navigator.clipboard.writeText(resultFieldElement.value).then(() => {
