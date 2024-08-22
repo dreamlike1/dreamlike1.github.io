@@ -59,19 +59,22 @@ export function setupEventListeners() {
             } catch (error) {
                 console.error(`Error fetching holidays for ${countryName}:`, error);
             }
-        }
 
-        // Ensure result fields are visible
-        resultFieldElement.style.display = 'block';
-        standardResultFieldElement.style.display = 'block';
+            // Ensure result fields are visible
+            resultFieldElement.style.display = 'block';
+            standardResultFieldElement.style.display = 'block';
+        }
     }
 
     serviceTypeElement.addEventListener('change', async () => {
         await updateCountries();
 
         // Handle country validation after changing the service type
-        await handleCountryChange();
-        
+        const selectedCountry = countrySelectElement.value;
+        if (selectedCountry) {
+            await handleCountryChange();
+        }
+
         // Store the currently selected country for future reference
         previousCountry = countrySelectElement.value;
     });
