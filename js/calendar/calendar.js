@@ -20,12 +20,6 @@ export function initializeDateSelector(holidays = []) {
             message: holiday.name,
             class: 'holiday', // Use a CSS class for styling
             variation: 'holiday' // Tooltip variation (if supported)
-        })),
-        onRender: function(date, cell) {
-            const dayOfWeek = date.getDay();
-            if (dayOfWeek === 0) { // Sunday
-                $(cell).addClass('weekend');
-            }
-        }
+        }))
     });
 }
