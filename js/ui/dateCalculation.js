@@ -78,9 +78,9 @@ export async function calculateBusinessDate() {
 
         // Special condition for United States
         if (selectedCountry === 'United States') {
-            // Handle the special case for the second range '6-7'
-            const specialRangeStart = 3;
-            const specialRangeEnd = 6;
+            // Handle the special case for the second range '5-8'
+            const specialRangeStart = 5;
+            const specialRangeEnd = 8;
             const specialEndDateStart = calculateBusinessDays(startDate, specialRangeStart, holidays);
             const specialEndDateEnd = calculateBusinessDays(startDate, specialRangeEnd, holidays);
             
