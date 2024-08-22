@@ -93,10 +93,8 @@ export async function calculateBusinessDate() {
         alert('Error calculating business dates. Please check the input and try again.');
     }
 
-    // If no holidays were found, open the external date calculator and reset the inputs
+    // If no holidays were found, open the external date calculator in a new tab
     if (!holidays || holidays.length === 0) {
         window.open('https://www.timeanddate.com/date/weekdayadd.html', '_blank');
-        document.getElementById('startDate').value = '';
-        document.getElementById('businessDays').value = '';
     }
 }
