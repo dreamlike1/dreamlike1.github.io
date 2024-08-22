@@ -11,13 +11,20 @@ export async function calculateBusinessDate() {
     // Validate start date
     let startDate = new Date(startDateInput);
     if (!startDateInput || isNaN(startDate.getTime())) {
+        console.log('Invalid start date:', startDateInput);
         alert('Please enter a valid start date.');
         return;
     }
 
     // Validate country and range input
-    if (!dateRangeInput || !selectedCountry) {
-        alert('Please enter a valid range of business days and select a country.');
+    if (!dateRangeInput) {
+        console.log('Invalid date range input:', dateRangeInput);
+        alert('Please enter a valid range of business days.');
+        return;
+    }
+    if (!selectedCountry) {
+        console.log('No country selected:', selectedCountry);
+        alert('Please select a country.');
         return;
     }
 
