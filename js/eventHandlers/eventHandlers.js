@@ -19,16 +19,16 @@ export function setupEventListeners() {
     serviceTypeElement.addEventListener('change', async () => {
         const serviceType = serviceTypeElement.value;
         await populateCountries(serviceType);
-        populateBusinessDays();
-        
-        // Delay fetching selected country value to ensure dropdown is updated
+
+        // Use a short delay to ensure the dropdown is populated
         setTimeout(() => {
             const selectedCountry = countrySelectElement.value;
+            const countryName = countrySelectElement.options[countrySelectElement.selectedIndex]?.text;
+
             console.log('Selected Country after service type change:', selectedCountry);
-            
+            console.log('Country Name after service type change:', countryName);
+
             if (selectedCountry) {
-                const countryName = countrySelectElement.options[countrySelectElement.selectedIndex]?.text;
-                console.log('Country Name after service type change:', countryName);
                 const currentYear = new Date().getFullYear();
                 const endYear = currentYear + 3;
 
@@ -46,16 +46,19 @@ export function setupEventListeners() {
             } else {
                 console.log('No country selected or country value is empty.');
             }
+
+            populateBusinessDays();
         }, 100); // Adjust timing as needed
     });
 
     countrySelectElement.addEventListener('change', async (event) => {
         const selectedCountry = event.target.value;
+        const countryName = event.target.options[event.target.selectedIndex]?.text;
+
         console.log('Selected Country on change event:', selectedCountry);
+        console.log('Country Name from options:', countryName);
 
         if (selectedCountry) {
-            const countryName = event.target.options[event.target.selectedIndex]?.text;
-            console.log('Country Name from options:', countryName);
             const currentYear = new Date().getFullYear();
             const endYear = currentYear + 3;
 
