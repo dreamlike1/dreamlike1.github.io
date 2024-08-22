@@ -21,29 +21,30 @@ export function setupEventListeners() {
         await populateCountries(serviceType);
         populateBusinessDays();
         
-        // Handle country validation after changing the service type
-        const selectedCountry = countrySelectElement.value;
-        if (selectedCountry) {
-            const countryName = countrySelectElement.options[countrySelectElement.selectedIndex]?.text;
-            console.log('Selected Country after service type change:', countryName);
-            const currentYear = new Date().getFullYear();
-            const endYear = currentYear + 3;
+        // Delay fetching selected country value to ensure dropdown is updated
+        setTimeout(() => {
+            const selectedCountry = countrySelectElement.value;
+            console.log('Selected Country after service type change:', selectedCountry);
+            
+            if (selectedCountry) {
+                const countryName = countrySelectElement.options[countrySelectElement.selectedIndex]?.text;
+                console.log('Country Name after service type change:', countryName);
+                const currentYear = new Date().getFullYear();
+                const endYear = currentYear + 3;
 
-            try {
-                const holidays = await fetchHolidaysForYears(countryName, currentYear, endYear);
-                
-                if (!holidays || holidays.length === 0) {
-                    warningMessageElement.classList.remove('hidden');
-                } else {
-                    warningMessageElement.classList.add('hidden');
-                }
+                fetchHolidaysForYears(countryName, currentYear, endYear)
+                    .then(holidays => {
+                        if (!holidays || holidays.length === 0) {
+                            warningMessageElement.classList.remove('hidden');
+                        } else {
+                            warningMessageElement.classList.add('hidden');
+                        }
 
-                initializeDateSelector(holidays);
-
-            } catch (error) {
-                console.error(`Error fetching holidays for ${countryName}:`, error);
+                        initializeDateSelector(holidays);
+                    })
+                    .catch(error => console.error(`Error fetching holidays for ${countryName}:`, error));
             }
-        }
+        }, 100); // Adjust timing as needed
     });
 
     countrySelectElement.addEventListener('change', async (event) => {
@@ -56,20 +57,17 @@ export function setupEventListeners() {
             const currentYear = new Date().getFullYear();
             const endYear = currentYear + 3;
 
-            try {
-                const holidays = await fetchHolidaysForYears(countryName, currentYear, endYear);
-                
-                if (!holidays || holidays.length === 0) {
-                    warningMessageElement.classList.remove('hidden');
-                } else {
-                    warningMessageElement.classList.add('hidden');
-                }
+            fetchHolidaysForYears(countryName, currentYear, endYear)
+                .then(holidays => {
+                    if (!holidays || holidays.length === 0) {
+                        warningMessageElement.classList.remove('hidden');
+                    } else {
+                        warningMessageElement.classList.add('hidden');
+                    }
 
-                initializeDateSelector(holidays);
-
-            } catch (error) {
-                console.error(`Error fetching holidays for ${countryName}:`, error);
-            }
+                    initializeDateSelector(holidays);
+                })
+                .catch(error => console.error(`Error fetching holidays for ${countryName}:`, error));
 
             populateBusinessDays();
         }
