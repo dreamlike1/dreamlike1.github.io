@@ -21,10 +21,10 @@ function handleVisibilityChange() {
 
     // Show additional fields if the conditions are met
     if (serviceType === 'standard' && country === 'United States') {
-        $('#resultText1').text('Result for 5-8 Business Days'); // Set text for #resultText1
+        $('#resultText1').text('Result for 3-6 Business Days'); // Set text for #resultText1
         $('#resultText1').removeClass('hidden'); // Show #resultText1
 
-        $('#resultText2').text('Result for 3-6 Business Days');
+        $('#resultText2').text('Result for 5-8 Business Days');
         $('#resultText2').removeClass('hidden'); // Show #resultText2
 
         $('#standardResultField').removeClass('hidden');
