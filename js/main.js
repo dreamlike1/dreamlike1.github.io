@@ -1,5 +1,3 @@
-// main.js
-
 import { populateCountries } from './ui/countryUtils.js';
 import { setupEventListeners } from './eventHandlers/eventHandlers.js';
 import { setupSwitchButton } from './switch/switch.js';
@@ -9,6 +7,13 @@ import { initializeResultsVisibility } from './resultsVisibility/resultsVisibili
 
 document.addEventListener('DOMContentLoaded', () => {
     const defaultServiceType = 'expressPaid'; // Default service type
+
+    // Function to set today's date
+    function setTodayDate() {
+        const today = new Date();
+        const formattedDate = today.toISOString().split('T')[0];
+        document.getElementById('couponDate').value = formattedDate;
+    }
 
     // Initialize Semantic UI dropdowns
     $('.ui.dropdown').dropdown();
@@ -23,4 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeTimezone(); // Initialize the timezone functionality
     initializeDateSelector(); // Initialize the date selector functionality
     initializeResultsVisibility(); // Initialize results visibility logic
+
+    // Set today's date as default value for couponDate input
+    setTodayDate();
 });
