@@ -1,3 +1,4 @@
+// js/ui/dateCalculation.js
 import { formatDate } from '../dateUtils/dateUtils.js';
 import { calculateBusinessDays } from '../businessDayUtils/businessDayUtils.js';
 import { getHolidaysForCountry } from './countryUtils.js';
@@ -24,22 +25,9 @@ export async function calculateBusinessDate() {
     const holidays = await getHolidaysForCountry(selectedCountry);
 
     // Check if holidays were successfully fetched
-    if (!Array.isArray(holidays) || holidays.length === 0) {
-        // Open a new tab to the external date calculator
-        window.open('https://www.timeanddate.com/date/weekdayadd.html', '_blank');
-
-        // Reset input fields
-        document.getElementById('startDate').value = '';
-        document.getElementById('businessDays').value = '';
-        document.getElementById('countrySelect').value = '';
-        document.getElementById('result').value = '';
-        document.getElementById('standardResult').value = '';
-
-        return;
+    if (!Array.isArray(holidays)) {
+        console.error('No holidays data found or error fetching holidays.');
     }
-
-    // Log fetched holidays
-    console.log(`Holidays for ${selectedCountry}:`, holidays);
 
     // Parse the date range input
     let numDaysStart, numDaysEnd;
@@ -103,5 +91,12 @@ export async function calculateBusinessDate() {
     } catch (error) {
         console.error('Error calculating business dates:', error);
         alert('Error calculating business dates. Please check the input and try again.');
+    }
+
+    // If no holidays were found, open the external date calculator and reset the inputs
+    if (!holidays || holidays.length === 0) {
+        window.open('https://www.timeanddate.com/date/weekdayadd.html', '_blank');
+        document.getElementById('startDate').value = '';
+        document.getElementById('businessDays').value = '';
     }
 }
