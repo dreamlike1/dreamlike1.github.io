@@ -43,6 +43,8 @@ export function setupEventListeners() {
                         initializeDateSelector(holidays);
                     })
                     .catch(error => console.error(`Error fetching holidays for ${countryName}:`, error));
+            } else {
+                console.log('No country selected or country value is empty.');
             }
         }, 100); // Adjust timing as needed
     });
@@ -70,6 +72,8 @@ export function setupEventListeners() {
                 .catch(error => console.error(`Error fetching holidays for ${countryName}:`, error));
 
             populateBusinessDays();
+        } else {
+            console.log('No country selected or country value is empty.');
         }
     });
 
