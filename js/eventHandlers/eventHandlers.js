@@ -16,8 +16,8 @@ export function setupEventListeners() {
 
     let previousCountry = ''; // Variable to store the previously selected country
 
-    async function updateCountries() {
-        console.log('Updating Countries');
+    async function updateCountriesAndFields() {
+        console.log('Updating Countries and Fields');
         const serviceType = serviceTypeElement.value;
         await populateCountries(serviceType);
         populateBusinessDays();
@@ -34,6 +34,8 @@ export function setupEventListeners() {
                 countrySelectElement.value = ''; // Clear the selection if no options are available
             }
         }
+
+        await handleCountryChange(); // Ensure fields are updated
     }
 
     async function handleCountryChange() {
@@ -56,25 +58,19 @@ export function setupEventListeners() {
 
                 initializeDateSelector(holidays);
 
+                // Ensure result fields are visible
+                resultFieldElement.style.display = 'block';
+                standardResultFieldElement.style.display = 'block';
+
             } catch (error) {
                 console.error(`Error fetching holidays for ${countryName}:`, error);
             }
-
-            // Ensure result fields are visible
-            resultFieldElement.style.display = 'block';
-            standardResultFieldElement.style.display = 'block';
         }
     }
 
     serviceTypeElement.addEventListener('change', async () => {
-        await updateCountries();
-
-        // Handle country validation after changing the service type
-        const selectedCountry = countrySelectElement.value;
-        if (selectedCountry) {
-            await handleCountryChange();
-        }
-
+        await updateCountriesAndFields();
+        
         // Store the currently selected country for future reference
         previousCountry = countrySelectElement.value;
     });
