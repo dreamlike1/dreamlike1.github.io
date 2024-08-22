@@ -441,3 +441,7 @@ button:hover {
 }
 
 
+.ui.calendar .weekend {
+    background-color: #f0f0f0; /* Light gray background for weekends */
+    color: #333; /* Darker text color for contrast */
+}
