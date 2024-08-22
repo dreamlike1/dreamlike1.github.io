@@ -43,7 +43,6 @@ async function initializeDropdown(dropdown, options) {
     dropdown.dropdown({
         onChange: function(value) {
             console.log('Dropdown value changed to:', value);
-            setTimeout(() => dropdown.dropdown('hide'), 100);
         },
         allowAdditions: false,
         fullTextSearch: true
@@ -53,7 +52,7 @@ async function initializeDropdown(dropdown, options) {
         dropdown.dropdown('set selected', options[0].value);
     }
 
-    // Log dropdown state after initialization
+    // Ensure value is properly set and logged
     console.log('Dropdown state after initialization:', dropdown.dropdown('get value'));
 }
 
