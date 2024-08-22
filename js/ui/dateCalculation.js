@@ -29,6 +29,13 @@ export async function calculateBusinessDate() {
         return;
     }
 
+    // Handle case where no holidays are available
+    if (holidays.length === 0) {
+        // Redirect to the alternative date calculator
+        window.location.href = 'https://www.timeanddate.com/date/weekdayadd.html';
+        return;
+    }
+
     // Log fetched holidays
     console.log(`Holidays for ${selectedCountry}:`, holidays);
 
