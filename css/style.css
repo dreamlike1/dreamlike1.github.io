@@ -439,19 +439,3 @@ button:hover {
    margin-top: 15px !important;
     margin-bottom: 4px !important; /* Adjust as needed */
 }
-
-
-/* Style header days (Sunday and Saturday) */
-.ui.calendar .calendar-header .header .day:nth-child(1),
-.ui.calendar .calendar-header .header .day:nth-child(7) {
-    background-color: #d3d3d3 !important; /* Grey color for header days */
-    color: #000 !important; /* Text color */
-}
-
-/* Style weekend days in the grid */
-.ui.calendar .calendar-day:nth-child(7n+1),
-.ui.calendar .calendar-day:nth-child(7n+7) {
-    background-color: #f0f0f0; /* Light grey background for weekend days */
-    color: #000 !important; /* Text color */
-}
-
