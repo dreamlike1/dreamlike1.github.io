@@ -441,7 +441,13 @@ button:hover {
 }
 
 
-.ui.calendar .weekend {
-    background-color: #f0f0f0; /* Light gray background for weekends */
-    color: #333; /* Darker text color for contrast */
+.ui.calendar .calendar-header .header .day:nth-child(1),
+.ui.calendar .calendar-header .header .day:nth-child(7) {
+    background-color: #d3d3d3; /* Grey color */
+    color: #000; /* Text color (adjust as needed) */
+}
+
+.ui.calendar .calendar-day:nth-child(7n+1),
+.ui.calendar .calendar-day:nth-child(7n+0) {
+    background-color: #f0f0f0; /* Light grey background for the days */
 }
