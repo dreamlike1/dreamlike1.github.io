@@ -16,16 +16,19 @@ export function setupEventListeners() {
 
     let previousCountry = ''; // Variable to store the previously selected country
 
-    async function updateCountriesAndFields() {
-        console.log('Updating Countries and Fields');
+    async function handleServiceTypeChange() {
+        console.log('Service Type Changed');
         const serviceType = serviceTypeElement.value;
+        const previousCountryValue = countrySelectElement.value;
+
+        // Update the list of countries based on the new service type
         await populateCountries(serviceType);
         populateBusinessDays();
 
         // Check if the previously selected country is available
         const newOptions = Array.from(countrySelectElement.options).map(option => option.value);
-        if (newOptions.includes(previousCountry)) {
-            countrySelectElement.value = previousCountry; // Reselect the previous country
+        if (newOptions.includes(previousCountryValue)) {
+            countrySelectElement.value = previousCountryValue; // Reselect the previous country
         } else {
             const firstOption = countrySelectElement.options[0];
             if (firstOption) {
@@ -35,7 +38,13 @@ export function setupEventListeners() {
             }
         }
 
-        await handleCountryChange(); // Ensure fields are updated
+        // Automatically show the result fields if the selected country is the US
+        if (countrySelectElement.value === 'US') {
+            await handleCountryChange();
+        }
+
+        // Store the currently selected country for future reference
+        previousCountry = countrySelectElement.value;
     }
 
     async function handleCountryChange() {
@@ -69,10 +78,7 @@ export function setupEventListeners() {
     }
 
     serviceTypeElement.addEventListener('change', async () => {
-        await updateCountriesAndFields();
-        
-        // Store the currently selected country for future reference
-        previousCountry = countrySelectElement.value;
+        await handleServiceTypeChange();
     });
 
     countrySelectElement.addEventListener('change', async () => {
