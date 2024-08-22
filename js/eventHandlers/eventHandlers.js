@@ -1,3 +1,4 @@
+
 import { fetchHolidaysForYears } from '../api/holidays.js';
 import { initializeDateSelector } from '../calendar/calendar.js';
 import { populateCountries } from '../ui/countryUtils.js';
@@ -14,30 +15,41 @@ export function setupEventListeners() {
     const copyMessageStandardResultElement = document.getElementById('copyMessageStandardResult');
     const warningMessageElement = document.getElementById('warningMessage');
 
-    async function handleServiceTypeChange() {
+    serviceTypeElement.addEventListener('change', async () => {
         const serviceType = serviceTypeElement.value;
-        const currentCountry = countrySelectElement.value; // Preserve current country value
-
-        console.log(`Service Type changed to: ${serviceType}`);
-        console.log(`Preserving current country value: ${currentCountry}`);
-
         await populateCountries(serviceType);
-
-        // Restore the selected country value if available
-        countrySelectElement.value = currentCountry;
-
         populateBusinessDays();
-        updateResultFieldsVisibility();
-    }
+        
+        // Handle country validation after changing the service type
+        const selectedCountry = countrySelectElement.value;
+        if (selectedCountry) {
+            const countryName = countrySelectElement.options[countrySelectElement.selectedIndex]?.text;
+            const currentYear = new Date().getFullYear();
+            const endYear = currentYear + 3;
 
-    async function handleCountryChange(event) {
+            try {
+                const holidays = await fetchHolidaysForYears(countryName, currentYear, endYear);
+                
+                if (!holidays || holidays.length === 0) {
+                    warningMessageElement.classList.remove('hidden');
+                } else {
+                    warningMessageElement.classList.add('hidden');
+                }
+
+                initializeDateSelector(holidays);
+
+            } catch (error) {
+                console.error(`Error fetching holidays for ${countryName}:`, error);
+            }
+        }
+    });
+
+    countrySelectElement.addEventListener('change', async (event) => {
         const selectedCountry = event.target.value;
         if (selectedCountry) {
             const countryName = event.target.options[event.target.selectedIndex]?.text;
             const currentYear = new Date().getFullYear();
             const endYear = currentYear + 3;
-
-            console.log(`Country changed to: ${selectedCountry}`);
 
             try {
                 const holidays = await fetchHolidaysForYears(countryName, currentYear, endYear);
@@ -55,12 +67,8 @@ export function setupEventListeners() {
             }
 
             populateBusinessDays();
-            updateResultFieldsVisibility();
         }
-    }
-
-    serviceTypeElement.addEventListener('change', handleServiceTypeChange);
-    countrySelectElement.addEventListener('change', handleCountryChange);
+    });
 
     calculateButtonElement.addEventListener('click', async () => {
         const startDateInput = document.getElementById('startDate').value;
@@ -101,23 +109,6 @@ export function setupEventListeners() {
             window.open('https://www.timeanddate.com/date/weekdayadd.html', '_blank');
         }
     });
-
-    function updateResultFieldsVisibility() {
-        const serviceType = serviceTypeElement.value;
-        const selectedCountry = countrySelectElement.value;
-
-        console.log(`Checking visibility conditions: Country = ${selectedCountry}, Service Type = ${serviceType}`);
-        
-        if (selectedCountry === 'united-states' && serviceType === 'standard') {
-            console.log('Conditions met: Showing result fields.');
-            resultFieldElement.style.display = 'block';
-            standardResultFieldElement.style.display = 'block';
-        } else {
-            console.log('Conditions not met: Hiding result fields.');
-            resultFieldElement.style.display = 'none';
-            standardResultFieldElement.style.display = 'none';
-        }
-    }
 
     resultFieldElement.addEventListener('click', () => {
         navigator.clipboard.writeText(resultFieldElement.value).then(() => {
