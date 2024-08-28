@@ -19,13 +19,36 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('couponDate').value = formattedDate;
     }
 
-    // Initialize Semantic UI dropdowns and popups
-    $('.ui.dropdown').dropdown();
-    $('.result-field').popup({
-        on: 'hover',
-        variation: 'wide',
-        position: 'right center'
+    function updatePopups() {
+        const serviceType = $('#serviceType').val();
+        const country = $('#countrySelect').val();
+
+        // Remove existing popups
+        $('.result-field').popup('destroy');
+
+        // Show popups only if service type is 'standard' and country is 'united states'
+        if (serviceType === 'standard' && country === 'united states') {
+            $('.result-field').popup({
+                on: 'hover',
+                variation: 'wide',
+                position: 'top center',
+                content: function() {
+                    const id = $(this).attr('id');
+                    return id === 'result' ? 'test1' : 'test2';
+                }
+            });
+        }
+    }
+
+    // Initialize Semantic UI dropdowns
+    $('.ui.dropdown').dropdown({
+        onChange: function(value, text, $selectedItem) {
+            updatePopups();
+        }
     });
+
+    // Initialize Semantic UI popups
+    updatePopups(); // Call initially to set up based on default values
 
     populateCountries(defaultServiceType).then(() => {
         $('#countrySelect').dropdown('refresh');
