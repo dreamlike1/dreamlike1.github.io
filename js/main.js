@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
         $('.result-field').popup('destroy');
 
         // Show popups only if service type is 'standard' and country is 'united states'
-        if (serviceType === 'standard' && country === 'united states') {
+        if (serviceType === 'Standard' && country === 'United States') {
             $('.result-field').popup({
                 on: 'hover',
                 variation: 'wide',
