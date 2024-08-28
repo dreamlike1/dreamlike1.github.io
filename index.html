@@ -4,11 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Business Date Calculator</title>
-    <!-- Include Fomantic UI CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.8/dist/semantic.min.css">
-    <!-- Include your custom CSS -->
     <link rel="stylesheet" href="css/style.css">
-    <!-- Update favicon -->
     <link rel="icon" href="/assets/favicon2.png" type="image/png">
 </head>
 <body>
@@ -33,20 +30,19 @@
                     <p id="timezoneText" class="timezone-text"></p>
                 </div>
                 <div class="field">
-                    <!--<input type="date" id="StartDate" required>-->
                     <div class="ui calendar" id="ETAstartDate">
                         <div class="ui input right icon">
                             <input type="text" placeholder="Select Date" id="startDate">
                             <i class="calendar icon"></i>
                         </div>
                     </div>
+                </div>
                 <div class="field">
                     <div class="checkbox-wrapper-42">
                         <input id="cbx-42" type="checkbox" />
                         <label class="cbx" for="cbx-42"></label>
                         <label class="lbl" for="cbx-42">Order is past 5pm</label>
                     </div>
-                </div>
                 </div>
                 <div class="field">
                     <div class="ui input">
@@ -56,21 +52,24 @@
                 <button id="calculateButton" class="ui button">Calculate</button>
                 
                 <div id="resultText1" class="hidden">
-                <p id="resultTextMessage1"></p>
+                    <p id="resultTextMessage1"></p>
                 </div>
                 
-                <input type="text" id="result" class="result-field" readonly>
+                <input type="text" id="result" class="result-field" readonly
+                       data-content="test1" data-variation="wide" data-position="top center">
                 
                 <div id="resultText2" class="hidden">
-                <p id="resultTextMessage2"></p>
+                    <p id="resultTextMessage2"></p>
                 </div>
                 
                 <div id="standardResultField" class="hidden">
-                <input type="text" id="standardResult" class="result-field" readonly>
+                    <input type="text" id="standardResult" class="result-field" readonly
+                           data-content="test2" data-variation="wide" data-position="top center">
                 </div>
                 
-                <div id="warningMessage" class="warning-message hidden">The selected country's holidays are not updated, resulting in inaccurate information.
-                <div>Click <a href="https://www.timeanddate.com/date/weekdayadd.html" target="_blank">here</a> for an alternative.</div>
+                <div id="warningMessage" class="warning-message hidden">
+                    The selected country's holidays are not updated, resulting in inaccurate information.
+                    <div>Click <a href="https://www.timeanddate.com/date/weekdayadd.html" target="_blank">here</a> for an alternative.</div>
                 </div>
                 <div id="copyMessageCalculator" class="copy-message">Copied!</div>
                 <div id="copyMessageStandardResult" class="copy-message">Copied!</div>
@@ -87,7 +86,6 @@
                             <i class="calendar icon"></i>
                         </div>
                     </div>
-                    <!--<input type="date" id="couponDate" required>-->
                 </div>
                 <div class="field">
                     <div class="ui input">
@@ -107,11 +105,8 @@
             </div>
         </div>
     </div>
-    <!-- Include jQuery first -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Include Fomantic UI JS -->
     <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.8/dist/semantic.min.js"></script>
-    <!-- Include your custom JS -->
     <script type="module" src="js/main.js"></script>
 </body>
 </html>
