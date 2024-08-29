@@ -30,8 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (serviceType === 'standard' && country === 'United States') {
             $('.result-field').popup({
                 on: 'hover',
-                variation: 'wide',
-                position: 'top center',
+                position: 'right center',
                 content: function() {
                     const id = $(this).attr('id');
                     return id === 'result' ? 'test1' : 'test2';
