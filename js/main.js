@@ -1,7 +1,7 @@
 import { populateCountries } from './ui/countryUtils.js';
 import { setupEventListeners } from './eventHandlers/eventHandlers.js';
 import { setupSwitchButton } from './switch/switch.js';
-import { initializeTimezone } from './timezone/timezone.js';
+//import { initializeTimezone } from './timezone/timezone.js';
 import { initializeDateSelector } from './calendar/calendar.js';
 import { initializeResultsVisibility } from './resultsVisibility/resultsVisibility.js';
 
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     setupEventListeners();
     setupSwitchButton();
-    initializeTimezone();
+    //initializeTimezone();
     initializeDateSelector();
     initializeResultsVisibility();
 
